@@ -55,5 +55,14 @@ ship watermarks, third-party copyrighted assets or generated text artifacts.
 - `textures/entity/hollow_grazer.png` — original 128 by 64 controlled pixel sheet,
   generated deterministically by `scripts/generate-dev-art.ps1`; visual QA pending.
 - `gravesown.png` — original 64 by 64 pixel mod icon from the same script.
+- Nine original 16 by 16 item icons cover the five Hollow Grazer resources and
+  four Quietskin armor pieces.
+- `textures/models/armor/quietskin_layer_1.png` and `quietskin_layer_2.png` are
+  original 64 by 32 controlled UV sheets for Minecraft 1.21.1 armor rendering;
+  resource loading passed and worn-model visual QA remains open.
 - `art/generation-prompts/hollow_grazer_concept.md` — preserved ImageGen concept
   prompt. Image generation is intentionally not used as the final UV texture.
+
+All current shipped pixel assets are reproducible by running
+`scripts/generate-dev-art.ps1`; the script writes fixed pixels rather than asking
+an image model to guess exact Minecraft UV coordinates.

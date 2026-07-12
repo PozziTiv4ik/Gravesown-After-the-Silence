@@ -3,6 +3,7 @@ package dev.gravesown;
 import com.mojang.logging.LogUtils;
 import dev.gravesown.config.GravesownConfig;
 import dev.gravesown.event.WorldSpawnEvents;
+import dev.gravesown.registry.ModArmorMaterials;
 import dev.gravesown.registry.ModCreativeTabs;
 import dev.gravesown.registry.ModEntities;
 import dev.gravesown.registry.ModItems;
@@ -21,6 +22,7 @@ public final class Gravesown {
 
     public Gravesown(IEventBus modEventBus, ModContainer modContainer) {
         ModEntities.register(modEventBus);
+        ModArmorMaterials.register(modEventBus);
         ModItems.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
         ModEntities.registerEventListeners(modEventBus);

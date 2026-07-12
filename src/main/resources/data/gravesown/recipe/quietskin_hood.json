@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": { "item": "gravesown:ragged_grazer_hide" },
+    "S": { "item": "gravesown:taut_sinew" }
+  },
+  "pattern": [
+    "SHS",
+    "H H"
+  ],
+  "result": {
+    "count": 1,
+    "id": "gravesown:quietskin_hood"
+  }
+}

@@ -19,8 +19,18 @@ public final class ModCreativeTabs {
                     .title(Component.translatable("itemGroup.gravesown.main"))
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .icon(() -> ModItems.HOLLOW_GRAZER_SPAWN_EGG.get().getDefaultInstance())
-                    .displayItems((parameters, output) ->
-                            output.accept(ModItems.HOLLOW_GRAZER_SPAWN_EGG.get()))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModItems.RAGGED_GRAZER_HIDE.get());
+                        output.accept(ModItems.TAUT_SINEW.get());
+                        output.accept(ModItems.GRAVE_TALLOW.get());
+                        output.accept(ModItems.TAINTED_GRAZER_MEAT.get());
+                        output.accept(ModItems.HOLLOW_JAW.get());
+                        output.accept(ModItems.QUIETSKIN_HOOD.get());
+                        output.accept(ModItems.QUIETSKIN_COAT.get());
+                        output.accept(ModItems.QUIETSKIN_LEGWRAPS.get());
+                        output.accept(ModItems.QUIETSKIN_BOOTS.get());
+                        output.accept(ModItems.HOLLOW_GRAZER_SPAWN_EGG.get());
+                    })
                     .build()
     );
 

@@ -17,8 +17,8 @@ distinctive creatures from Scape and Run: Parasites or any other mod.
 ## Start every session
 
 1. Read this file completely.
-2. Read docs/STATUS.md, docs/DESIGN.md, docs/ROADMAP.md,
-   docs/DECISIONS.md, and docs/TESTING.md.
+2. Read docs/STATUS.md, docs/DESIGN.md, docs/TOTAL_CONVERSION_PLAN.md,
+   docs/ROADMAP.md, docs/DECISIONS.md, and docs/TESTING.md.
 3. Inspect git status --short and all relevant diffs. Never discard unknown
    changes.
 4. Run doctor.cmd.
@@ -31,6 +31,7 @@ distinctive creatures from Scape and Run: Parasites or any other mod.
 - Code and tests describe current reality.
 - docs/DECISIONS.md records accepted architectural decisions.
 - docs/DESIGN.md records stable game design.
+- docs/TOTAL_CONVERSION_PLAN.md is the editable long-term implementation plan.
 - docs/CONTENT.md tracks every content asset.
 - docs/ROADMAP.md contains milestones and acceptance criteria.
 - docs/STATUS.md is the short operational handoff.

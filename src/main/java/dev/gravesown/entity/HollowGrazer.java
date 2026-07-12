@@ -1,5 +1,6 @@
 package dev.gravesown.entity;
 
+import dev.gravesown.gameplay.QuietskinEffects;
 import dev.gravesown.registry.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -68,17 +69,39 @@ public final class HollowGrazer extends Animal {
                 10,
                 true,
                 false,
-                this::canSmellBlood
-        ));
+                this::canDetectByScent
+        ) {
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && HollowGrazer.this.canContinueBloodScentHunt();
+            }
+        });
     }
 
-    private boolean canSmellBlood(net.minecraft.world.entity.LivingEntity target) {
+    public boolean canDetectByScent(net.minecraft.world.entity.LivingEntity target) {
         if (!(target instanceof Player player) || player.isCreative() || player.isSpectator()) {
             return false;
         }
 
+        if (!this.level().isDay()) {
+            return true;
+        }
+
         boolean badlyWounded = player.getHealth() <= player.getMaxHealth() * BLOOD_SCENT_HEALTH_RATIO;
-        return badlyWounded || !this.level().isDay();
+        if (!badlyWounded) {
+            return false;
+        }
+
+        double detectionRange = getBloodScentDetectionRange(player);
+        return this.distanceToSqr(player) <= detectionRange * detectionRange;
+    }
+
+    public double getBloodScentDetectionRange(Player player) {
+        return QuietskinEffects.modifyBloodScentRange(player, this.getAttributeValue(Attributes.FOLLOW_RANGE));
+    }
+
+    public boolean canContinueBloodScentHunt() {
+        return this.getTarget() != null && this.canDetectByScent(this.getTarget());
     }
 
     @Override

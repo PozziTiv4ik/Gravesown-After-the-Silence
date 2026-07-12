@@ -74,3 +74,22 @@ spawn/tick assertion. Manual client checks remain mandatory for rendering and UV
 
 Consequences: `check` alone is not sufficient. Agents run `test.cmd` for gameplay
 changes and keep GameTest structures under `data/gravesown/structure/`.
+
+## ADR-0006: Dedicated one-biome total-conversion preset
+
+Date: 2026-07-12
+Status: Accepted
+
+Context: The user wants a world with one dark biome and no standard Minecraft
+blocks, while the engine and development tools still depend on vanilla registries.
+
+Decision: Keep vanilla registries intact and create the dedicated
+`gravesown:after_the_silence` preset. Its Overworld uses only
+`gravesown:sown_grave`; generated player-facing blocks and fluids must be
+Gravesown-owned, with a narrow technical air allowlist. Development is
+new-world-only until the schema stabilizes.
+
+Consequences: A real chunk audit is required before worldgen milestones can be
+called complete. Nether and End survival access remains unavailable until their
+own replacement milestones. The editable detail plan lives in
+docs/TOTAL_CONVERSION_PLAN.md.

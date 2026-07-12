@@ -13,5 +13,15 @@
   "gravesown.configuration.preserveVanillaBosses.tooltip": "Keeps the Ender Dragon and Wither until progression-safe Gravesown replacements exist.",
   "itemGroup.gravesown.main": "Gravesown",
   "entity.gravesown.hollow_grazer": "Hollow Grazer",
-  "item.gravesown.hollow_grazer_spawn_egg": "Hollow Grazer Spawn Egg"
+  "item.gravesown.hollow_grazer_spawn_egg": "Hollow Grazer Spawn Egg",
+  "item.gravesown.ragged_grazer_hide": "Ragged Grazer Hide",
+  "item.gravesown.taut_sinew": "Taut Sinew",
+  "item.gravesown.grave_tallow": "Grave Tallow",
+  "item.gravesown.tainted_grazer_meat": "Tainted Grazer Meat",
+  "item.gravesown.hollow_jaw": "Hollow Jaw",
+  "item.gravesown.quietskin_hood": "Quietskin Hood",
+  "item.gravesown.quietskin_coat": "Quietskin Coat",
+  "item.gravesown.quietskin_legwraps": "Quietskin Legwraps",
+  "item.gravesown.quietskin_boots": "Quietskin Boots",
+  "item.gravesown.quietskin.dead_scent": "Dead Scent: -12.5% blood-scent range per piece"
 }

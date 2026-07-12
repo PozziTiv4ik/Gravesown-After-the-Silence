@@ -19,49 +19,79 @@ Acceptance: setup.cmd followed by build.cmd succeeds from a clean checkout.
 - [ ] Original model, renderer, texture, spawn egg and translations are implemented; visual QA pending.
 - [x] Server-authoritative config for vanilla mob suppression/replacement loads.
 - [ ] Eligible Overworld replacement path is implemented; natural-spawn world test pending.
-- [ ] Temporary loot table exists; original survival resources are not implemented yet.
-- [ ] Client and dedicated-server smoke tests.
+- [x] Original Hollow Grazer resource loot replaces the temporary vanilla drops.
+- [x] Client and dedicated-server startup smoke tests.
 
 Acceptance: a new world contains a functioning Hollow Grazer, regular eligible
 vanilla spawns are suppressed according to config, and save/reload works.
 
-## M2 — Basic ecosystem
+## TC1 — Hollow Grazer economy
 
-- [ ] Bellbeak.
-- [ ] Stitchtusk.
-- [ ] Ribspring.
-- [ ] Rotfin.
-- [ ] Biome-aware spawn tables and predator/prey interactions.
+- [x] Five original Hollow Grazer drops replace vanilla loot.
+- [x] Quietskin armor set, recipes and repair material.
+- [x] Dead Scent integration with blood-sensing AI.
+- [ ] Original item and worn-armor pixel textures implemented; worn visual QA pending.
+- [x] Deterministic GameTests for loot, equipment and scent lifecycle (5/5 PASS).
 
-Acceptance: Overworld land and water have a stable basic food chain.
+Acceptance: the complete set can be obtained and tested without vanilla leather
+or rotten flesh, and all automated server tests pass.
 
-## M3 — Regional infection
+## TC2 — World audit harness
 
-- [ ] Silence Nodes.
-- [ ] Region state and persistence.
-- [ ] Spawn/visual/audio changes by local infection.
-- [ ] Temporary cleansing loop.
+- [ ] `worldtest.cmd` scans real generated chunks.
+- [ ] `verify-all.cmd` provides one-button full verification.
+- [ ] Strict biome, block, fluid and block-entity allowlists.
+- [ ] Machine-readable and human-readable reports.
 
-Acceptance: two regions can maintain different infection states across restart.
+Acceptance: a deliberately inserted vanilla block or fluid fails the audit with
+its registry id and coordinates.
 
-## M4 — Survival progression
+## TC3 — World foundation
 
-- [ ] Food, hide, string and common mob-drop replacements.
-- [ ] Weapons and protective equipment.
-- [ ] Nether and End progression resources.
-- [ ] Configurable balance and migration.
+- [ ] Custom surface, soil, rock, deep rock and bottom blocks.
+- [ ] Ribroot wood family and bootstrap vegetation.
+- [ ] Early tools, light, crafting, processing and storage.
+- [ ] Mining, replaceable and tool tags plus loot tables.
 
-Acceptance: a fresh survival world can reach vanilla endgame without enabling
-ordinary vanilla mob spawns.
+Acceptance: every foundation block has assets, drops, tags and a tested survival use.
 
-## M5 — Polish
+## TC4 — The Sown Grave
+
+- [ ] `gravesown:after_the_silence` world preset.
+- [ ] Exactly one `gravesown:sown_grave` Overworld biome.
+- [ ] Custom noise settings, surface rules and carvers.
+- [ ] No vanilla aquifers, ore veins, structures or visible generated blocks.
+
+Acceptance: strict audit passes and the same seed is reproducible on client and server.
+
+## TC5 — Resources and subzones
+
+- [ ] Grave Pitch, Ferric Marrow, Gloam Salt and Mute Crystal.
+- [ ] Ashskin Flats, Ribroot Groves and Marrow Rifts.
+- [ ] Complete first-hour survival path.
+
+Acceptance: a fresh Survival player reaches Quietskin and Mute Crystal without
+commands or vanilla materials.
+
+## TC6 — Ecosystem and regional infection
+
+- [ ] Bellbeak, Stitchtusk, Ribspring and Rotfin.
+- [ ] Predator/prey interactions and spawn costs.
+- [ ] Silence Nodes, regional state and cleansing loop.
+- [ ] Remaining Sown Grave subzones.
+
+Acceptance: ecology and two distinct regional infection states persist across restart.
+
+## TC7 — Polish
 
 - [ ] Final models, animations, sounds, particles and UI.
 - [ ] Accessibility and gore controls.
 - [ ] Performance profiling and spawn caps.
 
-## M6 — Release
+## TC8 — Other dimensions and release
 
+- [ ] Gravesown Nether and End replacements.
+- [ ] Full progression without survival access to vanilla dimensions.
 - [ ] Dedicated multiplayer test with two players.
 - [ ] Upgrade/config migration test.
 - [ ] Clean profile and compatibility smoke tests.

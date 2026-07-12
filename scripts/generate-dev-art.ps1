@@ -168,5 +168,224 @@ function Save-ModIcon {
     Write-Host "Created $output"
 }
 
+function New-GravesownPalette {
+    return @{
+        shadow = New-Object System.Drawing.SolidBrush (Convert-HexColor '#171515')
+        soil = New-Object System.Drawing.SolidBrush (Convert-HexColor '#292522')
+        hide = New-Object System.Drawing.SolidBrush (Convert-HexColor '#554943')
+        bruise = New-Object System.Drawing.SolidBrush (Convert-HexColor '#725052')
+        sinew = New-Object System.Drawing.SolidBrush (Convert-HexColor '#9B5548')
+        bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B6A986')
+        pale = New-Object System.Drawing.SolidBrush (Convert-HexColor '#D0C39D')
+        sick = New-Object System.Drawing.SolidBrush (Convert-HexColor '#8A9A4A')
+        wound = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7E292B')
+    }
+}
+
+function Save-ItemTexture {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][scriptblock]$Painter
+    )
+
+    $output = Join-Path $script:ProjectRoot "src\main\resources\assets\gravesown\textures\item\$Name.png"
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $output) | Out-Null
+
+    $bitmap = New-PixelBitmap -Width 16 -Height 16
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    $graphics.Clear([System.Drawing.Color]::Transparent)
+    $palette = New-GravesownPalette
+
+    try {
+        & $Painter $bitmap $graphics $palette
+        $bitmap.Save($output, [System.Drawing.Imaging.ImageFormat]::Png)
+    }
+    finally {
+        foreach ($brush in $palette.Values) {
+            $brush.Dispose()
+        }
+        $graphics.Dispose()
+        $bitmap.Dispose()
+    }
+
+    Write-Host "Created $output"
+}
+
+function Save-QuietskinItemTextures {
+    Save-ItemTexture 'ragged_grazer_hide' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 2 3 11 11
+        Fill-Pixels $graphics $p.hide 3 2 10 11
+        Fill-Pixels $graphics $p.bruise 4 4 8 6
+        Fill-Pixels $graphics $p.soil 3 10 3 3
+        Fill-Pixels $graphics $p.hide 10 10 3 4
+        foreach ($y in @(4, 7, 10)) {
+            Fill-Pixels $graphics $p.bone 7 $y 1 2
+            Fill-Pixels $graphics $p.sinew 8 ($y + 1) 1 1
+        }
+    }
+
+    Save-ItemTexture 'taut_sinew' {
+        param($bitmap, $graphics, $p)
+        for ($i = 0; $i -lt 10; $i++) {
+            $x = 3 + $i
+            $y = 12 - $i
+            Fill-Pixels $graphics $p.shadow $x $y 2 2
+            Fill-Pixels $graphics $p.sinew $x ($y - 1) 1 2
+            if (($i % 3) -eq 0) {
+                $bitmap.SetPixel($x + 1, $y, (Convert-HexColor '#B6A986'))
+            }
+        }
+    }
+
+    Save-ItemTexture 'grave_tallow' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 3 7 10 6
+        Fill-Pixels $graphics $p.bone 4 5 8 7
+        Fill-Pixels $graphics $p.pale 6 4 5 6
+        Fill-Pixels $graphics $p.sick 5 9 2 2
+        Fill-Pixels $graphics $p.bruise 10 7 2 3
+    }
+
+    Save-ItemTexture 'tainted_grazer_meat' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 2 5 12 8
+        Fill-Pixels $graphics $p.wound 3 4 10 8
+        Fill-Pixels $graphics $p.bruise 5 5 7 6
+        Fill-Pixels $graphics $p.sick 4 9 2 2
+        Fill-Pixels $graphics $p.bone 10 6 2 4
+        Fill-Pixels $graphics $p.pale 11 7 1 2
+    }
+
+    Save-ItemTexture 'hollow_jaw' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 2 4 3 8
+        Fill-Pixels $graphics $p.shadow 11 4 3 8
+        Fill-Pixels $graphics $p.shadow 4 11 8 3
+        Fill-Pixels $graphics $p.bone 3 3 3 8
+        Fill-Pixels $graphics $p.bone 10 3 3 8
+        Fill-Pixels $graphics $p.bone 5 10 6 3
+        foreach ($x in @(5, 7, 9, 11)) {
+            Fill-Pixels $graphics $p.pale $x 8 1 3
+        }
+        Fill-Pixels $graphics $p.wound 7 11 2 1
+    }
+
+    Save-ItemTexture 'quietskin_hood' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 3 3 10 11
+        Fill-Pixels $graphics $p.hide 4 2 8 10
+        Fill-Pixels $graphics $p.bruise 5 4 6 3
+        Fill-Pixels $graphics $p.shadow 5 7 6 5
+        Fill-Pixels $graphics $p.sinew 7 2 1 5
+        Fill-Pixels $graphics $p.bone 8 3 1 3
+        Fill-Pixels $graphics $p.sick 11 9 1 2
+    }
+
+    Save-ItemTexture 'quietskin_coat' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 3 3 10 12
+        Fill-Pixels $graphics $p.hide 4 2 8 12
+        Fill-Pixels $graphics $p.bruise 5 4 6 8
+        Fill-Pixels $graphics $p.soil 2 4 3 7
+        Fill-Pixels $graphics $p.soil 11 4 3 7
+        Fill-Pixels $graphics $p.sinew 7 3 1 10
+        foreach ($y in @(5, 8, 11)) {
+            Fill-Pixels $graphics $p.bone 8 $y 1 1
+        }
+    }
+
+    Save-ItemTexture 'quietskin_legwraps' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 3 2 10 13
+        Fill-Pixels $graphics $p.hide 4 2 8 5
+        Fill-Pixels $graphics $p.bruise 4 7 3 7
+        Fill-Pixels $graphics $p.soil 9 7 3 7
+        foreach ($y in @(8, 11)) {
+            Fill-Pixels $graphics $p.sinew 4 $y 3 1
+            Fill-Pixels $graphics $p.sinew 9 $y 3 1
+        }
+        Fill-Pixels $graphics $p.bone 7 3 2 1
+    }
+
+    Save-ItemTexture 'quietskin_boots' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 2 5 5 9
+        Fill-Pixels $graphics $p.shadow 9 5 5 9
+        Fill-Pixels $graphics $p.hide 3 4 4 8
+        Fill-Pixels $graphics $p.hide 9 4 4 8
+        Fill-Pixels $graphics $p.soil 2 11 6 3
+        Fill-Pixels $graphics $p.soil 8 11 6 3
+        Fill-Pixels $graphics $p.sinew 3 7 4 1
+        Fill-Pixels $graphics $p.sinew 9 7 4 1
+        Fill-Pixels $graphics $p.bone 5 5 1 2
+        Fill-Pixels $graphics $p.bone 10 5 1 2
+    }
+}
+
+function Save-QuietskinArmorTextures {
+    $outputDir = Join-Path $script:ProjectRoot 'src\main\resources\assets\gravesown\textures\models\armor'
+    New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
+
+    foreach ($layer in @(1, 2)) {
+        $output = Join-Path $outputDir "quietskin_layer_$layer.png"
+        $bitmap = New-PixelBitmap -Width 64 -Height 32
+        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+        $graphics.Clear([System.Drawing.Color]::Transparent)
+        $p = New-GravesownPalette
+
+        try {
+            if ($layer -eq 1) {
+                # Hood and outer hood layer.
+                Fill-Pixels $graphics $p.hide 0 0 32 16
+                Fill-Pixels $graphics $p.soil 32 0 32 16
+                Fill-Pixels $graphics $p.bruise 8 3 8 8
+                Fill-Pixels $graphics $p.shadow 8 11 8 3
+                Fill-Pixels $graphics $p.sinew 16 1 1 14
+                Fill-Pixels $graphics $p.bone 17 5 1 4
+                Fill-Pixels $graphics $p.sick 44 8 2 2
+
+                # Coat body and arms.
+                Fill-Pixels $graphics $p.hide 16 16 24 16
+                Fill-Pixels $graphics $p.bruise 20 18 12 12
+                Fill-Pixels $graphics $p.soil 40 16 16 16
+                Fill-Pixels $graphics $p.sinew 27 17 1 14
+                foreach ($y in @(20, 24, 28)) {
+                    Fill-Pixels $graphics $p.bone 28 $y 1 1
+                }
+
+                # Boots share the standard leg UV region.
+                Fill-Pixels $graphics $p.soil 0 16 16 16
+                Fill-Pixels $graphics $p.hide 4 17 8 9
+                Fill-Pixels $graphics $p.sinew 4 22 8 1
+                Fill-Pixels $graphics $p.shadow 0 27 16 5
+            }
+            else {
+                # Inner armor layer used by legwraps.
+                Fill-Pixels $graphics $p.hide 0 16 16 16
+                Fill-Pixels $graphics $p.bruise 4 17 8 14
+                Fill-Pixels $graphics $p.sinew 4 20 8 1
+                Fill-Pixels $graphics $p.sinew 4 25 8 1
+                Fill-Pixels $graphics $p.soil 16 16 24 16
+                Fill-Pixels $graphics $p.shadow 22 25 12 5
+                Fill-Pixels $graphics $p.bone 27 18 1 7
+            }
+
+            $bitmap.Save($output, [System.Drawing.Imaging.ImageFormat]::Png)
+        }
+        finally {
+            foreach ($brush in $p.Values) {
+                $brush.Dispose()
+            }
+            $graphics.Dispose()
+            $bitmap.Dispose()
+        }
+
+        Write-Host "Created $output"
+    }
+}
+
 Save-HollowGrazerTexture
 Save-ModIcon
+Save-QuietskinItemTextures
+Save-QuietskinArmorTextures

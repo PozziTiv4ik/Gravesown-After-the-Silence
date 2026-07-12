@@ -1,66 +1,62 @@
 # Current status
 
-Updated: 2026-07-12 20:26 Europe/Zurich
-Branch: main; clean local baseline commit exists
-Playable state: first alpha vertical slice; automated server test passes, manual in-world visual QA pending
-Last build: PASS — scripts/build.ps1
-Last verified command: scripts/run-gametests.ps1 — PASS, 1/1 required tests
+Updated: 2026-07-12 21:12 Europe/Zurich
+Branch: main; TC1 implementation complete, manual visual acceptance pending
+Playable state: alpha vertical slice with original Hollow Grazer economy and Quietskin armor
+Last build: PASS — `scripts/build.ps1`; release JAR copied to `dist/`
+Last verified command: `scripts/run-gametests.ps1` — PASS, 5/5 required tests
 
 ## Current milestone
 
-M1 — first living Gravesown creature and Overworld replacement loop.
+TC1 — Hollow Grazer economy and Quietskin armor. Code, data and automated
+verification are complete. The only remaining acceptance item is a player-driven
+visual inspection of the worn armor and a no-command survival acquisition pass.
 
 ## Implemented and verified
 
-- Official NeoForge 1.21.1 ModDevGradle template imported.
-- Project identity pinned to Gravesown / gravesown / dev.gravesown.
-- Root handoff contract and permanent project documentation created.
-- Portable Microsoft OpenJDK 21.0.11 setup, doctor and one-click commands work.
-- `clean check build` produces `dist/gravesown-0.1.0-alpha.1.jar`.
-- Development client reaches the main menu with the mod and resources loaded;
-  no Gravesown missing-model, missing-texture, ERROR or FATAL marker was found.
-- Dedicated development server reaches `Done` on NeoForge 21.1.235 without
-  loading a client-only class.
-- Hollow Grazer registration, attributes, AI, renderer, model, spawn egg,
-  translations, temporary loot table and original 128x64 pixel texture exist.
-- Server-authoritative Overworld events suppress ordinary natural vanilla mobs,
-  replace eligible creature spawns with Hollow Grazers and optionally remove
-  loaded vanilla mobs. Developer command/spawn-egg entities remain testable.
-- Automated NeoForge GameTest creates a Hollow Grazer, verifies its stable id,
-  attributes and spawn category, and confirms that it survives five server ticks.
+- Official NeoForge 1.21.1 ModDevGradle template with Java 21 and pinned project versions.
+- Stable Gravesown identity, root handoff contract and living total-conversion plan.
+- One-click setup, doctor, GameTest, play, build, server and diagnostics commands.
+- Hollow Grazer registration, attributes, AI, renderer, model, spawn egg and translations.
+- Server-authoritative Overworld suppression and replacement of eligible natural vanilla mobs.
+- Hollow Grazer loot now contains only five original resources: Ragged Grazer Hide,
+  Taut Sinew, Grave Tallow, Tainted Grazer Meat and the rare Hollow Jaw.
+- Complete Quietskin set with recipes, correct armor slots and attributes, raw-hide
+  repair material, armor tags, item models and original deterministic pixel textures.
+- Dead Scent reduces daytime blood-sense range by 12.5% per equipped Quietskin
+  piece, reaching 50% for the full set. Night aggression deliberately ignores it.
+- Five deterministic server GameTests cover registration/ticking, loot namespace and
+  forbidden vanilla drops, equipment/armor/repair behavior, scent-range reduction and
+  ending an existing daytime hunt after equipping Quietskin or healing.
+- Development client loaded the mod, resources and an existing world without a
+  Gravesown ERROR, FATAL, missing-model or missing-texture marker.
+- Dedicated development server reached `Done (0.577s)` without loading client-only classes.
+- The editable one-biome total-conversion plan lives in
+  `docs/TOTAL_CONVERSION_PLAN.md`; future agents must read it through `AGENTS.md`.
 
-## In progress
+## Known issues and open acceptance checks
 
-- Manual disposable-world check of the renderer, UV layout, animations and AI.
-- Natural spawn replacement and save/reload smoke test inside a real world.
-- First proper survival drops; the alpha loot table still uses rotten flesh and leather.
-
-## Known issues
-
-- In-world rendering has not been visually verified. The Windows UI-control
-  connector was unavailable, so no claim is made about final UV alignment.
-- The dedicated server startup was verified and then deliberately terminated;
-  reconnect and graceful save/restart have not yet been tested.
-- The current M1 replacement scope is the Overworld. Nether and End ecosystem
-  replacement belongs to later milestones.
-
-## Open questions
-
-- Final public author name and distribution license can be chosen before release.
-- Exact gore intensity will be confirmed after the first visual concept.
+- Quietskin item textures loaded successfully, but the worn 64x32 UV sheets still
+  require an in-game third-person inspection on the player model.
+- Natural spawn replacement, full no-command armor acquisition and save/reload remain
+  manual world checks; automated real-chunk auditing begins in TC2.
+- The dedicated server startup was deliberately terminated after `Done`; localhost
+  reconnect and graceful save/restart are not yet verified.
+- Current replacement scope is the Overworld. Nether and End are later milestones.
 
 ## Next action
 
-Run play.cmd, create a disposable Creative world and complete the Hollow Grazer
-manual checklist in docs/TESTING.md: summon, daylight/night aggression, texture,
-animation, natural replacement and save/reload. Completion criterion: record the
-observed result here and fix every Gravesown ERROR or missing asset found in latest.log.
+Run the short TC1 manual acceptance in `docs/TESTING.md`, then begin TC2: build
+`worldtest.cmd`, strict block/biome/fluid allowlists and machine-readable chunk
+audit reports before implementing the custom world foundation.
 
 ## Verification evidence
 
-- `scripts/setup.ps1` — PASS — portable Microsoft OpenJDK 21.0.11 installed and verified by SHA-256.
-- `doctor.cmd` — PASS — Java, pinned versions, wrapper and compileJava.
+- `scripts/setup.ps1` — PASS — portable Microsoft OpenJDK 21.0.11.
+- `doctor.cmd` — PASS — Java, pinned versions, wrapper and `compileJava`.
+- `scripts/run-gametests.ps1` — PASS — `All 5 required tests passed`.
+- `scripts/run-client.ps1` — PASS — main menu and existing world loaded; graceful close.
+- `scripts/run-server.ps1` — PASS to `Done (0.577s)`; deliberately stopped afterward.
 - `scripts/build.ps1` — PASS — clean/check/build and release JAR copy.
-- `gradlew.bat runClient` — PASS to main menu; deliberately stopped there, so the Gradle task ended nonzero.
-- `gradlew.bat runServer` — PASS to `Done (8.834s)`; deliberately stopped after startup verification.
-- `scripts/run-gametests.ps1` — PASS — `All 1 required tests passed`.
+- Release audit — PASS — 83 JAR entries, 21 JSON files, nine 16x16 item
+  textures and two 64x32 armor sheets; no Fabric/example-template residue.

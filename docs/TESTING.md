@@ -22,15 +22,47 @@ The root scripts automatically select the project-local Java 21.
 
 ## Automated GameTest
 
-`test.cmd` currently verifies that `gravesown:hollow_grazer`:
+`test.cmd` currently runs five required server tests. Together they verify that:
 
 - is registered under the stable expected id;
 - can be created and added to a logical server level;
 - receives at least five server ticks and remains alive;
 - has 28 maximum health and uses the CREATURE spawn category.
+- its deterministic loot rolls contain only Gravesown resources, always provide
+  the required core materials, expose both optional drops across fixed seeds and
+  never contain leather or rotten flesh;
+- every Quietskin piece uses the intended slot, defense, durability and repair item,
+  and the equipped full set produces 10 armor points;
+- Dead Scent produces exact range multipliers of 100%, 87.5%, 75%, 62.5% and 50%,
+  including a server-side targeting boundary test.
+- an already active daytime blood-scent hunt stops after the player equips enough
+  Quietskin or heals, while night aggression continues.
 
-Success means exit code 0 and `All 1 required tests passed` in the output. Gradle
+Success means exit code 0 and `All 5 required tests passed` in the output. Gradle
 `check` does not run GameTests, so gameplay changes require the separate button.
+
+## TC1 manual acceptance
+
+In a disposable world with cheats, obtain the complete set quickly:
+
+```mcfunction
+/give @s gravesown:quietskin_hood
+/give @s gravesown:quietskin_coat
+/give @s gravesown:quietskin_legwraps
+/give @s gravesown:quietskin_boots
+/give @s gravesown:ragged_grazer_hide 16
+/give @s gravesown:taut_sinew 16
+```
+
+- Inspect all icons, names and the Dead Scent tooltip in both `en_us` and `ru_ru`.
+- Equip every piece and inspect front/back/arms/legs in third person, daylight,
+  darkness and hurt flash; purple-black pixels or displaced UV regions fail the check.
+- Kill at least 20 Hollow Grazers without Looting. Confirm the five custom resources
+  and the absence of leather and rotten flesh.
+- Craft and repair every armor piece in Survival using the documented recipes.
+- During daytime, become wounded below half health and compare blood-sense targeting
+  just inside and outside 24, 21, 18, 15 and 12 blocks as pieces are equipped.
+- At night, confirm that a complete set does not suppress ordinary night aggression.
 
 ## Client smoke test
 

@@ -13,5 +13,15 @@
   "gravesown.configuration.preserveVanillaBosses.tooltip": "Сохраняет Дракона Края и Визера до появления безопасных замен для прогрессии.",
   "itemGroup.gravesown.main": "Gravesown",
   "entity.gravesown.hollow_grazer": "Пустопас",
-  "item.gravesown.hollow_grazer_spawn_egg": "Яйцо призыва пустопаса"
+  "item.gravesown.hollow_grazer_spawn_egg": "Яйцо призыва пустопаса",
+  "item.gravesown.ragged_grazer_hide": "Рваная шкура пустопаса",
+  "item.gravesown.taut_sinew": "Тугая жила",
+  "item.gravesown.grave_tallow": "Могильное сало",
+  "item.gravesown.tainted_grazer_meat": "Порченое мясо пустопаса",
+  "item.gravesown.hollow_jaw": "Пустая челюсть",
+  "item.gravesown.quietskin_hood": "Тихошкурный капюшон",
+  "item.gravesown.quietskin_coat": "Тихошкурная куртка",
+  "item.gravesown.quietskin_legwraps": "Тихошкурные обмотки",
+  "item.gravesown.quietskin_boots": "Тихошкурные сапоги",
+  "item.gravesown.quietskin.dead_scent": "Мёртвый запах: −12,5% дальности чутья крови за часть"
 }
