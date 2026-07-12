@@ -1,0 +1,17 @@
+{
+  "gravesown.configuration.title": "Gravesown Configuration",
+  "gravesown.configuration.section.gravesown.common.toml": "Gravesown",
+  "gravesown.configuration.section.gravesown.common.toml.title": "Gravesown World Rules",
+  "gravesown.configuration.world": "World replacement",
+  "gravesown.configuration.world.button": "World replacement",
+  "gravesown.configuration.world.tooltip": "Controls how Gravesown replaces the vanilla ecosystem.",
+  "gravesown.configuration.removeExistingVanillaMobs": "Remove existing vanilla mobs",
+  "gravesown.configuration.removeExistingVanillaMobs.tooltip": "Prevents ordinary vanilla mobs loaded from saved chunks from re-entering the world.",
+  "gravesown.configuration.replaceNaturalVanillaSpawns": "Replace natural vanilla spawns",
+  "gravesown.configuration.replaceNaturalVanillaSpawns.tooltip": "Replaces eligible Overworld animal spawns and suppresses other ordinary natural vanilla spawns.",
+  "gravesown.configuration.preserveVanillaBosses": "Preserve vanilla bosses",
+  "gravesown.configuration.preserveVanillaBosses.tooltip": "Keeps the Ender Dragon and Wither until progression-safe Gravesown replacements exist.",
+  "itemGroup.gravesown.main": "Gravesown",
+  "entity.gravesown.hollow_grazer": "Hollow Grazer",
+  "item.gravesown.hollow_grazer_spawn_egg": "Hollow Grazer Spawn Egg"
+}

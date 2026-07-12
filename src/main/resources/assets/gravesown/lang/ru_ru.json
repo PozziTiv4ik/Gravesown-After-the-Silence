@@ -1,0 +1,17 @@
+{
+  "gravesown.configuration.title": "Настройки Gravesown",
+  "gravesown.configuration.section.gravesown.common.toml": "Gravesown",
+  "gravesown.configuration.section.gravesown.common.toml.title": "Правила мира Gravesown",
+  "gravesown.configuration.world": "Замена мира",
+  "gravesown.configuration.world.button": "Замена мира",
+  "gravesown.configuration.world.tooltip": "Настройки замены ванильной экосистемы существами Gravesown.",
+  "gravesown.configuration.removeExistingVanillaMobs": "Удалять существующих ванильных мобов",
+  "gravesown.configuration.removeExistingVanillaMobs.tooltip": "Не позволяет обычным ванильным мобам из сохранённых чанков вернуться в мир.",
+  "gravesown.configuration.replaceNaturalVanillaSpawns": "Заменять естественный спавн ванильных мобов",
+  "gravesown.configuration.replaceNaturalVanillaSpawns.tooltip": "Заменяет подходящих животных Верхнего мира и подавляет прочий обычный естественный спавн.",
+  "gravesown.configuration.preserveVanillaBosses": "Сохранять ванильных боссов",
+  "gravesown.configuration.preserveVanillaBosses.tooltip": "Сохраняет Дракона Края и Визера до появления безопасных замен для прогрессии.",
+  "itemGroup.gravesown.main": "Gravesown",
+  "entity.gravesown.hollow_grazer": "Пустопас",
+  "item.gravesown.hollow_grazer_spawn_egg": "Яйцо призыва пустопаса"
+}

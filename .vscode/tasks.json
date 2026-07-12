@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Gravesown: Setup",
+      "type": "shell",
+      "command": "${workspaceFolder}\\setup.cmd",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gravesown: Play",
+      "type": "shell",
+      "command": "${workspaceFolder}\\play.cmd",
+      "problemMatcher": [],
+      "isBackground": false
+    },
+    {
+      "label": "Gravesown: Automated GameTests",
+      "type": "shell",
+      "command": "${workspaceFolder}\\test.cmd",
+      "problemMatcher": "$javac"
+    },
+    {
+      "label": "Gravesown: Build JAR",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.cmd",
+      "problemMatcher": "$javac",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Gravesown: Doctor",
+      "type": "shell",
+      "command": "${workspaceFolder}\\doctor.cmd",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gravesown: Server",
+      "type": "shell",
+      "command": "${workspaceFolder}\\server.cmd",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gravesown: Diagnostics",
+      "type": "shell",
+      "command": "${workspaceFolder}\\diagnostics.cmd",
+      "problemMatcher": []
+    }
+  ]
+}

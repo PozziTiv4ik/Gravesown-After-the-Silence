@@ -1,0 +1,10 @@
+{
+  "java.import.gradle.enabled": true,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "files.exclude": {
+    "**/.gradle": true,
+    "**/.tools": true,
+    "**/build": true,
+    "**/run": true
+  }
+}

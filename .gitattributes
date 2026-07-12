@@ -1,0 +1,11 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.jar binary
+*.nbt binary
+*.png binary
+
+src/generated/**/.cache/* text eol=lf
+src/generated/**/*.json text eol=lf
