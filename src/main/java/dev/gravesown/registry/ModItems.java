@@ -22,6 +22,12 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> HUSHSTONE = ITEMS.registerSimpleBlockItem(ModBlocks.HUSHSTONE);
     public static final DeferredItem<BlockItem> DEEP_HUSHSTONE = ITEMS.registerSimpleBlockItem(ModBlocks.DEEP_HUSHSTONE);
     public static final DeferredItem<BlockItem> GRAVEBED = ITEMS.registerSimpleBlockItem(ModBlocks.GRAVEBED);
+    public static final DeferredItem<BlockItem> RIBROOT_STEM = ITEMS.registerSimpleBlockItem(ModBlocks.RIBROOT_STEM);
+    public static final DeferredItem<BlockItem> RIBROOT_PLANKS = ITEMS.registerSimpleBlockItem(ModBlocks.RIBROOT_PLANKS);
+    public static final DeferredItem<BlockItem> VEIL_FOLIAGE = ITEMS.registerSimpleBlockItem(ModBlocks.VEIL_FOLIAGE);
+    public static final DeferredItem<BlockItem> THREADGRASS = ITEMS.registerSimpleBlockItem(ModBlocks.THREADGRASS);
+    public static final DeferredItem<BlockItem> RIBROOT_SHOOT = ITEMS.registerSimpleBlockItem(ModBlocks.RIBROOT_SHOOT);
+    public static final DeferredItem<BlockItem> PALLID_BULB = ITEMS.registerSimpleBlockItem(ModBlocks.PALLID_BULB);
 
     public static final DeferredItem<Item> RAGGED_GRAZER_HIDE = ITEMS.registerSimpleItem("ragged_grazer_hide");
     public static final DeferredItem<Item> TAUT_SINEW = ITEMS.registerSimpleItem("taut_sinew");

@@ -147,10 +147,11 @@ worldgen milestones.
 
 ### TC3 — World foundation content
 
-Implementation status: first palette slice complete. `ashen_sod`, `grave_loam`,
-`hushstone`, `deep_hushstone` and `gravebed` have stable ids, block items,
-original textures/models, loot/tool tags and automated tests. Ribroot, vegetation,
-early tools and utility blocks remain.
+Implementation status: foundation palette and bootstrap flora slices are complete.
+The first five terrain blocks plus `ribroot_stem`, `ribroot_planks`, `veil_foliage`,
+`threadgrass`, `ribroot_shoot` and `pallid_bulb` have stable ids, block items,
+original textures/models, loot/tool/ecology tags and automated tests. Early tools,
+recipes and utility blocks remain.
 
 - priority-zero block palette and pixel textures;
 - mining/replaceable/tool tags, loot tables and building variants;

@@ -25,6 +25,12 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.HUSHSTONE.get());
                         output.accept(ModItems.DEEP_HUSHSTONE.get());
                         output.accept(ModItems.GRAVEBED.get());
+                        output.accept(ModItems.RIBROOT_STEM.get());
+                        output.accept(ModItems.RIBROOT_PLANKS.get());
+                        output.accept(ModItems.VEIL_FOLIAGE.get());
+                        output.accept(ModItems.THREADGRASS.get());
+                        output.accept(ModItems.RIBROOT_SHOOT.get());
+                        output.accept(ModItems.PALLID_BULB.get());
                         output.accept(ModItems.RAGGED_GRAZER_HIDE.get());
                         output.accept(ModItems.TAUT_SINEW.get());
                         output.accept(ModItems.GRAVE_TALLOW.get());

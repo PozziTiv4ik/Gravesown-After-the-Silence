@@ -24,7 +24,7 @@ The root scripts automatically select the project-local Java 21.
 
 ## Automated GameTest
 
-`test.cmd` currently runs eight required server tests. Together they verify that:
+`test.cmd` currently runs eleven required server tests. Together they verify that:
 
 - is registered under the stable expected id;
 - can be created and added to a logical server level;
@@ -45,8 +45,12 @@ The root scripts automatically select the project-local Java 21.
   intended hardness/no-loot properties;
 - soil/rock mining tags, Deep Hushstone tier restrictions and all four self-drop
   loot tables work on the logical server.
+- Ribroot wood, Veil Foliage and all three bootstrap plants retain stable block/item
+  ids, axis/collision/light behavior, standard ecosystem tags and exact self-drops;
+- Threadgrass, Ribroot Shoot and Pallid Bulb survive on both Gravesown soils while
+  deliberately rejecting vanilla dirt.
 
-Success means exit code 0 and `All 8 required tests passed` in the output. Gradle
+Success means exit code 0 and `All 11 required tests passed` in the output. Gradle
 `check` does not run GameTests, so gameplay changes require the separate button.
 
 ## TC3a foundation-block visual acceptance
@@ -68,6 +72,28 @@ In a disposable Creative world, obtain the five blocks:
   Hushstone drops only at stone tier or better.
 - Confirm Gravebed cannot be broken in Survival and produces no item if removed in Creative.
 - Switch `en_us`/`ru_ru`, reload resources with F3+T and inspect all inventory names/models.
+
+## TC3b Ribroot/flora visual acceptance
+
+In the same disposable Creative world, obtain the six new blocks:
+
+```mcfunction
+/give @s gravesown:ribroot_stem 64
+/give @s gravesown:ribroot_planks 64
+/give @s gravesown:veil_foliage 64
+/give @s gravesown:threadgrass 16
+/give @s gravesown:ribroot_shoot 16
+/give @s gravesown:pallid_bulb 16
+```
+
+- Place Ribroot Stem vertically and sideways; confirm the end grain follows the axis.
+- Build a dense Veil Foliage canopy and confirm holes use hard cutout edges without
+  purple-black pixels, sorting halos or missing internal silhouettes.
+- Place all plants on Ashen Sod and Grave Loam, then remove their support and confirm
+  they break. They must not remain on vanilla dirt.
+- View the plants from both sides, near/far and fast/fancy graphics. Confirm there is
+  no opaque black rectangle and that Pallid Bulb emits only a faint light level 3.
+- Inspect all six inventory models and names in both `en_us` and `ru_ru`.
 
 ## Real generated-chunk world audit
 

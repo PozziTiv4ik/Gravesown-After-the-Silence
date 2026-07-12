@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=x": { "model": "gravesown:block/ribroot_stem", "x": 90, "y": 90 },
+    "axis=y": { "model": "gravesown:block/ribroot_stem" },
+    "axis=z": { "model": "gravesown:block/ribroot_stem", "x": 90 }
+  }
+}

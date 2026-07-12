@@ -64,6 +64,10 @@ ship watermarks, third-party copyrighted assets or generated text artifacts.
   Ashen Sod has separate top/side textures and Grave Loam doubles as its bottom.
   Hushstone, Deep Hushstone and Gravebed use distinct value ranges so underground
   layers remain readable without bright fantasy colors.
+- Seven original 16 by 16 tiles cover Ribroot Stem sides/end, Ribroot Planks,
+  Veil Foliage, Threadgrass, Ribroot Shoot and Pallid Bulb. Foliage and plants use
+  audited hard-edged alpha silhouettes; their block models select NeoForge's named
+  `cutout_mipped`/`cutout` render types directly in JSON.
 - `art/generation-prompts/hollow_grazer_concept.md` — preserved ImageGen concept
   prompt. Image generation is intentionally not used as the final UV texture.
 

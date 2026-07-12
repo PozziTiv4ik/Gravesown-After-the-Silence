@@ -20,3 +20,14 @@ not merely the presence of a file.
 | hushstone | Primary rock | TC3a | Implemented | Original 16x16 | Self-drop | Wooden pickaxe or better | GameTest PASS; placed visual pending |
 | deep_hushstone | Deep rock | TC3a | Implemented | Original 16x16 | Self-drop | Stone pickaxe or better; wood/gold rejected | GameTest PASS; placed visual pending |
 | gravebed | Unbreakable bottom | TC3a | Implemented | Original 16x16 | No loot table | Unbreakable | GameTest PASS; placed visual pending |
+
+## Bootstrap flora
+
+| ID | Role | Stage | Model | Texture | Loot | Tags/behavior | Test |
+|---|---|---|---|---|---|---|---|
+| ribroot_stem | First wood/log | TC3b | Axis-aware column | Original 16x16 side/end | Self-drop | Logs, burnable logs, axe-mineable | GameTest PASS; placed visual pending |
+| ribroot_planks | First building wood | TC3b | Cube | Original 16x16 | Self-drop | Planks, axe-mineable | GameTest PASS; placed visual pending |
+| veil_foliage | Ribroot crown membrane | TC3b | Cutout-mipped cube | Original 16x16 alpha | Self-drop | Leaves, hoe-mineable, vanilla decay contract | GameTest PASS; placed visual pending |
+| threadgrass | Hand-gathered fiber plant | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Custom plant, tree-replaceable | GameTest PASS; placed visual pending |
+| ribroot_shoot | Future Ribroot propagule | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Sapling tag; deliberately non-growing until TC4 | GameTest PASS; placed visual pending |
+| pallid_bulb | Dim atmospheric plant | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Flower tag; light level 3 | GameTest PASS; placed visual pending |
