@@ -65,6 +65,17 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
+        // Isolated dedicated server used by worldtest.cmd. The mod scans real
+        // FULL chunks after startup, writes reports and then stops the server.
+        worldTest {
+            server()
+            gameDirectory = project.file('run-worldtest')
+            programArgument '--nogui'
+            systemProperty 'gravesown.worldAudit.enabled', 'true'
+            systemProperty 'gravesown.worldAudit.reportDir',
+                    file('build/reports/gravesown/world-audit').getAbsolutePath()
+        }
+
         // This run config launches GameTestServer and runs all registered gametests, then exits.
         // By default, the server will crash when no gametests are provided.
         // The gametest system is also enabled by default for other run configs under the /test command.

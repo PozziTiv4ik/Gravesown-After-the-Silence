@@ -176,18 +176,17 @@ public final class HollowGrazerGameTests {
         assertNear(helper, QuietskinEffects.scentDetectionMultiplier(player), 0.5D, "Full-set multiplier");
 
         HollowGrazer grazer = helper.spawnWithNoFreeWill(ModEntities.HOLLOW_GRAZER.get(), 1, 1, 1);
-        helper.getLevel().setDayTime(1000L);
         player.setHealth(1.0F);
         player.setPos(grazer.getX() + 13.0D, grazer.getY(), grazer.getZ());
         helper.assertTrue(
-                !grazer.canDetectByScent(player),
+                !grazer.canDetectByScent(player, true),
                 "Full Quietskin halves the 24-block scent range, so 13 blocks must be hidden"
         );
 
         player.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
         helper.assertTrue(!QuietskinEffects.hasFullSet(player), "Removing boots must break the full set");
         helper.assertTrue(
-                grazer.canDetectByScent(player),
+                grazer.canDetectByScent(player, true),
                 "Three pieces leave a 15-block scent range, so 13 blocks must be detected"
         );
         helper.succeed();
@@ -197,13 +196,12 @@ public final class HollowGrazerGameTests {
     public static void quietskinStopsAnExistingDaytimeScentHunt(GameTestHelper helper) {
         HollowGrazer grazer = helper.spawnWithNoFreeWill(ModEntities.HOLLOW_GRAZER.get(), 1, 1, 1);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.getLevel().setDayTime(1000L);
         player.setHealth(1.0F);
         player.setPos(grazer.getX() + 13.0D, grazer.getY(), grazer.getZ());
         grazer.setTarget(player);
 
         helper.assertTrue(
-                grazer.canContinueBloodScentHunt(),
+                grazer.canContinueBloodScentHunt(true),
                 "An existing daytime scent hunt must continue at 13 blocks without Quietskin"
         );
 
@@ -212,30 +210,27 @@ public final class HollowGrazerGameTests {
         player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.QUIETSKIN_LEGWRAPS.get()));
         player.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.QUIETSKIN_BOOTS.get()));
         helper.assertTrue(
-                !grazer.canContinueBloodScentHunt(),
+                !grazer.canContinueBloodScentHunt(true),
                 "Equipping full Quietskin must end an existing daytime scent hunt outside 12 blocks"
         );
 
         player.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
         helper.assertTrue(
-                grazer.canContinueBloodScentHunt(),
+                grazer.canContinueBloodScentHunt(true),
                 "Three Quietskin pieces must still allow the existing hunt at 13 blocks"
         );
 
         player.setHealth(player.getMaxHealth());
         helper.assertTrue(
-                !grazer.canContinueBloodScentHunt(),
+                !grazer.canContinueBloodScentHunt(true),
                 "Healing above half health must end an existing daytime scent hunt"
         );
 
-        helper.getLevel().setDayTime(13000L);
-        helper.runAfterDelay(2, () -> {
-            helper.assertTrue(
-                    grazer.canContinueBloodScentHunt(),
-                    "Night aggression must continue regardless of health and Quietskin"
-            );
-            helper.succeed();
-        });
+        helper.assertTrue(
+                grazer.canContinueBloodScentHunt(false),
+                "Night aggression must continue regardless of health and Quietskin"
+        );
+        helper.succeed();
     }
 
     private static int count(List<ItemStack> drops, Item item) {

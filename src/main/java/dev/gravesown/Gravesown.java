@@ -1,6 +1,7 @@
 package dev.gravesown;
 
 import com.mojang.logging.LogUtils;
+import dev.gravesown.audit.WorldAuditRunner;
 import dev.gravesown.config.GravesownConfig;
 import dev.gravesown.event.WorldSpawnEvents;
 import dev.gravesown.registry.ModArmorMaterials;
@@ -27,6 +28,7 @@ public final class Gravesown {
         ModCreativeTabs.register(modEventBus);
         ModEntities.registerEventListeners(modEventBus);
         NeoForge.EVENT_BUS.register(new WorldSpawnEvents());
+        NeoForge.EVENT_BUS.register(new WorldAuditRunner());
 
         modContainer.registerConfig(ModConfig.Type.COMMON, GravesownConfig.SPEC);
         LOGGER.info("Gravesown is preparing the world after the Silence.");

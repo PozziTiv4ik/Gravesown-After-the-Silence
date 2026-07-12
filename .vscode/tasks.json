@@ -21,6 +21,18 @@
       "problemMatcher": "$javac"
     },
     {
+      "label": "Gravesown: World Audit (Smoke)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\worldtest.cmd",
+      "problemMatcher": "$javac"
+    },
+    {
+      "label": "Gravesown: Verify Everything",
+      "type": "shell",
+      "command": "${workspaceFolder}\\verify-all.cmd",
+      "problemMatcher": "$javac"
+    },
+    {
       "label": "Gravesown: Build JAR",
       "type": "shell",
       "command": "${workspaceFolder}\\build.cmd",

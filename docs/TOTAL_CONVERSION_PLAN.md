@@ -137,6 +137,10 @@ visual inspection and no-command acquisition remain manual acceptance checks.
 
 ### TC2 — World audit harness
 
+Implementation status: complete. Smoke baseline and strict negative control are
+verified against 25 real FULL chunks; three-seed Full mode is available for later
+worldgen milestones.
+
 - `worldtest.cmd` for true chunk generation and block/biome/fluid audit;
 - `verify-all.cmd` for doctor, GameTests, world audit and build;
 - reports under `build/reports/gravesown/`.

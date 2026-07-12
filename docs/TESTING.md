@@ -5,8 +5,9 @@
 1. Run setup.cmd once.
 2. Run doctor.cmd.
 3. Run test.cmd. It starts a headless NeoForge GameTest server and exits by itself.
-4. Run play.cmd.
-5. Use a disposable Creative test world with cheats, never an important survival world.
+4. Run worldtest.cmd. It audits an isolated generated world and exits by itself.
+5. Run play.cmd.
+6. Use a disposable Creative test world with cheats, never an important survival world.
 
 ## Gradle commands
 
@@ -16,13 +17,14 @@
 - Development client: gradlew.bat runClient
 - Dedicated server: gradlew.bat runServer
 - GameTests: gradlew.bat runGameTestServer
+- Real generated-chunk audit server: gradlew.bat runWorldTest
 - Data generation: gradlew.bat runData
 
 The root scripts automatically select the project-local Java 21.
 
 ## Automated GameTest
 
-`test.cmd` currently runs five required server tests. Together they verify that:
+`test.cmd` currently runs six required server tests. Together they verify that:
 
 - is registered under the stable expected id;
 - can be created and added to a logical server level;
@@ -37,9 +39,47 @@ The root scripts automatically select the project-local Java 21.
   including a server-side targeting boundary test.
 - an already active daytime blood-scent hunt stops after the player equips enough
   Quietskin or heals, while night aggression continues.
+- the world-audit contract permits only reviewed technical air/empty-fluid states
+  and Gravesown-owned content, and strict/baseline status semantics cannot be mixed up.
 
-Success means exit code 0 and `All 5 required tests passed` in the output. Gradle
+Success means exit code 0 and `All 6 required tests passed` in the output. Gradle
 `check` does not run GameTests, so gameplay changes require the separate button.
+
+## Real generated-chunk world audit
+
+`worldtest.cmd` is different from a GameTest template. It starts a real isolated
+dedicated world, obtains FULL chunks from the normal world generator, scans them,
+writes reports and then uses Minecraft's normal save/stop path.
+
+Useful commands:
+
+```text
+worldtest.cmd
+worldtest.cmd -Strict
+worldtest.cmd -Profile Full
+verify-all.cmd
+verify-all.cmd -StrictWorld
+```
+
+- Default Smoke mode scans one fixed seed, 5x5 chunks, all 384 build-height blocks,
+  biome quart cells, fluid states and block entities.
+- Full mode scans three fixed seeds and 17x17 chunks per seed. It is deliberately
+  slower and is intended for worldgen milestones and release candidates.
+- Baseline enforcement exits successfully after recording violations. This is the
+  default only while the custom preset does not exist.
+- Strict enforcement exits nonzero unless the only biome is
+  `gravesown:sown_grave` and every generated block/fluid/block entity satisfies the
+  Gravesown namespace plus the explicit technical allowlist.
+- Reports are stored under `build/reports/gravesown/world-audit/` as JSON and text.
+
+Safety rules:
+
+- The only disposable world root is `run-worldtest/`, protected by
+  `.gravesown-worldtest-root`; `run/world` is never touched.
+- The script verifies the resolved absolute path and sentinel before recursive deletion.
+- It never accepts the Minecraft EULA and never scans or deletes a personal world.
+- `-ReuseWorld` is restricted to the single-seed Smoke profile and validates the
+  saved world's actual seed before accepting a report.
 
 ## TC1 manual acceptance
 

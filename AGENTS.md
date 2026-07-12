@@ -54,6 +54,8 @@ Chat history is not project memory.
 - Spawning, AI, damage, mutations, progression, loot, and saved state must run
   on the logical server.
 - Never scan every entity or every chunk every tick.
+- World-audit scans run only in the isolated `runWorldTest` development profile;
+  they must never activate during ordinary client or server play.
 - Use lowercase snake_case registry ids. Do not casually rename released ids.
 - All player-visible text must exist in both en_us.json and ru_ru.json.
 - Final game textures are original Minecraft-style pixel art with hard pixel
@@ -78,10 +80,13 @@ and a recorded smoke test.
    server-side behavior.
 4. Run gradlew.bat check and gradlew.bat build before declaring it done.
 5. Run the relevant client, GameTest, or dedicated-server smoke test.
-6. Record only tests that were actually executed.
-7. Update docs/STATUS.md and relevant content/design documents.
-8. Append architectural changes to docs/DECISIONS.md.
-9. Add user-visible changes to CHANGELOG.md.
+6. Run worldtest.cmd after worldgen, biome, placed-feature, structure, fluid, or
+   foundation-block changes. Use strict mode when the current milestone claims
+   the total-conversion world contract should pass.
+7. Record only tests that were actually executed.
+8. Update docs/STATUS.md and relevant content/design documents.
+9. Append architectural changes to docs/DECISIONS.md.
+10. Add user-visible changes to CHANGELOG.md.
 
 ## End every session
 

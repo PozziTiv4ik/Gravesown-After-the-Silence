@@ -79,11 +79,15 @@ public final class HollowGrazer extends Animal {
     }
 
     public boolean canDetectByScent(net.minecraft.world.entity.LivingEntity target) {
+        return canDetectByScent(target, this.level().isDay());
+    }
+
+    public boolean canDetectByScent(net.minecraft.world.entity.LivingEntity target, boolean daytime) {
         if (!(target instanceof Player player) || player.isCreative() || player.isSpectator()) {
             return false;
         }
 
-        if (!this.level().isDay()) {
+        if (!daytime) {
             return true;
         }
 
@@ -101,7 +105,11 @@ public final class HollowGrazer extends Animal {
     }
 
     public boolean canContinueBloodScentHunt() {
-        return this.getTarget() != null && this.canDetectByScent(this.getTarget());
+        return canContinueBloodScentHunt(this.level().isDay());
+    }
+
+    public boolean canContinueBloodScentHunt(boolean daytime) {
+        return this.getTarget() != null && this.canDetectByScent(this.getTarget(), daytime);
     }
 
     @Override

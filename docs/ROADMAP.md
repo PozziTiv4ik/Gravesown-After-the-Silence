@@ -38,13 +38,14 @@ or rotten flesh, and all automated server tests pass.
 
 ## TC2 — World audit harness
 
-- [ ] `worldtest.cmd` scans real generated chunks.
-- [ ] `verify-all.cmd` provides one-button full verification.
-- [ ] Strict biome, block, fluid and block-entity allowlists.
-- [ ] Machine-readable and human-readable reports.
+- [x] `worldtest.cmd` scans real generated FULL chunks in an isolated world.
+- [x] `verify-all.cmd` provides one-button full verification.
+- [x] Strict biome, block, fluid and block-entity allowlists.
+- [x] Machine-readable JSON and human-readable text reports.
 
 Acceptance: a deliberately inserted vanilla block or fluid fails the audit with
-its registry id and coordinates.
+its registry id and coordinates. Verified against the current vanilla generator:
+baseline records violations, while strict mode exits nonzero with exact samples.
 
 ## TC3 — World foundation
 

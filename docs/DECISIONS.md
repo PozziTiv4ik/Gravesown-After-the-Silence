@@ -93,3 +93,27 @@ Consequences: A real chunk audit is required before worldgen milestones can be
 called complete. Nether and End survival access remains unavailable until their
 own replacement milestones. The editable detail plan lives in
 docs/TOTAL_CONVERSION_PLAN.md.
+
+## ADR-0007: Isolated real-chunk world audit
+
+Date: 2026-07-12
+Status: Accepted
+
+Context: GameTest structures prove content mechanics but do not prove what the
+normal noise/feature/structure pipeline generated across complete chunks.
+
+Decision: Add an isolated ModDev dedicated-server run named `worldTest`. On
+`ServerStartedEvent`, and only when that run's explicit system property is present,
+the server loads real Overworld chunks to FULL status, scans every block and fluid
+position, biome quart cell and block entity, writes JSON/text reports, and calls the
+normal server halt path. The wrapper owns only sentinel-protected `run-worldtest/`.
+
+Baseline enforcement records violations while TC3–TC4 are unfinished. Strict
+enforcement is the release gate: content must use the Gravesown namespace, the only
+biome must be `gravesown:sown_grave`, and the technical allowlist is limited to air,
+cave air and the empty fluid state.
+
+Consequences: `worldtest.cmd` is required for worldgen changes; `verify-all.cmd`
+provides the vibe-coder one-button path. A normal client or server cannot trigger
+the scanner. Reports under `build/reports/gravesown/world-audit/` are generated
+evidence and are not committed. Test worlds are disposable and never user worlds.
