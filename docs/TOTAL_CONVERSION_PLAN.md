@@ -169,10 +169,18 @@ early utility blocks remain.
 
 ### TC4 — One-biome world preset
 
-- dynamic registry datagen;
-- fixed biome source, custom noise settings and surface rules;
-- custom carvers and safe spawn;
-- no vanilla structures, aquifers or ore veins.
+Implementation status: TC4a minimal preset complete. `after_the_silence` uses the
+single fixed `sown_grave` biome and a custom low-hill density function. Its surface
+is Ashen Sod over three Grave Loam layers, Hushstone, Deep Hushstone and one
+Gravebed floor. Fluids, aquifers, ore veins, carvers, placed features and structures
+are deliberately absent. Dedicated Smoke/Full audits and an integrated-client
+same-seed smoke test pass.
+
+- [x] data-driven dynamic registries;
+- [x] fixed biome source, custom noise settings and surface rules;
+- [x] empty reviewed carver/feature sets and safe solid spawn terrain;
+- [x] no vanilla structures, aquifers or ore veins;
+- [ ] TC4b custom Ribroot and bootstrap-flora placed features.
 
 ### TC5 — Deposits and subzones
 

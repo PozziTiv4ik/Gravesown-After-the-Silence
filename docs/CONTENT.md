@@ -29,8 +29,16 @@ not merely the presence of a file.
 | ribroot_planks | First building wood | TC3b | Cube | Original 16x16 | Self-drop | Planks, axe-mineable | GameTest PASS; placed visual pending |
 | veil_foliage | Ribroot crown membrane | TC3b | Cutout-mipped cube | Original 16x16 alpha | Self-drop | Leaves, hoe-mineable, vanilla decay contract | GameTest PASS; placed visual pending |
 | threadgrass | Hand-gathered fiber plant | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Custom plant, tree-replaceable | GameTest PASS; placed visual pending |
-| ribroot_shoot | Future Ribroot propagule | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Sapling tag; deliberately non-growing until TC4 | GameTest PASS; placed visual pending |
+| ribroot_shoot | Future Ribroot propagule | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Sapling tag; deliberately non-growing until TC4b | GameTest PASS; placed visual pending |
 | pallid_bulb | Dim atmospheric plant | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Flower tag; light level 3 | GameTest PASS; placed visual pending |
+
+## World generation
+
+| ID | Type | Stage | Contract | Natural content | Test |
+|---|---|---|---|---|---|
+| after_the_silence | World preset | TC4a | Overworld-only until TC8; fixed Sown Grave source | Custom terrain only | Dedicated Smoke/Full and integrated-client PASS |
+| sown_grave | Biome | TC4a | No precipitation, carvers or placed features; Hollow Grazer is the only natural spawn entry | TC4b flora pending | Registry GameTest and 38,400+ biome samples PASS |
+| sown_terrain | Noise/density | TC4a | Low hills around Y64, full -64..319 column, no aquifers or fluids | Five reviewed terrain blocks plus technical air | Three seeds × 289 FULL chunks PASS |
 
 ## First-tool survival chain
 

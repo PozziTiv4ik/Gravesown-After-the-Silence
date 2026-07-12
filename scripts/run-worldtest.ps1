@@ -3,11 +3,14 @@ param(
     [ValidateSet('Smoke', 'Full')]
     [string]$Profile = 'Smoke',
 
+    # Kept for compatibility with the pre-TC4 command line. Strict is now the default.
     [switch]$Strict,
+
+    [switch]$Baseline,
 
     [switch]$ReuseWorld,
 
-    [string]$WorldPreset = 'minecraft:normal'
+    [string]$WorldPreset = 'gravesown:after_the_silence'
 )
 
 . "$PSScriptRoot\common.ps1"
@@ -111,6 +114,9 @@ function Write-AuditServerProperties {
 }
 
 Initialize-SafeWorldTestRoot
+if ($Strict -and $Baseline) {
+    throw '-Strict and -Baseline cannot be used together.'
+}
 if ($ReuseWorld -and $Profile -eq 'Full') {
     throw '-ReuseWorld is only valid for the single-seed Smoke profile.'
 }
@@ -124,7 +130,8 @@ else {
     $radius = 2
 }
 
-$enforcement = if ($Strict) { 'strict' } else { 'baseline' }
+$strictEnforcement = -not $Baseline
+$enforcement = if ($strictEnforcement) { 'strict' } else { 'baseline' }
 $strictFailures = 0
 $reports = @()
 
@@ -179,10 +186,10 @@ foreach ($seed in $seeds) {
         $report.durationMillis
     )
 
-    if ($Strict -and $report.status -ne 'PASS') {
+    if ($strictEnforcement -and $report.status -ne 'PASS') {
         $strictFailures++
     }
-    elseif (-not $Strict -and $report.status -notin @('PASS', 'BASELINE_RECORDED')) {
+    elseif (-not $strictEnforcement -and $report.status -notin @('PASS', 'BASELINE_RECORDED')) {
         throw "Unexpected baseline audit status $($report.status): $reportPath"
     }
 }
@@ -194,11 +201,11 @@ if ($strictFailures -gt 0) {
     throw 'Strict Gravesown world audit failed.'
 }
 
-if ($Strict) {
+if ($strictEnforcement) {
     Write-Host 'WORLDTEST PASS: the strict Gravesown world contract is satisfied.' -ForegroundColor Green
 }
 else {
     Write-Host 'WORLDTEST HARNESS PASS: baseline reports were recorded successfully.' -ForegroundColor Green
-    Write-Warning 'Vanilla-world violations are expected until the custom world preset is implemented. Use -Strict to prove the final contract.'
+    Write-Warning 'Baseline mode records forbidden content without failing. Use the default strict mode for acceptance.'
 }
 Write-Host "Reports: $reportDirectory" -ForegroundColor Green

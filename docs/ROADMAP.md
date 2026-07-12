@@ -59,12 +59,13 @@ Acceptance: every foundation block has assets, drops, tags and a tested survival
 
 ## TC4 — The Sown Grave
 
-- [ ] `gravesown:after_the_silence` world preset.
-- [ ] Exactly one `gravesown:sown_grave` Overworld biome.
-- [ ] Custom noise settings, surface rules and carvers.
-- [ ] No vanilla aquifers, ore veins, structures or visible generated blocks.
+- [x] `gravesown:after_the_silence` world preset.
+- [x] Exactly one `gravesown:sown_grave` Overworld biome.
+- [x] Custom noise settings and surface rules; the reviewed TC4a carver list is empty.
+- [x] No vanilla aquifers, ore veins, structures or visible generated blocks.
 
-Acceptance: strict audit passes and the same seed is reproducible on client and server.
+Acceptance: PASS. Smoke and three-seed Full strict audits report zero violations;
+the fixed seed also loads in an isolated integrated client with the same biome.
 
 ## TC5 — Resources and subzones
 

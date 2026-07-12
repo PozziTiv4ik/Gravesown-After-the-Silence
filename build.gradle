@@ -59,6 +59,16 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
+        // Disposable integrated-server smoke test. scripts/run-client-smoke.ps1
+        // prepares its save and the client-side runner exits after validation.
+        clientSmoke {
+            client()
+            gameDirectory = project.file('run-clienttest')
+            programArguments.addAll '--quickPlaySingleplayer', 'tc4-client-smoke'
+            systemProperty 'gravesown.clientSmoke.enabled', 'true'
+            systemProperty 'gravesown.clientSmoke.expectedSeed', '-7046029254386353131'
+        }
+
         server {
             server()
             programArgument '--nogui'

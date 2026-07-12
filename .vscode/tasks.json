@@ -27,6 +27,12 @@
       "problemMatcher": "$javac"
     },
     {
+      "label": "Gravesown: Client Smoke",
+      "type": "shell",
+      "command": "${workspaceFolder}\\clienttest.cmd",
+      "problemMatcher": "$javac"
+    },
+    {
       "label": "Gravesown: Verify Everything",
       "type": "shell",
       "command": "${workspaceFolder}\\verify-all.cmd",

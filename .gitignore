@@ -39,6 +39,7 @@ bin/
 ### Minecraft Modding ###
 run/
 run-worldtest/
+run-clienttest/
 !**/src/**/run/
 **/src/generated/**/.cache/
 repo/

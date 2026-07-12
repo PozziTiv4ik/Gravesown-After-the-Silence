@@ -151,13 +151,13 @@ Decision: Reserve stable ids for `ribroot_stem`, `ribroot_planks`, `veil_foliage
 log/plank/leaf tag contracts so leaf distance and future recipes work without custom
 tick scans. All three ground plants share a no-collision server-safe block that only
 survives on Ashen Sod or Grave Loam. The Shoot is tagged as a sapling but cannot grow
-until TC4 supplies the reviewed configured feature. Pallid Bulb emits light level 3,
+until TC4b supplies the reviewed configured feature. Pallid Bulb emits light level 3,
 which is atmospheric rather than a replacement for the planned Tallow Lamp.
 
 Client transparency is selected through the 1.21.1 model JSON `render_type` field;
 no deprecated render-layer registration or common-side client reference is added.
 
-Consequences: TC4 can place the six ids directly and later attach deterministic
+Consequences: TC4b can place the six ids directly and later attach deterministic
 Ribroot growth without renaming content. Plants cannot leak vanilla tall grass or
 trees through bonemeal. The temporary self-drop economy keeps every block testable;
 rarer foliage/seed drops may replace it when renewable world generation exists.
@@ -183,3 +183,30 @@ Consequences: TC4 spawn placement only needs reachable Ribroot and Threadgrass t
 unlock the first mining tier. Deep Hushstone remains reserved for the next tool tier.
 The Knife uses standard sword behavior/tags and the Handpick standard pickaxe
 behavior/tags, preserving mod compatibility without exposing vanilla acquisition.
+
+## ADR-0011: Minimal one-biome preset before natural features
+
+Date: 2026-07-12
+Status: Accepted
+
+Context: TC4 needs a save-loadable total-conversion foundation whose absence of
+vanilla content can be proven before custom trees, deposits, caves and subzones add
+many independent failure paths.
+
+Decision: `gravesown:after_the_silence` initially defines only an Overworld using
+a fixed `gravesown:sown_grave` biome and `gravesown:sown_grave` noise settings. A
+small custom density function forms low hills. Surface rules produce Ashen Sod,
+three Grave Loam layers, Hushstone, Deep Hushstone and one Gravebed floor. The
+default fluid is technical air; aquifers, ore veins, carvers, placed features and
+structures are empty or disabled. Nether and End stems remain absent until their
+explicit TC8 replacements. Hollow Grazer is the biome's sole natural spawn entry.
+
+`worldtest.cmd` and `verify-all.cmd` now default to this preset and strict
+enforcement; baseline mode is explicit. `clienttest.cmd` copies only the sentinel-
+protected audit save into a separate sentinel-protected client directory, quick-
+loads it with the same seed, validates the biome and exits normally.
+
+Consequences: TC4a terrain is intentionally barren but safe and mechanically
+auditable. TC4b must add only Gravesown-owned Ribroot and bootstrap-flora features.
+Existing saves are never converted. The preset, biome, density/noise and terrain
+block ids are save-facing and must not be renamed casually.

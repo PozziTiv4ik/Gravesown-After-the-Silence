@@ -12,6 +12,8 @@
   "gravesown.configuration.preserveVanillaBosses": "Сохранять ванильных боссов",
   "gravesown.configuration.preserveVanillaBosses.tooltip": "Сохраняет Дракона Края и Визера до появления безопасных замен для прогрессии.",
   "itemGroup.gravesown.main": "Gravesown",
+  "generator.gravesown.after_the_silence": "После Тишины",
+  "biome.gravesown.sown_grave": "Засеянная могила",
   "block.gravesown.ashen_sod": "Пеплокожий дёрн",
   "block.gravesown.grave_loam": "Могильный суглинок",
   "block.gravesown.hushstone": "Камень тишины",

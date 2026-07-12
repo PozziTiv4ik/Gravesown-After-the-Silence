@@ -6,8 +6,9 @@
 2. Run doctor.cmd.
 3. Run test.cmd. It starts a headless NeoForge GameTest server and exits by itself.
 4. Run worldtest.cmd. It audits an isolated generated world and exits by itself.
-5. Run play.cmd.
-6. Use a disposable Creative test world with cheats, never an important survival world.
+5. Run clienttest.cmd. It opens the isolated audit save in a client and exits by itself.
+6. Run play.cmd.
+7. Use a disposable Creative test world with cheats, never an important survival world.
 
 ## Gradle commands
 
@@ -24,7 +25,7 @@ The root scripts automatically select the project-local Java 21.
 
 ## Automated GameTest
 
-`test.cmd` currently runs fourteen required server tests. Together they verify that:
+`test.cmd` currently runs fifteen required server tests. Together they verify that:
 
 - is registered under the stable expected id;
 - can be created and added to a logical server level;
@@ -53,8 +54,10 @@ The root scripts automatically select the project-local Java 21.
   pickaxe/sword/custom tags and the intended Hushstone versus Deep Hushstone gate;
 - all seven bootstrap recipes fit the player's 2x2 grid, resolve only Gravesown
   ingredients and execute the complete Ribroot/Threadgrass → Handpick → Shard → Knife chain.
+- the Sown Grave dynamic registries retain one fixed biome, no carvers/features or
+  foreign spawn entries, fluidless noise settings and the reviewed world preset.
 
-Success means exit code 0 and `All 14 required tests passed` in the output. Gradle
+Success means exit code 0 and `All 15 required tests passed` in the output. Gradle
 `check` does not run GameTests, so gameplay changes require the separate button.
 
 ## TC3a foundation-block visual acceptance
@@ -122,28 +125,29 @@ In Survival, start with one Ribroot Stem, three Threadgrass and no vanilla items
 ## Real generated-chunk world audit
 
 `worldtest.cmd` is different from a GameTest template. It starts a real isolated
-dedicated world, obtains FULL chunks from the normal world generator, scans them,
+dedicated world with `gravesown:after_the_silence`, obtains FULL chunks, scans them,
 writes reports and then uses Minecraft's normal save/stop path.
 
 Useful commands:
 
 ```text
 worldtest.cmd
-worldtest.cmd -Strict
 worldtest.cmd -Profile Full
+worldtest.cmd -Baseline -WorldPreset minecraft:normal
 verify-all.cmd
-verify-all.cmd -StrictWorld
+verify-all.cmd -FullWorld
+clienttest.cmd
 ```
 
 - Default Smoke mode scans one fixed seed, 5x5 chunks, all 384 build-height blocks,
   biome quart cells, fluid states and block entities.
 - Full mode scans three fixed seeds and 17x17 chunks per seed. It is deliberately
   slower and is intended for worldgen milestones and release candidates.
-- Baseline enforcement exits successfully after recording violations. This is the
-  default only while the custom preset does not exist.
-- Strict enforcement exits nonzero unless the only biome is
+- Strict enforcement is the default and exits nonzero unless the only biome is
   `gravesown:sown_grave` and every generated block/fluid/block entity satisfies the
   Gravesown namespace plus the explicit technical allowlist.
+- `-Baseline` is an explicit diagnostic escape hatch for auditing a known-incomplete
+  generator such as `minecraft:normal`; it never claims total-conversion acceptance.
 - Reports are stored under `build/reports/gravesown/world-audit/` as JSON and text.
 
 Safety rules:
@@ -154,6 +158,21 @@ Safety rules:
 - It never accepts the Minecraft EULA and never scans or deletes a personal world.
 - `-ReuseWorld` is restricted to the single-seed Smoke profile and validates the
   saved world's actual seed before accepting a report.
+- `clienttest.cmd` first generates the fixed-seed strict Smoke world, then uses only
+  `run-clienttest/`, protected by its own sentinel. It copies the isolated audit
+  save, checks the same seed and biome, then saves and exits.
+
+## TC4a world-preset acceptance
+
+- Run `worldtest.cmd`; strict Smoke must report zero violations.
+- Run `worldtest.cmd -Profile Full`; all three seeds and all 867 FULL chunks must pass.
+- Run `clienttest.cmd`; it must log `GRAVESOWN_CLIENT_SMOKE_RESULT status=PASS`,
+  disconnect normally and save the integrated world.
+- For visual QA, run `play.cmd`, create a disposable world and cycle World Type to
+  **After the Silence / После Тишины**. Confirm low hills, an Ashen Sod surface,
+  no water/vanilla vegetation/structures and a safe solid spawn.
+- The TC4a terrain is intentionally barren. Natural Ribroot and bootstrap plants
+  are the separate TC4b milestone, not a missing-resource error.
 
 ## TC1 manual acceptance
 

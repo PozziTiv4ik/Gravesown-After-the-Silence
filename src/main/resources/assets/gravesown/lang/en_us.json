@@ -12,6 +12,8 @@
   "gravesown.configuration.preserveVanillaBosses": "Preserve vanilla bosses",
   "gravesown.configuration.preserveVanillaBosses.tooltip": "Keeps the Ender Dragon and Wither until progression-safe Gravesown replacements exist.",
   "itemGroup.gravesown.main": "Gravesown",
+  "generator.gravesown.after_the_silence": "After the Silence",
+  "biome.gravesown.sown_grave": "The Sown Grave",
   "block.gravesown.ashen_sod": "Ashen Sod",
   "block.gravesown.grave_loam": "Grave Loam",
   "block.gravesown.hushstone": "Hushstone",
