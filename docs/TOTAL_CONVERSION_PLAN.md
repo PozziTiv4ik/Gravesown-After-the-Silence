@@ -52,6 +52,14 @@ Priority-zero blocks:
 - `ribroot_stem`, `ribroot_planks`, `veil_foliage` — first wood family;
 - `threadgrass`, `ribroot_shoot`, `pallid_bulb` — bootstrap vegetation.
 
+Bootstrap tool materials and tools:
+
+- `ribroot_splint` — local handle material from Ribroot Planks;
+- `thread_binding` — binding made only from Threadgrass;
+- `hushstone_shard` — reversible Hushstone cutting edge;
+- `crude_handpick` — 48-use first pick that harvests Hushstone but not Deep Hushstone;
+- `bound_knife` — 96-use first cutting/combat tool.
+
 Early utility blocks:
 
 - `gravework_bench` — crafting station;
@@ -112,9 +120,10 @@ before adding the timed full-set concealment state.
 
 ## First-hour survival loop
 
-1. Gather loose Hushstone, Threadgrass and Ribroot shoots by hand.
-2. Craft a Bound Knife and Crude Handpick in the 2x2 grid.
-3. Obtain Ribroot and Hushstone.
+1. Gather Ribroot and Threadgrass by hand.
+2. Convert planks into Splints, grass into Thread Binding and craft a Crude Handpick
+   in the 2x2 grid.
+3. Mine Hushstone, split it into reversible Shards and craft a Bound Knife.
 4. Build the Gravework Bench, Pitch Kiln, shelter and Tallow Lamp.
 5. Hunt Hollow Grazers during daytime and process food/hides.
 6. Mine Ferric Marrow and craft the first metal tool.
@@ -147,11 +156,12 @@ worldgen milestones.
 
 ### TC3 — World foundation content
 
-Implementation status: foundation palette and bootstrap flora slices are complete.
+Implementation status: foundation palette, bootstrap flora and first-tool slices are complete.
 The first five terrain blocks plus `ribroot_stem`, `ribroot_planks`, `veil_foliage`,
 `threadgrass`, `ribroot_shoot` and `pallid_bulb` have stable ids, block items,
-original textures/models, loot/tool/ecology tags and automated tests. Early tools,
-recipes and utility blocks remain.
+original textures/models, loot/tool/ecology tags and automated tests. The local
+Splint/Binding/Shard chain crafts a Crude Handpick and Bound Knife entirely in 2x2;
+early utility blocks remain.
 
 - priority-zero block palette and pixel textures;
 - mining/replaceable/tool tags, loot tables and building variants;

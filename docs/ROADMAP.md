@@ -51,7 +51,8 @@ baseline records violations, while strict mode exits nonzero with exact samples.
 
 - [x] Custom surface, soil, rock, deep rock and bottom blocks (TC3a; 8/8 tests PASS).
 - [x] Ribroot wood family and bootstrap vegetation (TC3b; 11/11 tests PASS).
-- [ ] Early tools, light, crafting, processing and storage.
+- [x] Vanilla-free 2x2 first-tool crafting chain (TC3c; 14/14 tests PASS).
+- [ ] Early light, crafting station, processing and storage.
 - [x] Mining, replaceable and tool tags plus loot tables for all current foundation content.
 
 Acceptance: every foundation block has assets, drops, tags and a tested survival use.

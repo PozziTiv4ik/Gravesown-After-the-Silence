@@ -1,64 +1,65 @@
 # Current status
 
-Updated: 2026-07-12 22:02 Europe/Zurich
-Branch: main; TC3b implementation and verification complete, checkpoint pending
-Playable state: creature/equipment alpha plus eleven placeable Gravesown world blocks
+Updated: 2026-07-12 22:13 Europe/Zurich
+Branch: main; TC3c implementation and verification complete, checkpoint pending
+Playable state: creature/equipment alpha, eleven world blocks and local first tools
 Last build: `scripts/verify-all.ps1` — PASS; release JAR copied to `dist/`
 Last verified command: `scripts/verify-all.ps1` — PASS
 
 ## Current milestone
 
-TC3b — the first wood family and bootstrap flora are implemented. Common-side
-behavior, data resources, dedicated logical-server tests and client asset loading pass.
+TC3c — the vanilla-free player-grid first-tool chain is implemented. Recipes,
+server-authoritative tool behavior, client resources and the full verification path pass.
 
 ## Implemented and verified
 
-- Added stable block and block-item ids for `ribroot_stem`, `ribroot_planks`,
-  `veil_foliage`, `threadgrass`, `ribroot_shoot` and `pallid_bulb`.
-- Ribroot Stem is axis-aware; wood and foliage use standard log/plank/leaf tags
-  plus family tags so future recipes and leaf-distance updates remain compatible.
-- Three no-collision ground plants only survive on Ashen Sod or Grave Loam and
-  reject vanilla dirt. Threadgrass is tree-replaceable, the Shoot is a sapling,
-  and Pallid Bulb is a flower with atmospheric light level 3.
-- Every TC3b block currently has an exact self-drop loot table and matching
-  English/Russian name, blockstate, block model and inventory model.
-- Seven original deterministic 16x16 textures cover stem side/end, planks,
-  foliage and three plants. Cutout alpha and nearest-neighbor contact-sheet QA pass.
-- Three new logical-server tests bring the suite to 11/11 PASS and cover ids,
-  items, placement axis, collision, light, soil survival, tags and loot.
-- Client main-menu smoke loaded `mod/gravesown`, rebuilt the block atlas without
-  missing model/texture or error markers, and shut down normally.
+- Added stable ids for `ribroot_splint`, `thread_binding`, `hushstone_shard`,
+  `crude_handpick` and `bound_knife`, all visible in the Gravesown creative tab.
+- Seven recipes form a complete 2x2 chain: Ribroot Stem → Planks → Splints,
+  Threadgrass → Bindings, Handpick, Hushstone ↔ Shards and Bound Knife.
+- Automated recipe inspection proves every recipe fits 2x2 and every accepted
+  ingredient belongs to the Gravesown namespace.
+- Crude Handpick has 48 durability and mining speed 2.5. It harvests Hushstone,
+  cannot harvest Deep Hushstone and repairs only with Ribroot Splints.
+- Bound Knife has 96 durability, uses standard sword behavior, cuts bootstrap
+  plants efficiently and repairs only with Hushstone Shards.
+- Standard pickaxe/sword tags and Gravesown handpick/knife/material tags load on
+  the logical server. Vanilla sticks and flint are rejected as repair items.
+- Five original deterministic 16x16 item textures, five item models and both
+  translations pass exact dimension, alpha silhouette and contact-sheet QA.
+- Three new server tests bring the required suite to 14/14 PASS.
+- Client smoke loaded all resources and recipes, entered the existing integrated
+  world, connected the player, then saved and shut down normally with a clean asset log.
 
 ## Known issues and open acceptance checks
 
-- TC3a/TC3b blocks still need player-driven in-world composition QA. Exact `/give`
-  checklists are in `docs/TESTING.md`; no placement claim is made yet.
-- Ribroot Shoot deliberately does not grow until TC4 provides the audited custom
-  configured tree feature. World generation does not place any new content yet.
-- Strict world audit remains expected to fail until the custom one-biome preset
-  replaces the vanilla generator; the latest baseline records 778,728 violations.
-- TC3 still lacks the no-command first-tool recipes and early utility blocks.
-- Quietskin worn-model visual QA and multiplayer reconnect checks remain open.
+- The crafting/mining chain is automated-test complete but still needs a player-driven
+  Survival playthrough; the exact checklist is in `docs/TESTING.md`.
+- TC3a/TC3b block composition and Quietskin worn-model visual QA remain manual.
+- Ribroot Shoot does not grow and no Gravesown content is generated naturally yet.
+- Strict world audit still fails by design on the vanilla generator; the latest
+  baseline records 778,728 pre-TC4 violations.
+- Gravework Bench, Pitch Kiln, Hide Rack, Tallow Lamp and Sinew Crate remain planned.
 
 ## Next action
 
-Implement TC3c first-tool survival loop: add `ribroot_splint`, `thread_binding`,
-`hushstone_shard`, `bound_knife` and `crude_handpick`, the Ribroot plank conversion
-and 2x2 crafting chain, original item textures/models/translations, tool tags and
-deterministic GameTests. Completion criterion: a fresh-inventory test can craft both
-tools without vanilla ingredients, the Handpick harvests Hushstone, and client,
-GameTests, release build and baseline world audit remain green.
+Implement TC4a minimal total-conversion world generation: selectable
+`gravesown:after_the_silence`, exactly one `gravesown:sown_grave` Overworld biome,
+custom noise settings/surface rules for Ashen Sod, Grave Loam, Hushstone, Deep
+Hushstone and Gravebed, and no vanilla fluids, aquifers, ores, features or structures.
+Completion criterion: new worlds load on client and dedicated server, safe terrain
+generates, and strict Smoke world audit reports zero biome/block/fluid/block-entity
+violations for the custom preset.
 
 ## Verification evidence
 
-- `gradlew.bat compileJava processResources` — PASS without deprecation warnings.
-- TC3b asset audit — PASS — 87 JSON resources parsed, six complete asset matrices,
-  seven 16x16 PNGs and bilingual names checked; alpha silhouettes are nonempty.
-- `scripts/run-gametests.ps1` — PASS — `All 11 required tests passed`.
-- `scripts/run-client.ps1` — PASS — Gravesown resources and block atlas loaded;
-  asset/error scan clean; normal client shutdown.
-- `scripts/verify-all.ps1` — PASS — doctor, 11/11 GameTests, clean build and
+- `gradlew.bat compileJava processResources` — PASS without Java warnings.
+- TC3c asset audit — PASS — 105 JSON resources parsed, five item matrices/textures,
+  seven recipe files and bilingual names checked.
+- `scripts/run-gametests.ps1` — PASS — `All 14 required tests passed`.
+- `scripts/run-client.ps1` — PASS — recipes/assets and integrated world loaded;
+  player login, save and normal shutdown completed with no relevant error markers.
+- `scripts/verify-all.ps1` — PASS — doctor, 14/14 GameTests, clean build and
   baseline dedicated-world audit all passed.
 - Baseline audit sampled 25 FULL chunks, 2,457,600 block/fluid positions and
-  38,400 biome positions; it recorded the expected 778,728 pre-TC4 violations
-  in 489 ms.
+  38,400 biome positions; it recorded 778,728 expected pre-TC4 violations in 948 ms.

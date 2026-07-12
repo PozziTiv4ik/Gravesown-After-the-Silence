@@ -68,6 +68,9 @@ ship watermarks, third-party copyrighted assets or generated text artifacts.
   Veil Foliage, Threadgrass, Ribroot Shoot and Pallid Bulb. Foliage and plants use
   audited hard-edged alpha silhouettes; their block models select NeoForge's named
   `cutout_mipped`/`cutout` render types directly in JSON.
+- Five original 16 by 16 item silhouettes cover Ribroot Splint, Thread Binding,
+  Hushstone Shard, Crude Handpick and Bound Knife. The two tools use vanilla-readable
+  handheld perspective while keeping the Gravesown wood/stone/membrane palette.
 - `art/generation-prompts/hollow_grazer_concept.md` — preserved ImageGen concept
   prompt. Image generation is intentionally not used as the final UV texture.
 

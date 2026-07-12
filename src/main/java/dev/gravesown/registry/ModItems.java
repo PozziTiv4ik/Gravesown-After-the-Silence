@@ -8,6 +8,8 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.SwordItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -28,6 +30,24 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> THREADGRASS = ITEMS.registerSimpleBlockItem(ModBlocks.THREADGRASS);
     public static final DeferredItem<BlockItem> RIBROOT_SHOOT = ITEMS.registerSimpleBlockItem(ModBlocks.RIBROOT_SHOOT);
     public static final DeferredItem<BlockItem> PALLID_BULB = ITEMS.registerSimpleBlockItem(ModBlocks.PALLID_BULB);
+
+    public static final DeferredItem<Item> RIBROOT_SPLINT = ITEMS.registerSimpleItem("ribroot_splint");
+    public static final DeferredItem<Item> THREAD_BINDING = ITEMS.registerSimpleItem("thread_binding");
+    public static final DeferredItem<Item> HUSHSTONE_SHARD = ITEMS.registerSimpleItem("hushstone_shard");
+    public static final DeferredItem<PickaxeItem> CRUDE_HANDPICK = ITEMS.registerItem(
+            "crude_handpick",
+            properties -> new PickaxeItem(
+                    ModToolTiers.CRUDE,
+                    properties.attributes(PickaxeItem.createAttributes(ModToolTiers.CRUDE, 1.0F, -2.8F))
+            )
+    );
+    public static final DeferredItem<SwordItem> BOUND_KNIFE = ITEMS.registerItem(
+            "bound_knife",
+            properties -> new SwordItem(
+                    ModToolTiers.BOUND_HUSHSTONE,
+                    properties.attributes(SwordItem.createAttributes(ModToolTiers.BOUND_HUSHSTONE, 2.0F, -2.0F))
+            )
+    );
 
     public static final DeferredItem<Item> RAGGED_GRAZER_HIDE = ITEMS.registerSimpleItem("ragged_grazer_hide");
     public static final DeferredItem<Item> TAUT_SINEW = ITEMS.registerSimpleItem("taut_sinew");

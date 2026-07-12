@@ -31,6 +31,11 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.THREADGRASS.get());
                         output.accept(ModItems.RIBROOT_SHOOT.get());
                         output.accept(ModItems.PALLID_BULB.get());
+                        output.accept(ModItems.RIBROOT_SPLINT.get());
+                        output.accept(ModItems.THREAD_BINDING.get());
+                        output.accept(ModItems.HUSHSTONE_SHARD.get());
+                        output.accept(ModItems.CRUDE_HANDPICK.get());
+                        output.accept(ModItems.BOUND_KNIFE.get());
                         output.accept(ModItems.RAGGED_GRAZER_HIDE.get());
                         output.accept(ModItems.TAUT_SINEW.get());
                         output.accept(ModItems.GRAVE_TALLOW.get());

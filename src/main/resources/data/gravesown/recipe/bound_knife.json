@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": { "item": "gravesown:thread_binding" },
+    "H": { "item": "gravesown:hushstone_shard" },
+    "S": { "item": "gravesown:ribroot_splint" }
+  },
+  "pattern": [
+    "H ",
+    "SB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "gravesown:bound_knife"
+  }
+}

@@ -31,3 +31,13 @@ not merely the presence of a file.
 | threadgrass | Hand-gathered fiber plant | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Custom plant, tree-replaceable | GameTest PASS; placed visual pending |
 | ribroot_shoot | Future Ribroot propagule | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Sapling tag; deliberately non-growing until TC4 | GameTest PASS; placed visual pending |
 | pallid_bulb | Dim atmospheric plant | TC3b | Offset cutout cross | Original 16x16 alpha | Self-drop | Flower tag; light level 3 | GameTest PASS; placed visual pending |
+
+## First-tool survival chain
+
+| ID | Role | Stage | Model/texture | Acquisition | Contract | Test |
+|---|---|---|---|---|---|---|
+| ribroot_splint | Local handle material | TC3c | Generated item; original 16x16 | 2 Ribroot Planks → 4 | Gravesown material only | GameTest PASS; visual pending |
+| thread_binding | Local binding material | TC3c | Generated item; original 16x16 | 3 Threadgrass → 2 | Gravesown material only | GameTest PASS; visual pending |
+| hushstone_shard | First stone edge | TC3c | Generated item; original 16x16 | 1 Hushstone → 4; reversible | Repairs Bound Knife | GameTest PASS; visual pending |
+| crude_handpick | First mining tool | TC3c | Handheld; original 16x16 | 2 Splints + Binding in 2x2 | 48 durability; speed 2.5; Hushstone yes, Deep no | GameTest PASS; visual pending |
+| bound_knife | First cutting/combat tool | TC3c | Handheld; original 16x16 | Shard + Splint + Binding in 2x2 | 96 durability; efficient on bootstrap plants | GameTest PASS; visual pending |

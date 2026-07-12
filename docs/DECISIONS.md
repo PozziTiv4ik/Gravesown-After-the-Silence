@@ -161,3 +161,25 @@ Consequences: TC4 can place the six ids directly and later attach deterministic
 Ribroot growth without renaming content. Plants cannot leak vanilla tall grass or
 trees through bonemeal. The temporary self-drop economy keeps every block testable;
 rarer foliage/seed drops may replace it when renewable world generation exists.
+
+## ADR-0010: Vanilla-free 2x2 first-tool gate
+
+Date: 2026-07-12
+Status: Accepted
+
+Context: A total-conversion spawn must provide a mining tool without a crafting
+table, vanilla sticks, flint or pre-mined stone, while still preserving a meaningful
+deep-rock progression gate.
+
+Decision: Ribroot Planks become `ribroot_splint`; three Threadgrass become two
+`thread_binding`. Two Splints and one Binding make a 48-use `crude_handpick` in the
+player 2x2 grid. Its wood-level incorrect-block contract harvests Hushstone but not
+Deep Hushstone. Mined Hushstone converts reversibly to four `hushstone_shard`; one
+Shard, Splint and Binding make a 96-use `bound_knife`. Repair inputs are the exact
+local material, not broad vanilla tags. Every recipe fits 2x2 and accepts only
+Gravesown-owned ingredients.
+
+Consequences: TC4 spawn placement only needs reachable Ribroot and Threadgrass to
+unlock the first mining tier. Deep Hushstone remains reserved for the next tool tier.
+The Knife uses standard sword behavior/tags and the Handpick standard pickaxe
+behavior/tags, preserving mod compatibility without exposing vanilla acquisition.

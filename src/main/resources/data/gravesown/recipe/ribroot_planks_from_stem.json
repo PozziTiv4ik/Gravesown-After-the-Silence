@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    { "tag": "gravesown:ribroot_logs" }
+  ],
+  "result": {
+    "count": 4,
+    "id": "gravesown:ribroot_planks"
+  }
+}

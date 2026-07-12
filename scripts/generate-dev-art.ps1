@@ -179,6 +179,14 @@ function New-GravesownPalette {
         pale = New-Object System.Drawing.SolidBrush (Convert-HexColor '#D0C39D')
         sick = New-Object System.Drawing.SolidBrush (Convert-HexColor '#8A9A4A')
         wound = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7E292B')
+        woodDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#24191F')
+        wood = New-Object System.Drawing.SolidBrush (Convert-HexColor '#3B2730')
+        woodLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5A3D49')
+        stoneDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#29272D')
+        stone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#3A373F')
+        stoneLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5C5661')
+        membrane = New-Object System.Drawing.SolidBrush (Convert-HexColor '#404C36')
+        membraneLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#657052')
     }
 }
 
@@ -695,9 +703,88 @@ function Save-BootstrapFloraTextures {
     }
 }
 
+function Save-FirstToolItemTextures {
+    Save-ItemTexture 'ribroot_splint' {
+        param($bitmap, $graphics, $p)
+        for ($i = 0; $i -lt 10; $i++) {
+            $x = 3 + $i
+            $y = 13 - $i
+            Fill-Pixels $graphics $p.shadow $x $y 2 2
+            Fill-Pixels $graphics $p.wood $x $y 1 2
+            if (($i % 3) -eq 1) {
+                $bitmap.SetPixel($x + 1, $y, (Convert-HexColor '#5A3D49'))
+            }
+        }
+        Fill-Pixels $graphics $p.bone 12 3 2 1
+        Fill-Pixels $graphics $p.woodDark 2 13 3 2
+    }
+
+    Save-ItemTexture 'thread_binding' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 3 4 10 9
+        Fill-Pixels $graphics $p.membrane 4 3 8 9
+        Fill-Pixels $graphics $p.shadow 6 5 5 5
+        Fill-Pixels $graphics $p.membraneLight 4 5 2 5
+        Fill-Pixels $graphics $p.membraneLight 7 3 4 1
+        Fill-Pixels $graphics $p.membrane 7 11 5 2
+        Fill-Pixels $graphics $p.sinew 10 8 3 1
+        Fill-Pixels $graphics $p.bone 6 10 2 1
+    }
+
+    Save-ItemTexture 'hushstone_shard' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 3 10 10 4
+        Fill-Pixels $graphics $p.stoneDark 4 7 8 6
+        Fill-Pixels $graphics $p.stone 6 4 5 8
+        Fill-Pixels $graphics $p.stoneLight 8 3 2 7
+        Fill-Pixels $graphics $p.stoneLight 5 9 2 3
+        Fill-Pixels $graphics $p.wound 9 7 2 3
+        Fill-Pixels $graphics $p.bone 7 11 2 1
+        $bitmap.SetPixel(10, 5, (Convert-HexColor '#171515'))
+    }
+
+    Save-ItemTexture 'crude_handpick' {
+        param($bitmap, $graphics, $p)
+        for ($i = 0; $i -lt 8; $i++) {
+            $x = 3 + $i
+            $y = 13 - $i
+            Fill-Pixels $graphics $p.shadow $x $y 3 3
+            Fill-Pixels $graphics $p.wood $x ($y + 1) 2 2
+            $bitmap.SetPixel($x + 1, $y + 1, (Convert-HexColor '#5A3D49'))
+        }
+        Fill-Pixels $graphics $p.shadow 4 3 10 4
+        Fill-Pixels $graphics $p.woodDark 5 4 9 2
+        Fill-Pixels $graphics $p.wood 6 4 5 1
+        Fill-Pixels $graphics $p.bone 4 4 2 2
+        Fill-Pixels $graphics $p.membrane 8 5 3 3
+        Fill-Pixels $graphics $p.membraneLight 9 5 1 3
+    }
+
+    Save-ItemTexture 'bound_knife' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.shadow 2 11 6 4
+        Fill-Pixels $graphics $p.woodDark 3 11 5 3
+        Fill-Pixels $graphics $p.wood 4 10 4 3
+        Fill-Pixels $graphics $p.membrane 6 9 3 3
+        Fill-Pixels $graphics $p.membraneLight 7 9 1 3
+        foreach ($segment in @(
+            @(7, 8, 4, 3), @(9, 6, 4, 3), @(11, 4, 3, 3), @(12, 2, 2, 3)
+        )) {
+            Fill-Pixels $graphics $p.shadow $segment[0] $segment[1] $segment[2] $segment[3]
+        }
+        Fill-Pixels $graphics $p.stone 8 8 3 2
+        Fill-Pixels $graphics $p.stone 10 6 3 2
+        Fill-Pixels $graphics $p.stoneLight 11 5 2 2
+        Fill-Pixels $graphics $p.stoneLight 12 3 2 2
+        Fill-Pixels $graphics $p.wound 9 8 1 1
+        Fill-Pixels $graphics $p.bone 4 12 1 1
+    }
+}
+
 Save-HollowGrazerTexture
 Save-ModIcon
 Save-QuietskinItemTextures
 Save-QuietskinArmorTextures
 Save-FoundationBlockTextures
 Save-BootstrapFloraTextures
+Save-FirstToolItemTextures

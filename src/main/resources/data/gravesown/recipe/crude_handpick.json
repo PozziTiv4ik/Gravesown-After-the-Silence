@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": { "item": "gravesown:thread_binding" },
+    "S": { "item": "gravesown:ribroot_splint" }
+  },
+  "pattern": [
+    "SS",
+    " B"
+  ],
+  "result": {
+    "count": 1,
+    "id": "gravesown:crude_handpick"
+  }
+}

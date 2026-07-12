@@ -24,7 +24,7 @@ The root scripts automatically select the project-local Java 21.
 
 ## Automated GameTest
 
-`test.cmd` currently runs eleven required server tests. Together they verify that:
+`test.cmd` currently runs fourteen required server tests. Together they verify that:
 
 - is registered under the stable expected id;
 - can be created and added to a logical server level;
@@ -49,8 +49,12 @@ The root scripts automatically select the project-local Java 21.
   ids, axis/collision/light behavior, standard ecosystem tags and exact self-drops;
 - Threadgrass, Ribroot Shoot and Pallid Bulb survive on both Gravesown soils while
   deliberately rejecting vanilla dirt.
+- all five first-tool items retain stable ids, exact durability, repair materials,
+  pickaxe/sword/custom tags and the intended Hushstone versus Deep Hushstone gate;
+- all seven bootstrap recipes fit the player's 2x2 grid, resolve only Gravesown
+  ingredients and execute the complete Ribroot/Threadgrass → Handpick → Shard → Knife chain.
 
-Success means exit code 0 and `All 11 required tests passed` in the output. Gradle
+Success means exit code 0 and `All 14 required tests passed` in the output. Gradle
 `check` does not run GameTests, so gameplay changes require the separate button.
 
 ## TC3a foundation-block visual acceptance
@@ -94,6 +98,26 @@ In the same disposable Creative world, obtain the six new blocks:
 - View the plants from both sides, near/far and fast/fancy graphics. Confirm there is
   no opaque black rectangle and that Pallid Bulb emits only a faint light level 3.
 - Inspect all six inventory models and names in both `en_us` and `ru_ru`.
+
+## TC3c first-tool acceptance
+
+In Survival, start with one Ribroot Stem, three Threadgrass and no vanilla items:
+
+```mcfunction
+/clear @s
+/give @s gravesown:ribroot_stem 1
+/give @s gravesown:threadgrass 3
+```
+
+- In the player 2x2 grid, convert the Stem to four Planks, two Planks to four
+  Splints and three Threadgrass to two Bindings.
+- Craft a Crude Handpick from two Splints and one Binding. Confirm it mines and
+  drops Hushstone, but cannot make Deep Hushstone drop.
+- Convert one mined Hushstone into four Shards; craft a Bound Knife from one Shard,
+  one Splint and one Binding. Rebuild four Shards into Hushstone as a separate
+  reversibility check.
+- Confirm the Handpick repairs with Splints but not sticks, and the Knife repairs
+  with Shards but not flint. Inspect both icons in hand and inventory in en/ru.
 
 ## Real generated-chunk world audit
 
