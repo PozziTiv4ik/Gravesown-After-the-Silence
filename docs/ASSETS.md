@@ -60,6 +60,10 @@ ship watermarks, third-party copyrighted assets or generated text artifacts.
 - `textures/models/armor/quietskin_layer_1.png` and `quietskin_layer_2.png` are
   original 64 by 32 controlled UV sheets for Minecraft 1.21.1 armor rendering;
   resource loading passed and worn-model visual QA remains open.
+- Six original 16 by 16 block tiles cover the first five foundation blocks:
+  Ashen Sod has separate top/side textures and Grave Loam doubles as its bottom.
+  Hushstone, Deep Hushstone and Gravebed use distinct value ranges so underground
+  layers remain readable without bright fantasy colors.
 - `art/generation-prompts/hollow_grazer_concept.md` — preserved ImageGen concept
   prompt. Image generation is intentionally not used as the final UV texture.
 

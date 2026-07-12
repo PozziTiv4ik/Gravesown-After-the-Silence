@@ -5,6 +5,7 @@ import dev.gravesown.audit.WorldAuditRunner;
 import dev.gravesown.config.GravesownConfig;
 import dev.gravesown.event.WorldSpawnEvents;
 import dev.gravesown.registry.ModArmorMaterials;
+import dev.gravesown.registry.ModBlocks;
 import dev.gravesown.registry.ModCreativeTabs;
 import dev.gravesown.registry.ModEntities;
 import dev.gravesown.registry.ModItems;
@@ -23,6 +24,7 @@ public final class Gravesown {
 
     public Gravesown(IEventBus modEventBus, ModContainer modContainer) {
         ModEntities.register(modEventBus);
+        ModBlocks.register(modEventBus);
         ModArmorMaterials.register(modEventBus);
         ModItems.register(modEventBus);
         ModCreativeTabs.register(modEventBus);

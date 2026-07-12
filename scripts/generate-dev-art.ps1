@@ -385,7 +385,175 @@ function Save-QuietskinArmorTextures {
     }
 }
 
+function New-FoundationPalette {
+    return @{
+        void = New-Object System.Drawing.SolidBrush (Convert-HexColor '#121116')
+        loamDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#211A1B')
+        loam = New-Object System.Drawing.SolidBrush (Convert-HexColor '#302526')
+        loamLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#463334')
+        ashDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#252721')
+        ash = New-Object System.Drawing.SolidBrush (Convert-HexColor '#34372E')
+        ashLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#46493B')
+        lichen = New-Object System.Drawing.SolidBrush (Convert-HexColor '#626748')
+        stoneDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#29272D')
+        stone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#3A373F')
+        stoneLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#4D4851')
+        deep = New-Object System.Drawing.SolidBrush (Convert-HexColor '#211F27')
+        deepLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#34313C')
+        vein = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5A3B46')
+        bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#8F8368')
+        rust = New-Object System.Drawing.SolidBrush (Convert-HexColor '#572D33')
+    }
+}
+
+function Save-BlockTexture {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][scriptblock]$Painter
+    )
+
+    $output = Join-Path $script:ProjectRoot "src\main\resources\assets\gravesown\textures\block\$Name.png"
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $output) | Out-Null
+    $bitmap = New-PixelBitmap -Width 16 -Height 16
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    $palette = New-FoundationPalette
+
+    try {
+        & $Painter $bitmap $graphics $palette
+        $bitmap.Save($output, [System.Drawing.Imaging.ImageFormat]::Png)
+    }
+    finally {
+        foreach ($brush in $palette.Values) {
+            $brush.Dispose()
+        }
+        $graphics.Dispose()
+        $bitmap.Dispose()
+    }
+
+    Write-Host "Created $output"
+}
+
+function Save-FoundationBlockTextures {
+    Save-BlockTexture 'grave_loam' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.loam 0 0 16 16
+        foreach ($patch in @(
+            @(1, 2, 3, 2), @(9, 1, 4, 2), @(5, 7, 4, 2),
+            @(12, 10, 3, 3), @(1, 13, 4, 2), @(7, 14, 2, 2)
+        )) {
+            Fill-Pixels $graphics $p.loamDark $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($patch in @(
+            @(5, 3, 2, 2), @(13, 4, 2, 2), @(2, 8, 3, 2), @(8, 11, 3, 2)
+        )) {
+            Fill-Pixels $graphics $p.loamLight $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($point in @(@(4, 12), @(10, 5), @(15, 8))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#8F8368'))
+        }
+    }
+
+    Save-BlockTexture 'ashen_sod_top' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.ash 0 0 16 16
+        foreach ($patch in @(
+            @(0, 3, 4, 2), @(7, 1, 3, 3), @(12, 5, 4, 2),
+            @(3, 9, 4, 3), @(10, 12, 4, 3), @(0, 14, 2, 2)
+        )) {
+            Fill-Pixels $graphics $p.ashDark $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($patch in @(
+            @(3, 1, 2, 1), @(10, 4, 2, 2), @(1, 7, 3, 1), @(7, 9, 2, 2), @(14, 14, 2, 1)
+        )) {
+            Fill-Pixels $graphics $p.ashLight $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($point in @(@(5, 5), @(6, 5), @(13, 9), @(2, 12), @(9, 15))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#626748'))
+        }
+        Fill-Pixels $graphics $p.rust 11 8 1 2
+    }
+
+    Save-BlockTexture 'ashen_sod_side' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.loam 0 0 16 16
+        Fill-Pixels $graphics $p.ash 0 0 16 4
+        Fill-Pixels $graphics $p.ashLight 2 1 4 1
+        Fill-Pixels $graphics $p.ashDark 8 2 5 2
+        Fill-Pixels $graphics $p.lichen 14 0 2 1
+        foreach ($root in @(
+            @(2, 3, 1, 6), @(6, 3, 1, 3), @(10, 3, 1, 8), @(14, 3, 1, 5)
+        )) {
+            Fill-Pixels $graphics $p.loamLight $root[0] $root[1] $root[2] $root[3]
+        }
+        Fill-Pixels $graphics $p.loamDark 0 9 4 3
+        Fill-Pixels $graphics $p.loamDark 7 12 4 2
+        Fill-Pixels $graphics $p.loamLight 12 10 3 2
+        foreach ($point in @(@(3, 6), @(9, 9), @(15, 13))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#8F8368'))
+        }
+    }
+
+    Save-BlockTexture 'hushstone' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.stone 0 0 16 16
+        foreach ($patch in @(
+            @(0, 2, 4, 2), @(7, 0, 3, 3), @(12, 4, 4, 3),
+            @(3, 8, 4, 2), @(9, 11, 5, 3), @(0, 14, 3, 2)
+        )) {
+            Fill-Pixels $graphics $p.stoneDark $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($patch in @(
+            @(4, 3, 3, 1), @(10, 2, 2, 2), @(1, 6, 2, 1), @(7, 7, 3, 2), @(4, 13, 3, 1)
+        )) {
+            Fill-Pixels $graphics $p.stoneLight $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($point in @(@(5, 9), @(6, 10), @(7, 11), @(14, 8), @(15, 8))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#5A3B46'))
+        }
+    }
+
+    Save-BlockTexture 'deep_hushstone' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.deep 0 0 16 16
+        Fill-Pixels $graphics $p.void 0 3 5 2
+        Fill-Pixels $graphics $p.void 10 0 4 3
+        Fill-Pixels $graphics $p.void 6 10 6 3
+        Fill-Pixels $graphics $p.void 13 14 3 2
+        Fill-Pixels $graphics $p.deepLight 4 0 3 2
+        Fill-Pixels $graphics $p.deepLight 8 4 5 2
+        Fill-Pixels $graphics $p.deepLight 1 8 4 3
+        Fill-Pixels $graphics $p.deepLight 3 14 5 2
+        foreach ($point in @(
+            @(1, 1), @(2, 2), @(3, 2), @(7, 5), @(7, 6),
+            @(8, 7), @(9, 7), @(12, 10), @(13, 11), @(14, 12)
+        )) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#5A3B46'))
+        }
+        Fill-Pixels $graphics $p.stoneLight 15 6 1 2
+    }
+
+    Save-BlockTexture 'gravebed' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.void 0 0 16 16
+        Fill-Pixels $graphics $p.deep 0 1 16 3
+        Fill-Pixels $graphics $p.stoneDark 0 6 16 3
+        Fill-Pixels $graphics $p.deep 0 11 16 4
+        Fill-Pixels $graphics $p.bone 1 3 5 1
+        Fill-Pixels $graphics $p.bone 9 7 6 1
+        Fill-Pixels $graphics $p.bone 3 12 7 1
+        Fill-Pixels $graphics $p.rust 6 2 5 2
+        Fill-Pixels $graphics $p.rust 0 8 4 2
+        Fill-Pixels $graphics $p.rust 11 13 5 2
+        Fill-Pixels $graphics $p.stoneLight 13 1 3 2
+        Fill-Pixels $graphics $p.stoneLight 5 7 2 2
+        foreach ($point in @(@(0, 4), @(7, 4), @(15, 4), @(2, 10), @(8, 10), @(14, 10))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#121116'))
+        }
+    }
+}
+
 Save-HollowGrazerTexture
 Save-ModIcon
 Save-QuietskinItemTextures
 Save-QuietskinArmorTextures
+Save-FoundationBlockTextures

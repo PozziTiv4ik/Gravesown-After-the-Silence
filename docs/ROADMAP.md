@@ -49,7 +49,7 @@ baseline records violations, while strict mode exits nonzero with exact samples.
 
 ## TC3 — World foundation
 
-- [ ] Custom surface, soil, rock, deep rock and bottom blocks.
+- [x] Custom surface, soil, rock, deep rock and bottom blocks (TC3a; 8/8 tests PASS).
 - [ ] Ribroot wood family and bootstrap vegetation.
 - [ ] Early tools, light, crafting, processing and storage.
 - [ ] Mining, replaceable and tool tags plus loot tables.

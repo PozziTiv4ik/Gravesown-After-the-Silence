@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -15,6 +16,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Gravesown.MOD_ID);
     private static final int QUIETSKIN_DURABILITY = 10;
+
+    public static final DeferredItem<BlockItem> ASHEN_SOD = ITEMS.registerSimpleBlockItem(ModBlocks.ASHEN_SOD);
+    public static final DeferredItem<BlockItem> GRAVE_LOAM = ITEMS.registerSimpleBlockItem(ModBlocks.GRAVE_LOAM);
+    public static final DeferredItem<BlockItem> HUSHSTONE = ITEMS.registerSimpleBlockItem(ModBlocks.HUSHSTONE);
+    public static final DeferredItem<BlockItem> DEEP_HUSHSTONE = ITEMS.registerSimpleBlockItem(ModBlocks.DEEP_HUSHSTONE);
+    public static final DeferredItem<BlockItem> GRAVEBED = ITEMS.registerSimpleBlockItem(ModBlocks.GRAVEBED);
 
     public static final DeferredItem<Item> RAGGED_GRAZER_HIDE = ITEMS.registerSimpleItem("ragged_grazer_hide");
     public static final DeferredItem<Item> TAUT_SINEW = ITEMS.registerSimpleItem("taut_sinew");

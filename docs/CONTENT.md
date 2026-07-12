@@ -10,3 +10,13 @@
 
 Update a row whenever any listed part changes. “Done” requires verification,
 not merely the presence of a file.
+
+## Foundation blocks
+
+| ID | Role | Stage | Model | Texture | Loot | Tool contract | Test |
+|---|---|---|---|---|---|---|---|
+| ashen_sod | Surface layer | TC3a | Implemented | Original 16x16 top/side; client loaded | Self-drop | Shovel-mineable | GameTest PASS; placed visual pending |
+| grave_loam | Soil/filler | TC3a | Implemented | Original 16x16 | Self-drop | Shovel-mineable | GameTest PASS; placed visual pending |
+| hushstone | Primary rock | TC3a | Implemented | Original 16x16 | Self-drop | Wooden pickaxe or better | GameTest PASS; placed visual pending |
+| deep_hushstone | Deep rock | TC3a | Implemented | Original 16x16 | Self-drop | Stone pickaxe or better; wood/gold rejected | GameTest PASS; placed visual pending |
+| gravebed | Unbreakable bottom | TC3a | Implemented | Original 16x16 | No loot table | Unbreakable | GameTest PASS; placed visual pending |

@@ -24,7 +24,7 @@ The root scripts automatically select the project-local Java 21.
 
 ## Automated GameTest
 
-`test.cmd` currently runs six required server tests. Together they verify that:
+`test.cmd` currently runs eight required server tests. Together they verify that:
 
 - is registered under the stable expected id;
 - can be created and added to a logical server level;
@@ -41,9 +41,33 @@ The root scripts automatically select the project-local Java 21.
   Quietskin or heals, while night aggression continues.
 - the world-audit contract permits only reviewed technical air/empty-fluid states
   and Gravesown-owned content, and strict/baseline status semantics cannot be mixed up.
+- all five foundation blocks/items keep stable ids, place correctly and use the
+  intended hardness/no-loot properties;
+- soil/rock mining tags, Deep Hushstone tier restrictions and all four self-drop
+  loot tables work on the logical server.
 
-Success means exit code 0 and `All 6 required tests passed` in the output. Gradle
+Success means exit code 0 and `All 8 required tests passed` in the output. Gradle
 `check` does not run GameTests, so gameplay changes require the separate button.
+
+## TC3a foundation-block visual acceptance
+
+In a disposable Creative world, obtain the five blocks:
+
+```mcfunction
+/give @s gravesown:ashen_sod 64
+/give @s gravesown:grave_loam 64
+/give @s gravesown:hushstone 64
+/give @s gravesown:deep_hushstone 64
+/give @s gravesown:gravebed 64
+```
+
+- Build a 5x5 sample of each block in daylight and darkness; check for purple-black
+  missing assets, obvious 16-block tiling seams and unreadable value collisions.
+- Confirm Ashen Sod uses its top on top, loam underneath and the rooted side laterally.
+- In Survival, compare hand, shovel, wooden/gold/stone pickaxes and verify Deep
+  Hushstone drops only at stone tier or better.
+- Confirm Gravebed cannot be broken in Survival and produces no item if removed in Creative.
+- Switch `en_us`/`ru_ru`, reload resources with F3+T and inspect all inventory names/models.
 
 ## Real generated-chunk world audit
 

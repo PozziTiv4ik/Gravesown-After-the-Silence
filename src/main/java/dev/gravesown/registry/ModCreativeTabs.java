@@ -20,6 +20,11 @@ public final class ModCreativeTabs {
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .icon(() -> ModItems.HOLLOW_GRAZER_SPAWN_EGG.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
+                        output.accept(ModItems.ASHEN_SOD.get());
+                        output.accept(ModItems.GRAVE_LOAM.get());
+                        output.accept(ModItems.HUSHSTONE.get());
+                        output.accept(ModItems.DEEP_HUSHSTONE.get());
+                        output.accept(ModItems.GRAVEBED.get());
                         output.accept(ModItems.RAGGED_GRAZER_HIDE.get());
                         output.accept(ModItems.TAUT_SINEW.get());
                         output.accept(ModItems.GRAVE_TALLOW.get());
