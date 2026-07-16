@@ -1,18 +1,20 @@
 # Current status
 
 Updated: 2026-07-16 Europe/Zurich
-Branch: main; working tree contains the complete uncommitted total-conversion slice
+Branch: main; published at `PozziTiv4ik/Gravesown-After-the-Silence`
 Playable state: nine-biome Survival alpha with 23 native creatures, one vehicle,
 early crafting/cooking/farming stations, aquatic life, ruins, camps, a Windows
-launcher and a GitHub-ready source/release distribution
+launcher and a verified GitHub source/release distribution
 
 ## Current milestone
 
-The current alpha is prepared for GitHub publication. Every runtime and cache that
-previously inflated the repository now lives outside Git, a fresh source checkout or
-Windows release ZIP has a one-command bootstrap, and automated publication gates
-reject private/generated state and oversized files. The existing native-ecosystem,
-survival, launcher and presentation slices remain unchanged and server-authoritative.
+The current alpha is published to GitHub. Every runtime and cache that previously
+inflated the repository now lives outside Git, a fresh source checkout or Windows
+release ZIP has a one-command bootstrap, and automated publication gates reject
+private/generated state and oversized files. The clean Windows GitHub runner has
+verified setup, offline checks, launcher packaging and artifact upload. The existing
+native-ecosystem, survival, launcher and presentation slices remain unchanged and
+server-authoritative.
 
 ## Implemented and verified
 
@@ -61,8 +63,14 @@ survival, launcher and presentation slices remain unchanged and server-authorita
   fully offline in 29 seconds and restored `dist/gravesown-0.1.0-alpha.1.jar`.
 - `github-ready.cmd` — PASS on 2026-07-16: external Java/cache check, offline
   compile, clean check/build, Windows app-image build and diagnostic, Git whitespace
-  check and repository-content audit. Git candidates: 1,565 files / 7.3 MiB; no
-  remote is configured.
+  check and repository-content audit. Git candidates: 1,565 files / 7.3 MiB; remote
+  `origin` targets `PozziTiv4ik/Gravesown-After-the-Silence`.
+- GitHub publication — PASS on 2026-07-16: `main` was pushed without history
+  rewriting, the obsolete duplicate online Gradle workflow was removed, and
+  `Gravesown CI` run `29532023275` completed successfully on Windows.
+- GitHub artifact upload — PASS on 2026-07-16: artifact
+  `gravesown-17d009ba373c29e672d246d569d64fe2789e9509` contains the release outputs
+  and is 39,175,934 bytes.
 - `package-release.cmd` and `scripts/verify-release-bundle.ps1` — PASS on
   2026-07-16: the Windows archive re-extracted with 1,702 files / 85.4 MiB unpacked,
   no runtime/private state, matching JAR hash and passing packaged EXE diagnostic.
@@ -94,9 +102,6 @@ survival, launcher and presentation slices remain unchanged and server-authorita
   retain manual visual checks beyond the automated FHD smoke.
 - Industrial progression beyond the current field stations is not implemented yet.
   Nether and End remain intentionally unavailable until TC8.
-- A genuinely empty-machine first setup is not reproducible without intentionally
-  downloading the pinned toolchain again; the committed Windows GitHub Actions
-  workflow is the clean-run gate once the repository is pushed.
 
 ## Important changed areas
 
@@ -112,8 +117,8 @@ survival, launcher and presentation slices remain unchanged and server-authorita
 
 ## Next action
 
-Create the GitHub repository, configure its URL as `origin`, then commit and push the
-complete working tree only after explicit publication authorization. Completion
-criterion: `github-ready.cmd` passes immediately before the commit, local `main`
-matches `origin/main`, the GitHub Actions Windows build passes, and its uploaded JAR
-and Windows ZIP match the local release artifacts.
+Run a focused singleplayer native-fauna balance pass across all nine biomes and tune
+only evidence-backed density, pursuit and population-pressure issues. Completion
+criterion: every biome is observed for at least one full day/night cycle, adjustments
+are covered by GameTests/world audit where applicable, FHD acceptance evidence is
+recorded, and the offline `check build` gate remains green.
