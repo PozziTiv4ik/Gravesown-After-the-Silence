@@ -1,0 +1,6 @@
+{
+  "type":"gravesown:gravework_shaped",
+  "pattern":["JJ  ","JHH "," SH "," S  "],
+  "key":{"J":{"item":"gravesown:hollow_jaw"},"H":{"item":"gravesown:hushstone_shard"},"S":{"item":"gravesown:ribroot_splint"}},
+  "result":{"id":"gravesown:bone_cleaver","count":1}
+}

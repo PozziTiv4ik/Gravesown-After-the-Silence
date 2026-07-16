@@ -1,0 +1,24 @@
+{
+  "textures": {
+    "marker": "gravesown:block/remnant_grave",
+    "soil": "gravesown:block/grave_loam",
+    "particle": "gravesown:block/remnant_grave"
+  },
+  "elements": [
+    { "from": [2, 0, 3], "to": [14, 3, 13], "faces": {
+      "down": { "texture": "#soil", "cullface": "down" }, "up": { "texture": "#marker" },
+      "north": { "texture": "#soil" }, "south": { "texture": "#soil" },
+      "west": { "texture": "#soil" }, "east": { "texture": "#soil" }
+    }},
+    { "from": [3, 3, 9], "to": [13, 14, 13], "faces": {
+      "down": { "texture": "#marker" }, "up": { "texture": "#marker" },
+      "north": { "texture": "#marker" }, "south": { "texture": "#marker" },
+      "west": { "texture": "#marker" }, "east": { "texture": "#marker" }
+    }},
+    { "from": [2.5, 13, 8.5], "to": [13.5, 15.5, 13.5], "faces": {
+      "down": { "texture": "#marker" }, "up": { "texture": "#marker" },
+      "north": { "texture": "#marker" }, "south": { "texture": "#marker" },
+      "west": { "texture": "#marker" }, "east": { "texture": "#marker" }
+    }}
+  ]
+}

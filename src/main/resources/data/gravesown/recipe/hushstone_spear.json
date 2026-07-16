@@ -1,0 +1,10 @@
+{
+  "type": "gravesown:gravework_shaped",
+  "pattern": [" HH ", " HB ", " S  ", " S  "],
+  "key": {
+    "H": { "item": "gravesown:hushstone_shard" },
+    "B": { "item": "gravesown:thread_binding" },
+    "S": { "item": "gravesown:ribroot_splint" }
+  },
+  "result": { "id": "gravesown:hushstone_spear", "count": 1 }
+}

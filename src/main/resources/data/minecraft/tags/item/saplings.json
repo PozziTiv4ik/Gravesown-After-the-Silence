@@ -1,6 +1,12 @@
 {
   "replace": false,
   "values": [
-    "gravesown:ribroot_shoot"
+    "gravesown:ribroot_shoot",
+    "gravesown:emberbark_shoot",
+    "gravesown:palevine_shoot",
+    "gravesown:cairnwood_shoot",
+    "gravesown:suturewood_shoot",
+    "gravesown:mosswake_shoot",
+    "gravesown:sunveil_shoot"
   ]
 }

@@ -1,0 +1,6 @@
+{
+  "feature": "gravesown:gloam_sea_growth",
+  "placement": [
+    { "type": "minecraft:biome" }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "gravesown:crude_handpick"
+    "gravesown:crude_handpick",
+    "gravesown:hushstone_pickaxe"
   ]
 }

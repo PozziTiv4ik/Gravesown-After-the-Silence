@@ -1,0 +1,27 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "bottom": "gravesown:block/sawmill_bottom",
+    "side": "gravesown:block/sawmill_side",
+    "front": "gravesown:block/sawmill_front",
+    "top": "gravesown:block/sawmill_top",
+    "blade": "gravesown:block/sawmill_blade",
+    "particle": "gravesown:block/sawmill_side"
+  },
+  "elements": [
+    { "from": [1, 0, 1], "to": [15, 8, 15], "faces": {
+      "down": { "texture": "#bottom" }, "up": { "texture": "#top" },
+      "north": { "texture": "#front" }, "south": { "texture": "#side" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }},
+    { "from": [0, 8, 0], "to": [16, 10, 16], "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#side" }, "south": { "texture": "#side" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }},
+    { "from": [7.5, 9, 3], "to": [8.5, 16, 13], "faces": {
+      "north": { "texture": "#blade" }, "south": { "texture": "#blade" },
+      "west": { "texture": "#blade" }, "east": { "texture": "#blade" }
+    }}
+  ]
+}

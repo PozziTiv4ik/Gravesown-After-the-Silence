@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "ingredient": { "item": "gravesown:gravesown_glass" },
+  "result": { "id": "gravesown:tempered_glass" },
+  "experience": 0.2,
+  "cookingtime": 300
+}

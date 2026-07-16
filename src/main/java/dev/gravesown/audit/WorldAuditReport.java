@@ -20,7 +20,7 @@ public final class WorldAuditReport {
             .disableHtmlEscaping()
             .create();
 
-    public final int schemaVersion = 1;
+    public final int schemaVersion = 3;
     public final String createdAtUtc = Instant.now().toString();
     public String status = "RUNNING";
     public String enforcement;
@@ -39,14 +39,21 @@ public final class WorldAuditReport {
     public final Region region = new Region();
     public final Totals totals = new Totals();
     public final Map<String, Long> biomeHistogram = new TreeMap<>();
+    public final Map<String, Long> biomeProbeHistogram = new TreeMap<>();
     public final Map<String, Long> blockHistogram = new TreeMap<>();
     public final Map<String, Long> fluidHistogram = new TreeMap<>();
     public final Map<String, Long> blockEntityHistogram = new TreeMap<>();
+    public final List<String> missingExpectedBiomes = new ArrayList<>();
     public final Violations violations = new Violations();
 
     public void recordBiome(String id) {
         increment(biomeHistogram, id);
         totals.biomeSamples++;
+    }
+
+    public void recordBiomeProbe(String id) {
+        increment(biomeProbeHistogram, id);
+        totals.biomeProbeSamples++;
     }
 
     public void recordBlock(String id, boolean air) {
@@ -91,6 +98,12 @@ public final class WorldAuditReport {
 
     public void finish(WorldAuditConfig config, long startedNanos) {
         durationMillis = (System.nanoTime() - startedNanos) / 1_000_000L;
+        missingExpectedBiomes.clear();
+        config.expectedBiomes().stream()
+                .map(Object::toString)
+                .filter(id -> !biomeHistogram.containsKey(id) && !biomeProbeHistogram.containsKey(id))
+                .sorted()
+                .forEach(missingExpectedBiomes::add);
         complete = true;
         if (error != null) {
             status = "ERROR";
@@ -125,6 +138,12 @@ public final class WorldAuditReport {
         text.append("Build height: ").append(region.minY).append("..").append(region.maxYExclusive - 1).append('\n');
         text.append("Positions scanned: ").append(totals.blockPositions).append('\n');
         text.append("Biome samples: ").append(totals.biomeSamples).append('\n');
+        text.append("Wide biome-source probe: ").append(totals.biomeProbeSamples)
+                .append(" samples across +/-").append(region.biomeProbeRadiusChunks)
+                .append(" chunks every ").append(region.biomeProbeStepChunks).append(" chunks\n");
+        text.append("Missing expected biomes: ")
+                .append(missingExpectedBiomes.isEmpty() ? "none" : String.join(", ", missingExpectedBiomes))
+                .append('\n');
         text.append("Block entities: ").append(totals.blockEntities).append('\n');
         text.append("Violations: ").append(violations.total).append('\n');
         text.append("Duration: ").append(durationMillis).append(" ms\n");
@@ -132,6 +151,7 @@ public final class WorldAuditReport {
             text.append("Error: ").append(error).append('\n');
         }
         appendTop(text, "Biomes", biomeHistogram);
+        appendTop(text, "Wide biome-source probe", biomeProbeHistogram);
         appendTop(text, "Blocks", blockHistogram);
         appendTop(text, "Fluids", fluidHistogram);
         appendTop(text, "Block entities", blockEntityHistogram);
@@ -177,7 +197,7 @@ public final class WorldAuditReport {
     }
 
     public static final class Contract {
-        public String requiredBiome;
+        public List<String> expectedBiomes = new ArrayList<>();
         public String allowedContentNamespace;
         public List<String> technicalBlockAllowlist = new ArrayList<>();
         public List<String> technicalFluidAllowlist = new ArrayList<>();
@@ -189,6 +209,8 @@ public final class WorldAuditReport {
         public int centerChunkZ;
         public int radiusChunks;
         public int chunkCount;
+        public int biomeProbeRadiusChunks;
+        public int biomeProbeStepChunks;
         public int minY;
         public int maxYExclusive;
     }
@@ -200,6 +222,7 @@ public final class WorldAuditReport {
         public long fluidPositions;
         public long nonEmptyFluids;
         public long biomeSamples;
+        public long biomeProbeSamples;
         public long blockEntities;
     }
 

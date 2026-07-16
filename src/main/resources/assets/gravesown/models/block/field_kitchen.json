@@ -1,0 +1,25 @@
+{
+  "textures": {
+    "front": "gravesown:block/field_kitchen",
+    "side": "gravesown:block/field_kitchen_side",
+    "top": "gravesown:block/field_kitchen_top",
+    "particle": "gravesown:block/field_kitchen_side"
+  },
+  "elements": [
+    { "from": [2, 1, 2], "to": [14, 10, 14], "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#front" }, "south": { "texture": "#front" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }},
+    { "from": [1, 10, 1], "to": [15, 12, 15], "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#side" }, "south": { "texture": "#side" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }},
+    { "from": [4, 12, 4], "to": [12, 15, 12], "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#front" }, "south": { "texture": "#front" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }}
+  ]
+}

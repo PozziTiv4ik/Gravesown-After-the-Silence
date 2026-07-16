@@ -1,0 +1,5 @@
+{
+  "type": "gravesown:sawmill",
+  "ingredient": { "item": "gravesown:ribroot_planks" },
+  "result": { "id": "gravesown:ribroot_cut_planks", "count": 1 }
+}

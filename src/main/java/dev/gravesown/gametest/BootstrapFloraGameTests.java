@@ -3,6 +3,7 @@ package dev.gravesown.gametest;
 import dev.gravesown.Gravesown;
 import dev.gravesown.registry.ModBlocks;
 import dev.gravesown.registry.ModItems;
+import dev.gravesown.item.GravebloomDustItem;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,7 +50,10 @@ public final class BootstrapFloraGameTests {
                 "veil_foliage",
                 "threadgrass",
                 "ribroot_shoot",
-                "pallid_bulb"
+                "pallid_bulb",
+                "cinder_bloom",
+                "sinew_fern",
+                "marrow_reed"
         };
 
         for (int index = 0; index < blocks.length; index++) {
@@ -108,7 +112,10 @@ public final class BootstrapFloraGameTests {
         Block[] plants = {
                 ModBlocks.THREADGRASS.get(),
                 ModBlocks.RIBROOT_SHOOT.get(),
-                ModBlocks.PALLID_BULB.get()
+                ModBlocks.PALLID_BULB.get(),
+                ModBlocks.CINDER_BLOOM.get(),
+                ModBlocks.SINEW_FERN.get(),
+                ModBlocks.MARROW_REED.get()
         };
         Block[] validSoils = {ModBlocks.ASHEN_SOD.get(), ModBlocks.GRAVE_LOAM.get()};
 
@@ -132,6 +139,29 @@ public final class BootstrapFloraGameTests {
                     BuiltInRegistries.BLOCK.getKey(plant) + " must reject vanilla dirt"
             );
         }
+        helper.succeed();
+    }
+
+    @GameTest(template = "hollow_grazer_platform", timeoutTicks = 40)
+    public static void gravebloomDustGrowsACompletePersistentRibroot(GameTestHelper helper) {
+        BlockPos base = new BlockPos(4, 2, 4);
+        helper.setBlock(base.below(), ModBlocks.ROOTFELT.get());
+        helper.setBlock(base, ModBlocks.RIBROOT_SHOOT.get());
+        helper.assertTrue(
+                GravebloomDustItem.growRibroot(helper.getLevel(), helper.absolutePos(base)),
+                "Gravebloom Dust must grow a Ribroot Shoot when there is clear space"
+        );
+        int stems = 0;
+        for (int y = 0; y < 7; y++) {
+            if (helper.getBlockState(base.above(y)).is(ModBlocks.RIBROOT_STEM.get())) {
+                stems++;
+            }
+        }
+        helper.assertTrue(stems >= 5, "The fertilizer-grown tree must have a readable trunk");
+        helper.assertTrue(
+                BuiltInRegistries.ITEM.getKey(ModItems.GRAVEBLOOM_DUST.get()).equals(Gravesown.id("gravebloom_dust")),
+                "Gravebloom Dust registry id must remain stable"
+        );
         helper.succeed();
     }
 
@@ -188,7 +218,10 @@ public final class BootstrapFloraGameTests {
                 ModBlocks.VEIL_FOLIAGE.get(),
                 ModBlocks.THREADGRASS.get(),
                 ModBlocks.RIBROOT_SHOOT.get(),
-                ModBlocks.PALLID_BULB.get()
+                ModBlocks.PALLID_BULB.get(),
+                ModBlocks.CINDER_BLOOM.get(),
+                ModBlocks.SINEW_FERN.get(),
+                ModBlocks.MARROW_REED.get()
         };
     }
 
@@ -199,7 +232,10 @@ public final class BootstrapFloraGameTests {
                 ModItems.VEIL_FOLIAGE.get(),
                 ModItems.THREADGRASS.get(),
                 ModItems.RIBROOT_SHOOT.get(),
-                ModItems.PALLID_BULB.get()
+                ModItems.PALLID_BULB.get(),
+                ModItems.CINDER_BLOOM.get(),
+                ModItems.SINEW_FERN.get(),
+                ModItems.MARROW_REED.get()
         };
     }
 

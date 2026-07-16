@@ -99,3 +99,54 @@ finally {
 }
 
 Write-Host "Generated GameTest structure: $outputPath"
+
+# A wider all-Gravesown bed lets the real pond feature run through its normal
+# heightmap and footprint checks without touching neighboring GameTests.
+$aquaticOutputPath = Join-Path $projectRoot 'src\main\resources\data\gravesown\structure\gloamwater_pond_platform.nbt'
+$file = [System.IO.File]::Create($aquaticOutputPath)
+$gzip = [System.IO.Compression.GZipStream]::new(
+    $file,
+    [System.IO.Compression.CompressionLevel]::Optimal
+)
+$writer = [System.IO.BinaryWriter]::new($gzip, [System.Text.Encoding]::UTF8, $false)
+
+try {
+    $writer.Write([byte]10)
+    Write-NbtString -Value ''
+
+    Write-NamedTagHeader -Type 3 -Name 'DataVersion'
+    Write-Int32BigEndian -Value 3955
+
+    Write-NamedTagHeader -Type 9 -Name 'size'
+    Write-IntListPayload -Values @(11, 4, 11)
+
+    Write-NamedTagHeader -Type 9 -Name 'blocks'
+    $writer.Write([byte]10)
+    Write-Int32BigEndian -Value 121
+    for ($x = 0; $x -lt 11; $x++) {
+        for ($z = 0; $z -lt 11; $z++) {
+            Write-NamedTagHeader -Type 9 -Name 'pos'
+            Write-IntListPayload -Values @($x, 0, $z)
+            Write-NamedTagHeader -Type 3 -Name 'state'
+            Write-Int32BigEndian -Value 0
+            $writer.Write([byte]0)
+        }
+    }
+
+    Write-NamedTagHeader -Type 9 -Name 'palette'
+    $writer.Write([byte]10)
+    Write-Int32BigEndian -Value 1
+    Write-NamedTagHeader -Type 8 -Name 'Name'
+    Write-NbtString -Value 'gravesown:suture_silt'
+    $writer.Write([byte]0)
+
+    Write-NamedTagHeader -Type 9 -Name 'entities'
+    $writer.Write([byte]10)
+    Write-Int32BigEndian -Value 0
+    $writer.Write([byte]0)
+}
+finally {
+    $writer.Dispose()
+}
+
+Write-Host "Generated GameTest structure: $aquaticOutputPath"

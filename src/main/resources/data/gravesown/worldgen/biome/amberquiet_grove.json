@@ -1,0 +1,65 @@
+{
+  "carvers": {},
+  "downfall": 0.2,
+  "effects": {
+    "fog_color": 13679249,
+    "sky_color": 10849128,
+    "water_color": 5927519,
+    "water_fog_color": 1916983
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "gravesown:sunveil_trees",
+      "gravesown:amber_bloom_patches",
+      "gravesown:pallid_bulb_patches",
+      "gravesown:gloam_sea_growth",
+      "gravesown:ruined_shelters_rare",
+      "gravesown:abandoned_camps_very_rare"
+    ],
+    []
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "gravesown:hollow_grazer",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 11
+      },
+      {
+        "type": "gravesown:amber_jay",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 12
+      },
+      {
+        "type": "gravesown:sunhorn",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 6
+      }
+    ],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [
+      { "type": "gravesown:veilfin", "maxCount": 3, "minCount": 1, "weight": 4 },
+      { "type": "gravesown:rootskimmer", "maxCount": 2, "minCount": 1, "weight": 4 }
+    ],
+    "water_creature": []
+  },
+  "temperature": 0.62
+}

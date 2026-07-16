@@ -1,0 +1,36 @@
+{
+  "textures": {
+    "side": "gravesown:block/reliquary_crate",
+    "front": "gravesown:block/reliquary_crate_front",
+    "top": "gravesown:block/reliquary_crate_top",
+    "metal": "gravesown:block/reliquary_crate_metal",
+    "particle": "gravesown:block/reliquary_crate"
+  },
+  "elements": [
+    { "from": [2, 0, 2], "to": [14, 14, 14], "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#front" }, "south": { "texture": "#side" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }},
+    { "from": [1, 13, 1], "to": [15, 16, 15], "faces": {
+      "down": { "texture": "#side" }, "up": { "texture": "#top" },
+      "north": { "texture": "#front" }, "south": { "texture": "#side" },
+      "west": { "texture": "#side" }, "east": { "texture": "#side" }
+    }},
+    { "from": [1.5, 4, 1.5], "to": [14.5, 5, 14.5], "faces": {
+      "down": { "texture": "#metal" }, "up": { "texture": "#metal" },
+      "north": { "texture": "#metal" }, "south": { "texture": "#metal" },
+      "west": { "texture": "#metal" }, "east": { "texture": "#metal" }
+    }},
+    { "from": [1.5, 10, 1.5], "to": [14.5, 11, 14.5], "faces": {
+      "down": { "texture": "#metal" }, "up": { "texture": "#metal" },
+      "north": { "texture": "#metal" }, "south": { "texture": "#metal" },
+      "west": { "texture": "#metal" }, "east": { "texture": "#metal" }
+    }},
+    { "from": [6, 6, 1], "to": [10, 11, 2], "faces": {
+      "down": { "texture": "#metal" }, "up": { "texture": "#metal" },
+      "north": { "texture": "#metal" }, "south": { "texture": "#metal" },
+      "west": { "texture": "#metal" }, "east": { "texture": "#metal" }
+    }}
+  ]
+}

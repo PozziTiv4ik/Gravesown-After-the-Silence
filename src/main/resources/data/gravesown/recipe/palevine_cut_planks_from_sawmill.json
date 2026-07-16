@@ -1,0 +1,5 @@
+{
+  "type": "gravesown:sawmill",
+  "ingredient": { "item": "gravesown:palevine_planks" },
+  "result": { "id": "gravesown:palevine_cut_planks", "count": 1 }
+}

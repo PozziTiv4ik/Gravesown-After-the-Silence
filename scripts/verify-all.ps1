@@ -15,16 +15,19 @@ Enter-ProjectRoot
 if ($StrictWorld -and $BaselineWorld) {
     throw '-StrictWorld and -BaselineWorld cannot be used together.'
 }
-Write-Step '1/4 Environment and compile doctor'
+Write-Step '1/5 Environment and compile doctor'
 & "$PSScriptRoot\doctor.ps1"
 
-Write-Step '2/4 Server GameTests'
+Write-Step '2/5 Deterministic art contract'
+& "$PSScriptRoot\verify-art.ps1"
+
+Write-Step '3/5 Server GameTests'
 & "$PSScriptRoot\run-gametests.ps1"
 
-Write-Step '3/4 Clean release build'
+Write-Step '4/5 Clean release build'
 & "$PSScriptRoot\build.ps1"
 
-Write-Step '4/4 Real generated-chunk world audit'
+Write-Step '5/5 Real generated-chunk world audit'
 $profile = if ($FullWorld) { 'Full' } else { 'Smoke' }
 & "$PSScriptRoot\run-worldtest.ps1" -Profile $profile -Strict:$StrictWorld -Baseline:$BaselineWorld
 

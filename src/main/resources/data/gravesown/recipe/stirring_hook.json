@@ -1,0 +1,6 @@
+{
+  "type":"gravesown:gravework_shaped",
+  "pattern":["  HH","   H"," SS ","S   "],
+  "key":{"H":{"item":"gravesown:hushstone_shard"},"S":{"item":"gravesown:taut_sinew"}},
+  "result":{"id":"gravesown:stirring_hook","count":1}
+}

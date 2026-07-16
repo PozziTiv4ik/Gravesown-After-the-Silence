@@ -1,0 +1,9 @@
+{
+  "type": "gravesown:gravework_shaped",
+  "pattern": ["B  S", "  SB", " SBB", "SBBB"],
+  "key": {
+    "S": { "item": "gravesown:ribroot_splint" },
+    "B": { "item": "gravesown:thread_binding" }
+  },
+  "result": { "id": "gravesown:gloamline_rod", "count": 1 }
+}

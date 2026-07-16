@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "gravesown:ribroot_fence_gate",
+    "gravesown:emberbark_fence_gate",
+    "gravesown:palevine_fence_gate",
+    "gravesown:cairnwood_fence_gate",
+    "gravesown:suturewood_fence_gate",
+    "gravesown:mosswake_fence_gate",
+    "gravesown:sunveil_fence_gate"
+  ]
+}

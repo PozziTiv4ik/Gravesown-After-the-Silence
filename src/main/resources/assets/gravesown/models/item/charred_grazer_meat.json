@@ -1,0 +1,1 @@
+{ "parent": "minecraft:item/generated", "textures": { "layer0": "gravesown:item/charred_grazer_meat" } }

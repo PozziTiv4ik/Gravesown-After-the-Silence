@@ -17,20 +17,21 @@ catch {
     $_ | Out-String | Out-File -LiteralPath (Join-Path $workDir 'doctor-error.txt') -Encoding utf8
 }
 
+$clientRun = Get-GravesownRunPath 'client'
 $safeFiles = @(
-    @{ Source = 'run\logs\latest.log'; Destination = 'latest.log' },
-    @{ Source = 'run\logs\debug.log'; Destination = 'debug.log' },
-    @{ Source = 'docs\STATUS.md'; Destination = 'STATUS.md' },
-    @{ Source = 'gradle.properties'; Destination = 'gradle.properties' }
+    @{ Source = (Join-Path $clientRun 'logs\latest.log'); Destination = 'latest.log' },
+    @{ Source = (Join-Path $clientRun 'logs\debug.log'); Destination = 'debug.log' },
+    @{ Source = (Join-Path $script:ProjectRoot 'docs\STATUS.md'); Destination = 'STATUS.md' },
+    @{ Source = (Join-Path $script:ProjectRoot 'gradle.properties'); Destination = 'gradle.properties' }
 )
 foreach ($entry in $safeFiles) {
-    $source = Join-Path $script:ProjectRoot $entry.Source
+    $source = $entry.Source
     if (Test-Path -LiteralPath $source) {
         Copy-Item -LiteralPath $source -Destination (Join-Path $workDir $entry.Destination)
     }
 }
 
-$crashDir = Join-Path $script:ProjectRoot 'run\crash-reports'
+$crashDir = Join-Path $clientRun 'crash-reports'
 if (Test-Path -LiteralPath $crashDir) {
     $latestCrash = Get-ChildItem -LiteralPath $crashDir -File |
         Sort-Object LastWriteTime -Descending |

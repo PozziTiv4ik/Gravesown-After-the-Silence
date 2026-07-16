@@ -7,15 +7,20 @@ Enter-ProjectRoot
 $javaHome = Use-ProjectJava
 Write-Host "Using JAVA_HOME=$javaHome"
 
-$sourceRoot = [System.IO.Path]::GetFullPath((Join-Path $script:ProjectRoot 'run-worldtest'))
+$sourceRoot = Get-GravesownRunPath 'tests\worldtest'
 $sourceSentinel = Join-Path $sourceRoot '.gravesown-worldtest-root'
 $sourceWorld = [System.IO.Path]::GetFullPath((Join-Path $sourceRoot 'world-audit'))
-$runRoot = [System.IO.Path]::GetFullPath((Join-Path $script:ProjectRoot 'run-clienttest'))
+$runRoot = Get-GravesownRunPath 'tests\client-smoke'
 $sentinel = Join-Path $runRoot '.gravesown-clienttest-root'
 $saveRoot = [System.IO.Path]::GetFullPath((Join-Path $runRoot 'saves'))
 $saveName = 'tc4-client-smoke'
 $savePath = [System.IO.Path]::GetFullPath((Join-Path $saveRoot $saveName))
 $latestLog = Join-Path $runRoot 'logs\latest.log'
+$codexScreenshot = Join-Path $runRoot 'screenshots\gravesown-codex-smoke.png'
+$guideScreenshot = Join-Path $runRoot 'screenshots\gravesown-guide-smoke.png'
+$creativeScreenshot = Join-Path $runRoot 'screenshots\gravesown-creative-inventory-smoke.png'
+$entityScreenshot = Join-Path $runRoot 'screenshots\gravesown-creature-lineup-smoke.png'
+$armorScreenshot = Join-Path $runRoot 'screenshots\gravesown-quietskin-smoke.png'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 function Assert-ChildPath {
@@ -33,7 +38,7 @@ function Assert-ChildPath {
 }
 
 function Initialize-SafeClientTestRoot {
-    Assert-ChildPath -Parent $script:ProjectRoot -Child $runRoot -Label 'a client-test root'
+    Assert-ChildPath -Parent $script:GravesownHome -Child $runRoot -Label 'a client-test root'
     if (-not (Test-Path -LiteralPath $runRoot)) {
         New-Item -ItemType Directory -Path $runRoot | Out-Null
     }
@@ -92,9 +97,14 @@ Copy-Item -LiteralPath $sourceWorld -Destination $savePath -Recurse
 if (Test-Path -LiteralPath $latestLog) {
     Remove-Item -LiteralPath $latestLog -Force
 }
+foreach ($screenshot in @($codexScreenshot, $guideScreenshot, $creativeScreenshot, $entityScreenshot, $armorScreenshot)) {
+    if (Test-Path -LiteralPath $screenshot) {
+        Remove-Item -LiteralPath $screenshot -Force
+    }
+}
 
 Write-Step 'Running isolated Gravesown integrated-client smoke test'
-Invoke-ProjectGradle 'runClientSmoke'
+Invoke-ProjectGradle 'runClientSmoke' '--offline' '--no-daemon'
 
 if (-not (Test-Path -LiteralPath $latestLog)) {
     throw "Client exited without writing $latestLog"
@@ -107,6 +117,44 @@ if ($log -notmatch 'GRAVESOWN_CLIENT_SMOKE_RESULT status=PASS') {
     }
     throw 'Client exited without a Gravesown client-smoke PASS marker.'
 }
+foreach ($requiredMarker in @(
+    'GRAVESOWN_CODEX_AUTO_GRANT verified=true count=1 attachment=true',
+    'GRAVESOWN_RECIPE_GUIDE verified=true recipes_at_least=33 exact_grid=true search=true categories=true guide=true graph_nodes=6 graph_edges=5 shortcut_request=true',
+    'GRAVESOWN_ENTITY_TRACKING verified=true count=5'
+)) {
+    if (-not $log.Contains($requiredMarker)) {
+        throw "Client smoke passed without required evidence marker: $requiredMarker"
+    }
+}
+foreach ($capture in @(
+    @{ Label = 'Codex'; Path = $codexScreenshot },
+    @{ Label = 'Guide'; Path = $guideScreenshot },
+    @{ Label = 'Creative survival inventory'; Path = $creativeScreenshot },
+    @{ Label = 'creature lineup'; Path = $entityScreenshot },
+    @{ Label = 'Quietskin'; Path = $armorScreenshot }
+)) {
+    if (-not (Test-Path -LiteralPath $capture.Path)) {
+        throw "Client smoke passed without writing the $($capture.Label) visual capture: $($capture.Path)"
+    }
+    if ((Get-Item -LiteralPath $capture.Path).Length -le 0) {
+        throw "Client smoke wrote an empty $($capture.Label) visual capture: $($capture.Path)"
+    }
+    Add-Type -AssemblyName System.Drawing
+    $image = [System.Drawing.Image]::FromFile($capture.Path)
+    try {
+        if ($image.Width -ne 1920 -or $image.Height -ne 1080) {
+            throw "The $($capture.Label) capture is $($image.Width)x$($image.Height); expected 1920x1080."
+        }
+    }
+    finally {
+        $image.Dispose()
+    }
+}
 
 Write-Host ''
 Write-Host 'CLIENTTEST PASS: the disposable custom-preset world loaded on the integrated server.' -ForegroundColor Green
+Write-Host "Codex capture: $codexScreenshot"
+Write-Host "Guide capture: $guideScreenshot"
+Write-Host "Creative capture: $creativeScreenshot"
+Write-Host "Creature capture: $entityScreenshot"
+Write-Host "Armor capture: $armorScreenshot"

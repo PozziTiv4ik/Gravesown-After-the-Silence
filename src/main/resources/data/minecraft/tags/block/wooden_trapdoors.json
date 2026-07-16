@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "gravesown:ribroot_trapdoor",
+    "gravesown:emberbark_trapdoor",
+    "gravesown:palevine_trapdoor",
+    "gravesown:cairnwood_trapdoor",
+    "gravesown:suturewood_trapdoor",
+    "gravesown:mosswake_trapdoor",
+    "gravesown:sunveil_trapdoor"
+  ]
+}

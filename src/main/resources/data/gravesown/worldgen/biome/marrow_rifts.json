@@ -1,0 +1,70 @@
+{
+  "carvers": {},
+  "downfall": 0.05,
+  "effects": {
+    "fog_color": 13154718,
+    "sky_color": 8956110,
+    "water_color": 4948624,
+    "water_fog_color": 2379098
+  },
+  "features": [
+    [],
+    [],
+    [
+      "gravesown:marrow_outcrops",
+      "gravesown:veined_shale_disks",
+      "gravesown:splintered_marrowstone_disks",
+      "gravesown:cairnstone_disks"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "gravesown:cairnwood_shrubs",
+      "gravesown:rift_thorn_patches",
+      "gravesown:marrow_reed_patches",
+      "gravesown:gloam_sea_growth",
+      "gravesown:ruined_shelters_rare",
+      "gravesown:abandoned_camps_very_rare"
+    ],
+    []
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "gravesown:stitchtusk",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 9
+      },
+      {
+        "type": "gravesown:crag_ram",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "gravesown:rift_puma",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 2
+      }
+    ],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [
+      {"type":"gravesown:veilfin","maxCount":3,"minCount":1,"weight":4},
+      {"type":"gravesown:rootskimmer","maxCount":2,"minCount":1,"weight":4}
+    ],
+    "water_creature": []
+  },
+  "temperature": 0.85
+}

@@ -1,0 +1,24 @@
+{
+  "carvers": {},
+  "downfall": 0.08,
+  "effects": {"fog_color":13149556,"sky_color":9218248,"water_color":4685680,"water_fog_color":1589052},
+  "features": [[],[],[],[],[],[],[],[],[],["gravesown:emberbark_trees","gravesown:cinder_bloom_patches","gravesown:marrow_reed_patches","gravesown:gloam_sea_growth","gravesown:ruined_shelters_rare","gravesown:abandoned_camps_very_rare"],[]],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient":[],"axolotls":[],
+    "creature":[
+      {"type":"gravesown:hollow_grazer","maxCount":3,"minCount":1,"weight":10},
+      {"type":"gravesown:ember_fox","maxCount":2,"minCount":1,"weight":4},
+      {"type":"gravesown:cinder_fowl","maxCount":3,"minCount":2,"weight":10}
+    ],
+    "misc":[],"monster":[{"type":"gravesown:woundscent","maxCount":2,"minCount":1,"weight":5}],
+    "underground_water_creature":[],
+    "water_ambient":[
+      {"type":"gravesown:veilfin","maxCount":3,"minCount":1,"weight":4},
+      {"type":"gravesown:rootskimmer","maxCount":2,"minCount":1,"weight":4}
+    ],
+    "water_creature":[]
+  },
+  "temperature": 1.05
+}

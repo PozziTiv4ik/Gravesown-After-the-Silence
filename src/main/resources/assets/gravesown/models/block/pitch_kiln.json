@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "gravesown:block/pitch_kiln_top",
+    "bottom": "gravesown:block/pitch_kiln_bottom",
+    "side": "gravesown:block/pitch_kiln_side",
+    "front": "gravesown:block/pitch_kiln_front"
+  }
+}

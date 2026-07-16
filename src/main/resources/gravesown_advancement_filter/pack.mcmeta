@@ -1,0 +1,18 @@
+{
+  "pack": {
+    "description": "Gravesown total-conversion progression filter",
+    "pack_format": 48
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "^minecraft$",
+        "path": "^advancement/.*$"
+      },
+      {
+        "namespace": "^minecraft$",
+        "path": "^recipe/.*$"
+      }
+    ]
+  }
+}

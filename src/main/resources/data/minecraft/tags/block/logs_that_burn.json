@@ -1,6 +1,12 @@
 {
   "replace": false,
   "values": [
-    "#gravesown:ribroot_logs"
+    "#gravesown:ribroot_logs",
+    "#gravesown:emberbark_logs",
+    "#gravesown:palevine_logs",
+    "#gravesown:cairnwood_logs",
+    "#gravesown:suturewood_logs",
+    "#gravesown:mosswake_logs",
+    "#gravesown:sunveil_logs"
   ]
 }

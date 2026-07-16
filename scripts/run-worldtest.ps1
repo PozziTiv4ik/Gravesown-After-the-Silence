@@ -22,7 +22,7 @@ Enter-ProjectRoot
 $javaHome = Use-ProjectJava
 Write-Host "Using JAVA_HOME=$javaHome"
 
-$runRoot = [System.IO.Path]::GetFullPath((Join-Path $script:ProjectRoot 'run-worldtest'))
+$runRoot = Get-GravesownRunPath 'tests\worldtest'
 $sentinel = Join-Path $runRoot '.gravesown-worldtest-root'
 $worldName = 'world-audit'
 $worldPath = [System.IO.Path]::GetFullPath((Join-Path $runRoot $worldName))
@@ -48,9 +48,9 @@ function Initialize-SafeWorldTestRoot {
 }
 
 function Remove-SafeAuditWorld {
-    $projectPrefix = [System.IO.Path]::GetFullPath($script:ProjectRoot).TrimEnd('\') + '\'
-    if (-not $runRoot.StartsWith($projectPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
-        throw "Refusing a world-test root outside the project workspace: $runRoot"
+    $dataPrefix = [System.IO.Path]::GetFullPath($script:GravesownHome).TrimEnd('\') + '\'
+    if (-not $runRoot.StartsWith($dataPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "Refusing a world-test root outside the Gravesown data directory: $runRoot"
     }
     $rootPrefix = $runRoot.TrimEnd('\') + '\'
     if (-not $worldPath.StartsWith($rootPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -87,7 +87,9 @@ function Write-AuditServerProperties {
         'enable-rcon=false'
         'enable-status=false'
         'enforce-secure-profile=false'
-        'gamemode=creative'
+        # The Smoke world is copied into the integrated client harness, so keep
+        # its first real login in Survival and exercise onboarding truthfully.
+        'gamemode=survival'
         'generate-structures=true'
         'hardcore=false'
         "level-name=$worldName"
@@ -124,16 +126,34 @@ if ($ReuseWorld -and $Profile -eq 'Full') {
 if ($Profile -eq 'Full') {
     [long[]]$seeds = @(-7046029254386353131L, 8675309L, 2305843009213693951L)
     $radius = 8
+    # Climate noise is four times broader than the previous public world. Keep
+    # the same 65x65 uncached probe count while covering four times the span.
+    $biomeProbeRadius = 512
+    $biomeProbeStep = 16
 }
 else {
     [long[]]$seeds = @(-7046029254386353131L)
     $radius = 2
+    $biomeProbeRadius = 0
+    $biomeProbeStep = 4
 }
 
 $strictEnforcement = -not $Baseline
 $enforcement = if ($strictEnforcement) { 'strict' } else { 'baseline' }
 $strictFailures = 0
 $reports = @()
+$expectedBiomes = @(
+    'gravesown:sown_grave'
+    'gravesown:mosswake_woods'
+    'gravesown:amberquiet_grove'
+    'gravesown:ribroot_groves'
+    'gravesown:marrow_rifts'
+    'gravesown:suture_mire'
+    'gravesown:gloam_sea'
+    'gravesown:ember_thicket'
+    'gravesown:pallid_weald'
+)
+$observedBiomes = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
 
 Write-Step "Running $Profile real-chunk world audit ($enforcement enforcement)"
 foreach ($seed in $seeds) {
@@ -155,11 +175,14 @@ foreach ($seed in $seeds) {
     $env:GRAVESOWN_WORLD_AUDIT_PROFILE = $Profile.ToLowerInvariant()
     $env:GRAVESOWN_WORLD_AUDIT_REPORT_ID = $reportId
     $env:GRAVESOWN_WORLD_AUDIT_RADIUS = [string]$radius
+    $env:GRAVESOWN_WORLD_AUDIT_BIOME_PROBE_RADIUS = [string]$biomeProbeRadius
+    $env:GRAVESOWN_WORLD_AUDIT_BIOME_PROBE_STEP = [string]$biomeProbeStep
     $env:GRAVESOWN_WORLD_AUDIT_SAMPLE_LIMIT = '50'
-    $env:GRAVESOWN_WORLD_AUDIT_REQUIRED_BIOME = 'gravesown:sown_grave'
+    $env:GRAVESOWN_WORLD_AUDIT_EXPECTED_BIOMES = $expectedBiomes -join ','
+    Remove-Item Env:GRAVESOWN_WORLD_AUDIT_REQUIRED_BIOME -ErrorAction SilentlyContinue
 
     Write-Host "Generating and scanning seed $seed ($((2 * $radius + 1) * (2 * $radius + 1)) FULL chunks)..."
-    Invoke-ProjectGradle 'runWorldTest'
+    Invoke-ProjectGradle 'runWorldTest' '--offline' '--no-daemon'
 
     if (-not (Test-Path -LiteralPath $reportPath)) {
         throw "World audit server exited without writing $reportPath"
@@ -174,14 +197,25 @@ foreach ($seed in $seeds) {
     if ($report.status -eq 'ERROR') {
         throw "World audit scanner error: $($report.error). See $reportPath"
     }
+    if ([int]$report.schemaVersion -ne 3) {
+        throw "Unsupported world audit report schema $($report.schemaVersion): $reportPath"
+    }
+
+    foreach ($biomeProperty in $report.biomeHistogram.PSObject.Properties) {
+        [void]$observedBiomes.Add([string]$biomeProperty.Name)
+    }
+    foreach ($biomeProperty in $report.biomeProbeHistogram.PSObject.Properties) {
+        [void]$observedBiomes.Add([string]$biomeProperty.Name)
+    }
 
     $reports += $reportPath
     Write-Host (
-        "Seed {0}: status={1}, chunks={2}, positions={3}, violations={4}, duration={5}ms" -f
+        "Seed {0}: status={1}, chunks={2}, positions={3}, biomeProbes={4}, violations={5}, duration={6}ms" -f
         $seed,
         $report.status,
         $report.totals.chunks,
         $report.totals.blockPositions,
+        $report.totals.biomeProbeSamples,
         $report.violations.total,
         $report.durationMillis
     )
@@ -194,9 +228,29 @@ foreach ($seed in $seeds) {
     }
 }
 
+$missingAcrossReports = @(
+    $expectedBiomes |
+        Where-Object { -not $observedBiomes.Contains($_) } |
+        Sort-Object
+)
+
+if ($Profile -eq 'Full') {
+    Write-Host ("Full-profile biome coverage: {0}" -f (($observedBiomes | Sort-Object) -join ', '))
+    if ($missingAcrossReports.Count -gt 0) {
+        $coverageMessage = "Full-profile reports are missing expected biome(s): $($missingAcrossReports -join ', ')"
+        if ($strictEnforcement) {
+            $strictFailures++
+            Write-Host $coverageMessage -ForegroundColor Red
+        }
+        else {
+            Write-Warning $coverageMessage
+        }
+    }
+}
+
 Write-Host ''
 if ($strictFailures -gt 0) {
-    Write-Host "WORLD CONTRACT FAIL: $strictFailures seed(s) contain forbidden world content." -ForegroundColor Red
+    Write-Host "WORLD CONTRACT FAIL: $strictFailures strict contract check(s) failed." -ForegroundColor Red
     Write-Host "Reports: $reportDirectory" -ForegroundColor Yellow
     throw 'Strict Gravesown world audit failed.'
 }

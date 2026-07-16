@@ -24,6 +24,14 @@ public enum ModToolTiers implements Tier {
             0.5F,
             4,
             () -> Ingredient.of(ModItems.HUSHSTONE_SHARD.get())
+    ),
+    GRAVEWORK_HUSHSTONE(
+            BlockTags.INCORRECT_FOR_STONE_TOOL,
+            192,
+            4.8F,
+            1.0F,
+            7,
+            () -> Ingredient.of(ModItems.HUSHSTONE_SHARD.get())
     );
 
     private final TagKey<Block> incorrectBlocksForDrops;

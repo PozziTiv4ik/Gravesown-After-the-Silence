@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "gravesown:block/palevine_stem_top",
+    "side": "gravesown:block/palevine_stem"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,opened=false": { "model": "gravesown:block/remnant_grave_closed" },
+    "facing=east,opened=false": { "model": "gravesown:block/remnant_grave_closed", "y": 90 },
+    "facing=south,opened=false": { "model": "gravesown:block/remnant_grave_closed", "y": 180 },
+    "facing=west,opened=false": { "model": "gravesown:block/remnant_grave_closed", "y": 270 },
+    "facing=north,opened=true": { "model": "gravesown:block/remnant_grave_open" },
+    "facing=east,opened=true": { "model": "gravesown:block/remnant_grave_open", "y": 90 },
+    "facing=south,opened=true": { "model": "gravesown:block/remnant_grave_open", "y": 180 },
+    "facing=west,opened=true": { "model": "gravesown:block/remnant_grave_open", "y": 270 }
+  }
+}

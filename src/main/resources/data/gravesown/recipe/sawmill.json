@@ -1,0 +1,16 @@
+{
+  "type": "gravesown:gravework_shaped",
+  "pattern": [
+    "HHH ",
+    "PPPP",
+    "S  S",
+    "B  B"
+  ],
+  "key": {
+    "H": { "item": "gravesown:hushstone_shard" },
+    "P": { "tag": "gravesown:planks" },
+    "S": { "item": "gravesown:ribroot_splint" },
+    "B": { "item": "gravesown:thread_binding" }
+  },
+  "result": { "id": "gravesown:sawmill", "count": 1 }
+}

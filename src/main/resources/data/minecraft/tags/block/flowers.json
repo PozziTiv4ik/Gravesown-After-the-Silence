@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "gravesown:pallid_bulb"
+    "gravesown:pallid_bulb",
+    "gravesown:cinder_bloom"
   ]
 }

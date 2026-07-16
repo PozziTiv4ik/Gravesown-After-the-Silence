@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "ingredient": { "item": "gravesown:rotfin_flesh" },
+  "result": { "id": "gravesown:smoked_rotfin" },
+  "experience": 0.25,
+  "cookingtime": 160
+}

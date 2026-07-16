@@ -1,5 +1,6 @@
 ### Gradle ###
-.gradle
+.gradle/
+.gradle-user-home/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/**/build/
@@ -49,4 +50,24 @@ repo/
 .tools/
 dist/
 diagnostics/
+release/
+launcher/build/
+launcher/build-verify/
+launcher/dist/
 *.log
+*.lck
+*.part
+hs_err_pid*
+
+### Local credentials and Minecraft account state ###
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.p12
+eula.txt
+servers.dat
+launcher_accounts.json
+usercache.json
+usernamecache.json

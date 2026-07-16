@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "ingredient": { "item": "gravesown:tainted_grazer_meat" },
+  "result": { "id": "gravesown:charred_grazer_meat" },
+  "experience": 0.35,
+  "cookingtime": 200
+}

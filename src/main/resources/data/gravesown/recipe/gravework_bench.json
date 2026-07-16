@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["PP", "SS"],
+  "key": {
+    "P": { "tag": "gravesown:planks" },
+    "S": { "item": "gravesown:ribroot_splint" }
+  },
+  "result": { "id": "gravesown:gravework_bench", "count": 1 }
+}

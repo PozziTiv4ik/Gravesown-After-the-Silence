@@ -31,7 +31,15 @@ public final class GravesownPlantBlock extends BushBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(ModBlocks.ASHEN_SOD.get()) || state.is(ModBlocks.GRAVE_LOAM.get());
+        return state.is(ModBlocks.ASHEN_SOD.get())
+                || state.is(ModBlocks.GRAVE_LOAM.get())
+                || state.is(ModBlocks.ROOTFELT.get())
+                || state.is(ModBlocks.FIBROUS_LOAM.get())
+                || state.is(ModBlocks.SCAR_SHALE.get())
+                || state.is(ModBlocks.SUTURE_SILT.get())
+                || state.is(ModBlocks.DRIED_ICHOR.get())
+                || state.is(ModBlocks.MARROWSTONE.get())
+                || state.is(ModBlocks.GLOAM_SAND.get());
     }
 
     @Override

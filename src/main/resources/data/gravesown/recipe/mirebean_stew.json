@@ -1,0 +1,7 @@
+{
+  "type":"gravesown:field_kitchen",
+  "ingredients":[{"item":"gravesown:mirebean"},{"item":"gravesown:ashgrain"},{"item":"gravesown:gloamwater_bucket"}],
+  "cleaver":{"item":"gravesown:bone_cleaver"},
+  "hook":{"item":"gravesown:stirring_hook"},
+  "result":{"id":"gravesown:mirebean_stew","count":2}
+}

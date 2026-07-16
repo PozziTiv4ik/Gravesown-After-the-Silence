@@ -41,9 +41,8 @@ foreach ($relative in $requiredFiles) {
 }
 
 $rootPath = [System.IO.Path]::GetPathRoot($script:ProjectRoot)
-$driveName = $rootPath.TrimEnd('\').TrimEnd(':')
-$drive = Get-PSDrive -Name $driveName
-$freeGb = [Math]::Round($drive.Free / 1GB, 1)
+$drive = [System.IO.DriveInfo]::new($rootPath)
+$freeGb = [Math]::Round($drive.AvailableFreeSpace / 1GB, 1)
 Write-Host "INFO Free disk space: $freeGb GB"
 if ($freeGb -lt 6) {
     Write-Warning 'Less than 6 GB free; first NeoForge setup may fail.'
@@ -54,8 +53,13 @@ Invoke-ProjectGradle '--version'
 
 if (-not $SkipCompile) {
     Write-Step 'Compiling Java sources'
-    Invoke-ProjectGradle 'compileJava'
+    Invoke-ProjectGradle 'compileJava' '--offline' '--no-daemon'
 }
+
+$marker = Write-GravesownSetupState
+Write-Host "PASS External data: $script:GravesownHome" -ForegroundColor Green
+Write-Host "PASS Gradle cache: $script:ExternalGradleUserHome" -ForegroundColor Green
+Write-Host "PASS Setup state: $marker" -ForegroundColor Green
 
 Write-Host ''
 Write-Host 'Doctor finished: PASS' -ForegroundColor Green

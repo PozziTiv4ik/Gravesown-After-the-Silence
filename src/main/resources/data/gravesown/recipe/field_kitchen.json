@@ -1,0 +1,6 @@
+{
+  "type":"gravesown:gravework_shaped",
+  "pattern":["PSSP","PHHP","PHHP","PPPP"],
+  "key":{"P":{"tag":"gravesown:planks"},"S":{"item":"gravesown:ribroot_splint"},"H":{"item":"gravesown:hushstone"}},
+  "result":{"id":"gravesown:field_kitchen","count":1}
+}

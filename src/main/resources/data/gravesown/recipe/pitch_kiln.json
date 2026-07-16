@@ -1,0 +1,6 @@
+{
+  "type": "gravesown:gravework_shaped",
+  "pattern": ["HHHH", "H  H", "H  H", "HHHH"],
+  "key": { "H": { "item": "gravesown:hushstone" } },
+  "result": { "id": "gravesown:pitch_kiln", "count": 1 }
+}

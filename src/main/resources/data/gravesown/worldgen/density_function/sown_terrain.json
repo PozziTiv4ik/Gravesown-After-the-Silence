@@ -2,19 +2,39 @@
   "type": "minecraft:add",
   "argument1": {
     "type": "minecraft:y_clamped_gradient",
-    "from_y": 48,
-    "to_y": 80,
+    "from_y": 28,
+    "to_y": 112,
     "from_value": 1.0,
     "to_value": -1.0
   },
   "argument2": {
-    "type": "minecraft:mul",
-    "argument1": 0.45,
+    "type": "minecraft:add",
+    "argument1": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:mul",
+        "argument1": 0.72,
+        "argument2": "gravesown:terrain_macro"
+      },
+      "argument2": {
+        "type": "minecraft:mul",
+        "argument1": 0.18,
+        "argument2": "gravesown:terrain_detail"
+      }
+    },
     "argument2": {
-      "type": "minecraft:noise",
-      "noise": "gravesown:sown_terrain",
-      "xz_scale": 0.25,
-      "y_scale": 0.0
+      "type": "minecraft:mul",
+      "argument1": -1.15,
+      "argument2": {
+        "type": "minecraft:clamp",
+        "input": {
+          "type": "minecraft:add",
+          "argument1": "gravesown:climate_wetness",
+          "argument2": -0.45
+        },
+        "min": 0.0,
+        "max": 0.55
+      }
     }
   }
 }

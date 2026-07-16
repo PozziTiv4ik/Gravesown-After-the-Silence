@@ -4,6 +4,8 @@ import dev.gravesown.Gravesown;
 import dev.gravesown.audit.WorldAuditConfig;
 import dev.gravesown.audit.WorldAuditReport;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
@@ -52,6 +54,28 @@ public final class WorldAuditContractGameTests {
                 !strict.isAllowedBlockEntity(ResourceLocation.withDefaultNamespace("chest")),
                 "Vanilla block entities must fail the strict contract"
         );
+        helper.assertTrue(
+                strict.expectedBiomes().equals(Set.of(
+                        Gravesown.id("sown_grave"),
+                        Gravesown.id("mosswake_woods"),
+                        Gravesown.id("amberquiet_grove"),
+                        Gravesown.id("ribroot_groves"),
+                        Gravesown.id("marrow_rifts"),
+                        Gravesown.id("suture_mire"),
+                        Gravesown.id("gloam_sea"),
+                        Gravesown.id("ember_thicket"),
+                        Gravesown.id("pallid_weald")
+                )),
+                "The audit contract must contain exactly the nine reviewed Gravesown biomes"
+        );
+        helper.assertTrue(
+                strict.isAllowedBiome(Gravesown.id("marrow_rifts")),
+                "Every reviewed Gravesown biome must pass the exact biome allowlist"
+        );
+        helper.assertTrue(
+                !strict.isAllowedBiome(ResourceLocation.withDefaultNamespace("plains")),
+                "Foreign biomes must fail the exact biome allowlist"
+        );
 
         WorldAuditReport strictReport = new WorldAuditReport();
         strictReport.recordViolation("block", "minecraft:stone", 0, 0, 0, 0, 0, strict.sampleLimit());
@@ -66,6 +90,23 @@ public final class WorldAuditContractGameTests {
                 "BASELINE_RECORDED".equals(baselineReport.status),
                 "Baseline mode must record violations without claiming a strict pass"
         );
+
+        WorldAuditReport coverageReport = new WorldAuditReport();
+        coverageReport.recordBiome(Gravesown.id("sown_grave").toString());
+        coverageReport.recordBiome(Gravesown.id("marrow_rifts").toString());
+        coverageReport.recordBiomeProbe(Gravesown.id("ribroot_groves").toString());
+        coverageReport.finish(strict, System.nanoTime());
+        helper.assertTrue(
+                coverageReport.missingExpectedBiomes.equals(List.of(
+                        Gravesown.id("amberquiet_grove").toString(),
+                        Gravesown.id("ember_thicket").toString(),
+                        Gravesown.id("gloam_sea").toString(),
+                        Gravesown.id("mosswake_woods").toString(),
+                        Gravesown.id("pallid_weald").toString(),
+                        Gravesown.id("suture_mire").toString()
+                )),
+                "Schema v3 must combine deep and wide biome samples when reporting coverage"
+        );
         helper.succeed();
     }
 
@@ -76,8 +117,20 @@ public final class WorldAuditContractGameTests {
                 "gametest",
                 Path.of("build", "reports", "gravesown", "world-audit"),
                 2,
+                8,
+                2,
                 50,
-                Gravesown.id("sown_grave")
+                Set.of(
+                        Gravesown.id("sown_grave"),
+                        Gravesown.id("mosswake_woods"),
+                        Gravesown.id("amberquiet_grove"),
+                        Gravesown.id("ribroot_groves"),
+                        Gravesown.id("marrow_rifts"),
+                        Gravesown.id("suture_mire"),
+                        Gravesown.id("gloam_sea"),
+                        Gravesown.id("ember_thicket"),
+                        Gravesown.id("pallid_weald")
+                )
         );
     }
 }

@@ -1,0 +1,7 @@
+{
+  "type":"gravesown:field_kitchen",
+  "ingredients":[{"item":"gravesown:rotfin_flesh"},{"item":"gravesown:rootskimmer_meat"},{"item":"gravesown:gloamwater_bucket"}],
+  "cleaver":{"item":"gravesown:bone_cleaver"},
+  "hook":{"item":"gravesown:stirring_hook"},
+  "result":{"id":"gravesown:gloam_chowder","count":2}
+}

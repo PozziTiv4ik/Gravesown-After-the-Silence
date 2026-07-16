@@ -2,6 +2,13 @@
   "replace": false,
   "values": [
     "gravesown:threadgrass",
-    "gravesown:pallid_bulb"
+    "gravesown:pallid_bulb",
+    "gravesown:cinder_bloom",
+    "gravesown:sinew_fern",
+    "gravesown:marrow_reed",
+    "gravesown:rift_thorn",
+    "gravesown:mire_frond",
+    "gravesown:mossveil",
+    "gravesown:amber_bloom"
   ]
 }

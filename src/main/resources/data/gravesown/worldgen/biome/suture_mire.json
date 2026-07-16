@@ -1,0 +1,64 @@
+{
+  "carvers": {},
+  "downfall": 0.8,
+  "effects": {
+    "fog_color": 9480334,
+    "sky_color": 7248825,
+    "water_color": 3437925,
+    "water_fog_color": 1195574
+  },
+  "features": [
+    [],
+    [],
+    ["gravesown:dried_ichor_patches"],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "gravesown:suturewood_trees",
+      "gravesown:mire_frond_patches",
+      "gravesown:sinew_fern_patches",
+      "gravesown:gloamwater_puddles_common",
+      "gravesown:gloam_sea_growth",
+      "gravesown:ruined_shelters_rare",
+      "gravesown:abandoned_camps_very_rare"
+    ],
+    []
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [
+      { "type": "gravesown:mire_toad", "maxCount": 4, "minCount": 2, "weight": 12 },
+      { "type": "gravesown:reed_lynx", "maxCount": 1, "minCount": 1, "weight": 2 }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "gravesown:woundscent",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 18
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [
+      {"type":"gravesown:veilfin","maxCount":3,"minCount":1,"weight":4},
+      {"type":"gravesown:rootskimmer","maxCount":2,"minCount":1,"weight":4}
+    ],
+    "water_creature": [
+      {
+        "type": "gravesown:rotfin",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 8
+      }
+    ]
+  },
+  "temperature": 0.65
+}

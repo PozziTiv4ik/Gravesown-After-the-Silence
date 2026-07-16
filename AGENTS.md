@@ -3,22 +3,26 @@
 ## Project
 
 Gravesown: After the Silence is an original Minecraft Java Edition 1.21.1
-total-conversion horror mod. It uses NeoForge 21.1.235, ModDevGradle 2.0.141,
+total-conversion alien survival and industrial-progression mod. It uses NeoForge 21.1.235, ModDevGradle 2.0.141,
 Gradle 9.2.1, Java 21, Mojang mappings plus the Parchment version pinned in
 gradle.properties, and the mod id gravesown.
 
 Primary play is singleplayer, but all gameplay logic must be correct on a
 dedicated server. The server is authoritative.
 
-The project is inspired by the broad infection-apocalypse genre. Never copy
-names, code, lore, progression, textures, sounds, models, animations, or
-distinctive creatures from Scape and Run: Parasites or any other mod.
+The player is a crash survivor on a wild low-technology alien planet. Its fauna
+is a native ecosystem, not infected Earth life or a zombie replacement set.
+Long-term progression grows from primitive survival into original processing,
+power and automation systems built from local materials. Never copy names, code,
+lore, progression, textures, sounds, models, animations, machines or distinctive
+creatures from Scape and Run: Parasites, IndustrialCraft or any other mod.
 
 ## Start every session
 
 1. Read this file completely.
-2. Read docs/STATUS.md, docs/DESIGN.md, docs/TOTAL_CONVERSION_PLAN.md,
-   docs/ROADMAP.md, docs/DECISIONS.md, and docs/TESTING.md.
+2. Read docs/STATUS.md, docs/DESIGN.md, docs/ART_DIRECTION.md,
+   docs/TOTAL_CONVERSION_PLAN.md, docs/ROADMAP.md, docs/DECISIONS.md, and
+   docs/TESTING.md.
 3. Inspect git status --short and all relevant diffs. Never discard unknown
    changes.
 4. Run doctor.cmd.
@@ -31,6 +35,7 @@ distinctive creatures from Scape and Run: Parasites or any other mod.
 - Code and tests describe current reality.
 - docs/DECISIONS.md records accepted architectural decisions.
 - docs/DESIGN.md records stable game design.
+- docs/ART_DIRECTION.md is the binding visual and interface style contract.
 - docs/TOTAL_CONVERSION_PLAN.md is the editable long-term implementation plan.
 - docs/CONTENT.md tracks every content asset.
 - docs/ROADMAP.md contains milestones and acceptance criteria.
@@ -62,6 +67,10 @@ Chat history is not project memory.
   edges and no filtering blur.
 - Never commit secrets, downloaded JDKs, Gradle caches, compiled output, logs,
   crash reports, or test worlds.
+- `setup.cmd` is the only routine allowed to download toolchains or dependencies.
+  After setup, every Gradle compile, test, build, client and server invocation must
+  use `--offline --no-daemon`; a missing cache is a setup failure, not permission
+  to consume network or leave a background daemon running.
 - Never push, publish, accept a server EULA, or delete user worlds without
   explicit user authorization.
 
@@ -75,18 +84,25 @@ and a recorded smoke test.
 ## General definition of done
 
 1. Implement code and resources for the requested vertical slice.
-2. Run gradlew.bat compileJava while iterating.
+2. Run `gradlew.bat compileJava --offline --no-daemon` while iterating.
 3. Run test.cmd after changes to entity registration, attributes, spawning, or
    server-side behavior.
-4. Run gradlew.bat check and gradlew.bat build before declaring it done.
+4. Run `gradlew.bat check build --offline --no-daemon` before declaring it done.
 5. Run the relevant client, GameTest, or dedicated-server smoke test.
+   Do not launch Minecraft after routine compile/data iterations. Prefer automated
+   checks and run at most one final visual client smoke when the task actually changes
+   presentation. That acceptance run uses 1920x1080; 854x480 is only an explicit
+   compact-layout regression and may never be the sole visual evidence.
 6. Run worldtest.cmd after worldgen, biome, placed-feature, structure, fluid, or
    foundation-block changes. Use strict mode when the current milestone claims
    the total-conversion world contract should pass.
-7. Record only tests that were actually executed.
-8. Update docs/STATUS.md and relevant content/design documents.
-9. Append architectural changes to docs/DECISIONS.md.
-10. Add user-visible changes to CHANGELOG.md.
+7. After pixel-art changes, regenerate through scripts/generate-all-art.ps1 and run
+   artcheck.cmd. Release-candidate art requires two complete regenerations with
+   identical shipped-texture hashes before the one final FHD client smoke.
+8. Record only tests that were actually executed.
+9. Update docs/STATUS.md and relevant content/design documents.
+10. Append architectural changes to docs/DECISIONS.md.
+11. Add user-visible changes to CHANGELOG.md.
 
 ## End every session
 

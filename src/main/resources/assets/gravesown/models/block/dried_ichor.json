@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "gravesown:block/scar_shale",
+    "side": "gravesown:block/dried_ichor_side",
+    "top": "gravesown:block/dried_ichor_top"
+  }
+}

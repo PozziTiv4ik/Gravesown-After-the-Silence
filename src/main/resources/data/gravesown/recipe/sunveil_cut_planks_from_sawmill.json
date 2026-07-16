@@ -1,0 +1,5 @@
+{
+  "type": "gravesown:sawmill",
+  "ingredient": { "item": "gravesown:sunveil_planks" },
+  "result": { "id": "gravesown:sunveil_cut_planks", "count": 1 }
+}

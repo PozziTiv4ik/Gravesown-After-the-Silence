@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "gravesown:block/reliquary_crate" },
+    "facing=east": { "model": "gravesown:block/reliquary_crate", "y": 90 },
+    "facing=south": { "model": "gravesown:block/reliquary_crate", "y": 180 },
+    "facing=west": { "model": "gravesown:block/reliquary_crate", "y": 270 }
+  }
+}

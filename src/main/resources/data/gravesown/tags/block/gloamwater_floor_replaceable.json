@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "gravesown:ashen_sod",
+    "gravesown:grave_loam",
+    "gravesown:hushstone",
+    "gravesown:deep_hushstone",
+    "gravesown:rootfelt",
+    "gravesown:fibrous_loam",
+    "gravesown:scar_shale",
+    "gravesown:marrowstone",
+    "gravesown:veined_shale",
+    "gravesown:splintered_marrowstone",
+    "gravesown:cairnstone",
+    "gravesown:suture_silt",
+    "gravesown:dried_ichor"
+  ]
+}

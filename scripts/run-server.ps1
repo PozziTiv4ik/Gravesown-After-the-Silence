@@ -4,7 +4,8 @@ Enter-ProjectRoot
 $javaHome = Use-ProjectJava
 Write-Host "Using JAVA_HOME=$javaHome"
 
-$eulaPath = Join-Path $script:ProjectRoot 'run\eula.txt'
+$serverRoot = Get-GravesownRunPath 'server'
+$eulaPath = Join-Path $serverRoot 'eula.txt'
 if ((Test-Path -LiteralPath $eulaPath) -and
     -not (Select-String -LiteralPath $eulaPath -SimpleMatch 'eula=true' -Quiet)) {
     Write-Warning 'The server EULA is not accepted.'
@@ -12,4 +13,4 @@ if ((Test-Path -LiteralPath $eulaPath) -and
 }
 
 Write-Step 'Launching Gravesown dedicated development server'
-Invoke-ProjectGradle 'runServer'
+Invoke-ProjectGradle 'runServer' '--offline' '--no-daemon'

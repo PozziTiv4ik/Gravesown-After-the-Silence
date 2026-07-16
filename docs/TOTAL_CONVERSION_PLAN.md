@@ -10,33 +10,63 @@ be renamed casually.
 
 ## Product contract
 
+- The protagonist is a crash survivor on a wild alien planet; Gravesown fauna is a
+  native ecosystem rather than infected or zombified Earth life.
+- The planet provides no usable technology. Progression starts with hand survival and
+  grows into original Gravesown mechanical processing, metallurgy, power and automation.
 - The playable world uses the dedicated preset `gravesown:after_the_silence`.
-- Its Overworld uses exactly one biome: `gravesown:sown_grave`.
+- Its Overworld uses exactly nine Gravesown biomes: `sown_grave`,
+  `mosswake_woods`, `amberquiet_grove`, `ribroot_groves`, `marrow_rifts`,
+  `suture_mire`, `gloam_sea`, `ember_thicket` and `pallid_weald`.
 - Newly generated playable Overworld chunks contain no visible or obtainable
   vanilla blocks, fluids, ores, vegetation or structures.
 - Vanilla registries remain intact for engine stability and development tools.
 - The initial strict technical allowlist is only `minecraft:air` and
-  `minecraft:cave_air`. Any temporary exception must be named and tracked.
+  `minecraft:cave_air`; all non-empty fluids in generated chunks must be
+  Gravesown-owned. Any temporary exception must be named and tracked.
 - Existing vanilla/M1 worlds are never converted in place. Worldgen development
   is new-world-only until the schema is declared stable.
 - Nether and End survival access stays unavailable until each dimension receives
   an explicit Gravesown replacement milestone.
 
-## The single biome
+## The nine-biome Overworld
 
-Working name: **The Sown Grave / Засеянная могила**.
+TC4a proved a minimal one-biome generator. The user review found it too flat and
+empty, so the shipping target is now nine registry biomes with strong silhouettes:
 
-It remains one registry biome while terrain noise, surface rules and placed
-features create different visual subzones:
+1. **The Sown Grave / Засеянная могила** — open Ashskin flats, low grave mounds
+   and Hollow Grazer herds; this keeps the existing stable biome id.
+2. **Ribroot Groves / Рощи рёберника** — dense rib-like trunks, membrane crowns,
+   root arches and a skittish native prey species.
+3. **Marrow Rifts / Костномозговые разломы** — high ridges, ravines, exposed
+   marrow rock and a heavy territorial burrower.
+4. **Suture Mire / Шовная топь** — low dark silt basins, dried ichor channels,
+   pallid lights and a blind scent predator.
 
-1. **Ashskin Flats / Пеплокожие равнины** — open grazing land and Hollow Grazers.
-2. **Ribroot Groves / Рощи рёберника** — membrane-crowned custom trees.
-3. **Marrow Rifts / Костномозговые разломы** — cliffs, caves and exposed deposits.
-4. **Suture Mire / Шовная топь** — dark silt and later custom ichor ponds.
-5. **Hush Hollows / Безмолвные впадины** — fog and dangerous night populations.
-6. **Cairnspines / Курганные хребты** — rare ridges and late resources.
+5. **Gloam Sea** — a large Gloamwater ocean with Abyssal Silt/Brinebone floor,
+   layered aquatic vegetation and three fish depth niches.
+6. **Ember Thicket** — warm dry Dried Ichor/Scar Shale hills, Emberbark stands,
+   cinder flora and Grazer/Woundscent pressure.
+7. **Pallid Weald** — cool Fibrous Loam/Marrowstone woodland, Palevine crowns,
+   pale bulbs and fleeing Ribspring herds.
+8. **Mosswake Woods** — Ashen Sod woodland with broad Mosswake crowns, Mossveil
+   understory and Ribspring movement through readable green-brown turf.
+9. **Amberquiet Grove** — warmer Ashen Sod woodland with tall Sunveil crowns,
+   Amber Bloom accents and sparse Hollow Grazer groups.
 
-The first worldgen release only needs Flats, Groves and Rifts.
+Climate parameters select the registry biome while custom density functions,
+surface rules and Gravesown-only placed features create the terrain. No biome may
+reuse a vanilla surface provider, tree, ore, structure or fluid as final content.
+The reviewed climate functions now target one-half of the prototype X/Z frequency,
+making public regions roughly twice the prototype width and half the previous
+over-broad four-times width. Emberbark and Palevine shoots remain
+player-planted propagation items and are deliberately absent from natural decoration.
+Mosswake Woods and Amberquiet Grove reuse the Ashen Sod/Grave Loam surface contract;
+their identity comes from trees, understory and local color rather than a gratuitous
+new foundation block.
+
+Later internal subzones such as Hush Hollows and Cairnspines may vary terrain and
+features without increasing the reviewed public biome count.
 
 ## World foundation palette
 
@@ -49,7 +79,17 @@ Priority-zero blocks:
 - `fractured_hushstone` — early building and processing material;
 - `clotted_marl` — noisy surface patches;
 - `gravebed` — unbreakable bottom replacement;
+- `rootfelt`, `fibrous_loam` — Ribroot Groves surface and filler;
+- `scar_shale`, `marrowstone` — Marrow Rifts surface and filler;
+- `suture_silt`, `dried_ichor` — Suture Mire surface and slow channel material;
 - `ribroot_stem`, `ribroot_planks`, `veil_foliage` — first wood family;
+- `emberbark_*`, `palevine_*`, `cairnwood_*`, `suturewood_*`, `mosswake_*`,
+  `sunveil_*` — six additional complete regional wood/decor families;
+- `*_cut_planks` — one Sawmill-finished 1:1 plank variant for every one of the seven
+  wood species;
+- `veined_shale`, `splintered_marrowstone`, `cairnstone` — Rifts geology accents;
+- `rift_thorn`, `mire_frond`, `mossveil`, `amber_bloom` — regional understory;
+- `gloam_muck`, `gloam_sand` — aquatic floor and shore materials;
 - `threadgrass`, `ribroot_shoot`, `pallid_bulb` — bootstrap vegetation.
 
 Bootstrap tool materials and tools:
@@ -67,10 +107,20 @@ Early utility blocks:
 - `hide_rack` — hide curing;
 - `tallow_lamp` — early light;
 - `sinew_crate` — storage.
+- `sawmill` — server-authoritative one-input wood finishing station;
+- `gravesown_glass`, `tempered_glass` — two-stage Gloam Sand glass loop.
+
+Implemented landmark/aquatic content:
+
+- `remnant_grave` — no-loot, one-shot interactive Sown Grave marker;
+- `gloamwater`, `flowing_gloamwater` and `gloamwater_bucket` — custom fluid family;
+- `threadkelp` — Gloamwater vegetation;
+- Buried Remnant and Rotfin — complete grave/aquatic entity vertical slices.
 
 No vanilla default feature may be copied without auditing every block provider.
-Aquifers and vanilla ore veins remain disabled in the first preset. Custom ponds
-are placed features; a full custom fluid system comes later.
+Aquifers and vanilla ore veins remain disabled. Rare Suture Mire ponds are now a
+reviewed placed feature using the custom Gloamwater source/flow/block/bucket family,
+with Threadkelp and Rotfin forming the first aquatic ecology slice.
 
 ## Resource progression
 
@@ -137,8 +187,11 @@ food, light, shelter and a mining tool without commands or vanilla resources.
 
 ### TC1 — Hollow Grazer economy
 
-Implementation status: code/data complete and 5/5 automated tests pass; worn-armor
-visual inspection and no-command acquisition remain manual acceptance checks.
+Implementation status: code/data complete and the original economy tests pass.
+Quietskin has four slot-specific volumetric client models with 49 total cubes,
+layered scavenged plates/fittings and an open-face hood. Default/slim fit plus
+front/back/daylight/hurt-flash appearance and no-command acquisition remain manual
+acceptance checks.
 
 - custom drops and loot table;
 - Quietskin armor, recipes, textures and Dead Scent integration;
@@ -167,20 +220,102 @@ early utility blocks remain.
 - mining/replaceable/tool tags, loot tables and building variants;
 - bootstrap items and utility blocks.
 
-### TC4 — One-biome world preset
+### TC4 — World preset and biome expansion
 
-Implementation status: TC4a minimal preset complete. `after_the_silence` uses the
-single fixed `sown_grave` biome and a custom low-hill density function. Its surface
-is Ashen Sod over three Grave Loam layers, Hushstone, Deep Hushstone and one
-Gravebed floor. Fluids, aquifers, ore veins, carvers, placed features and structures
-are deliberately absent. Dedicated Smoke/Full audits and an integrated-client
-same-seed smoke test pass.
+Implementation status: TC4a remains the historical clean foundation, and TC4b is
+implemented. `after_the_silence` now uses a nine-entry multi-noise source and
+spatial warmth/wetness functions. A safe Y28–112 gradient plus macro/detail density
+creates broad hills and local variation. Biome surface rules select the reviewed
+regional foundations, while original tree, plant, stone, dried-ichor, rare Remnant
+Grave and Gloamwater placed features provide Gravesown-only natural content. Aquifers,
+vanilla ore veins, carvers and vanilla structures remain absent. Dedicated strict
+Smoke/Full evidence exists; the current slice reran strict Smoke without a client.
 
 - [x] data-driven dynamic registries;
-- [x] fixed biome source, custom noise settings and surface rules;
-- [x] empty reviewed carver/feature sets and safe solid spawn terrain;
+- [x] nine-biome multi-noise source, custom noise settings and surface rules;
+- [x] empty reviewed carver sets and safe solid spawn terrain;
 - [x] no vanilla structures, aquifers or ore veins;
-- [ ] TC4b custom Ribroot and bootstrap-flora placed features.
+- [x] stronger macro/detail terrain variation;
+- [x] broad 0.175-scale climate regions plus player-only Emberbark/Palevine shoots;
+- [x] custom Ribroot, bootstrap-flora, dried-ichor, rare grave and rare pond placed
+  features;
+- [x] biome-specific surface blocks and one complete creature per added biome;
+- [x] custom Gloamwater fluid family, Threadkelp and Rotfin aquatic slice.
+
+### TC4V — Visual identity, onboarding and Windows client
+
+- [x] replace the alpha Quietskin shell with readable original pixel art and four
+  slot-specific volumetric armor models (49 cubes) using layered scavenged plates and
+  an open-face hood; automated resource/model checks pass, while default/slim,
+  back/daylight/hurt-flash appearance remains manual;
+- [x] rebuild Hollow Grazer, Ribspring, Stitchtusk and Woundscent with richer layered
+  model geometry, procedural motion accents and fully redrawn deterministic texture
+  sheets; all four atlases are 128x128 with opaque multi-tone safety underlays, all
+  143 cubes pass bounds and all 101 added detail cubes own non-overlapping full-
+  footprint UV islands; exact client tracking and the lineup capture pass;
+- [x] branded title-screen and selected vanilla menu/options/loading presentation;
+  deterministic widget overrides preserve the underlying screen behavior, while one
+  isolated client theme subscriber owns the pinned deprecated background event;
+- [x] a Windows launcher app-image with a real `.exe`, centered animated Play button,
+  Verify/Logs controls, compact bottom console, RU/EN locale path, offscreen preview and cached project client
+  startup; it must not bypass Microsoft authentication or redistribute Minecraft
+  binaries;
+- [x] full-screen pannable/zoomable Survival Hub with `Story`, categorized `Crafts`,
+  branching `Chain` and scrollable `Guide`, a fourteen-step
+  server-owned condition/claim tree, manual Claim validation, sound and custom
+  completion notice; grant its Codex item on first Survival login or first later
+  Creative-to-Survival transition, persist all state and synchronize through protocol 3;
+- [x] make `Crafts` an interactive server-synchronized recipe browser with EN/RU and
+  registry-id search, six filters and exact station grids; make `Chain` a separate auto-fitted,
+  pannable/zoomable branching dependency graph whose craftable nodes jump back to
+  `Crafts`, with `R` over a container item opening its graph through a server request;
+- [x] vanilla advancements and recipes are filtered through an always-on high-priority
+  built-in server data pack; no fragile Mixin is used;
+- [x] Gloamwater remains a distinct custom fluid while matching vanilla-water source,
+  flow-distance and tick semantics and reusing vanilla water animation sprites with
+  Gravesown tint, fog, floor materials and ecology;
+- [x] chunk-aligned pond/sea growth covers every 4x4 bed cell with one candidate from
+  five custom plant families including softly luminous Lumen Kelp, while no vanilla
+  fluid or aquatic vegetation enters the world;
+- [x] low-density peaceful fish spawn tables cover Gloamwater in all nine climates,
+  with larger schools and predators remaining regional ecology differences;
+- [x] add the first complete field/shelter slice: custom-fluid-only farmland, two crops,
+  food, six Ribroot construction shapes and a Tallow Lantern;
+- [x] add Ember Thicket and Pallid Weald with complete Emberbark/Palevine families;
+- [x] add procedural ruined shelters, a 36-slot Reliquary Crate, Field Kitchen,
+  persistent utensils, three hot meals and Gravesown-only fishing loot;
+- [x] extend the server-owned Story to 14 goals and Guide to seven topics; allow a
+  creation chain to be pinned while inspecting intermediate crafts;
+- [x] force new worlds to the After the Silence preset, structures enabled and bonus
+  chest disabled through public NeoForge/vanilla screen state rather than a Mixin;
+
+Large branded illustration work may use ImageGen and must still receive visual
+review. Exact 16x16 items/blocks, 64x32 armor UVs and 128x128 entity sheets remain
+deterministic hard-edged pixel art generated by project scripts.
+
+### TC4E — Woodland, material and Art Language V3 expansion
+
+Implementation status: code/data and deterministic asset ownership exist; final
+command evidence and FHD visual acceptance are recorded only in `docs/STATUS.md`.
+
+- [x] add Mosswake Woods and Amberquiet Grove on Ashen Sod/Grave Loam, keeping the
+  exact nine-biome allowlist and a 0.175 climate scale: half the linear width of the
+  rejected over-broad build while still broader than the original prototype;
+- [x] add Cairnwood shrubs and three Rifts stone accents, four-root Suturewood mire
+  trees/puddles, broad Mosswake trees and tall Sunveil crowns with region-specific
+  understory;
+- [x] complete seven public wood families, including species-colored foliage,
+  construction shapes, propagation, falling leaves and Sawmill-only cut planks;
+- [x] add the server-authoritative Sawmill and exact one-plank-to-one-cut-plank recipes;
+- [x] add Gloam Sand -> Glass -> Tempered Glass smelting, with Silk Touch recovery for
+  fragile glass and ordinary self-drop for the three-times-harder tempered block;
+- [x] replace the visible 4x4 bed mosaic with deterministic coordinate-warped
+  multi-scale Sand/Muck shelves while preserving the bounded 4x4 ecology grid;
+- [x] keep sticky horizontal slowdown while restoring a normal player jump impulse;
+- [x] make Art Language V3 the final raster owner for terrain, all seven wood families,
+  tools/stations, HUD/GUI, armor and creature atlases; keep natural local colors on
+  gameplay art, use the cold navy/steel/cyan palette only for presentation, and keep
+  large mood backgrounds as the only non-UV ImageGen-eligible shipping art.
 
 ### TC5 — Deposits and subzones
 
@@ -194,10 +329,18 @@ same-seed smoke test pass.
 - one-hour no-command playthrough;
 - dedicated-server save/reload.
 
-### TC7 — Ecosystem and atmosphere
+### TC7 — Native ecosystem and industrial foundation
 
-- additional creatures, predator/prey interactions and spawn costs;
-- remaining subzones, Gravesown ruins, particles and original sounds.
+- [x] add at least fifteen endemic animals so every public biome has one to three
+  local prey, neutral, avian/small-fauna or predator species;
+- [ ] deepen predator/prey interactions, feeding/resting loops, spawn costs and
+  long-session population pacing;
+- [x] first aquatic pocket: Gloamwater, Threadkelp and Rotfin;
+- [x] first rare interactive landmark: one-shot Remnant Grave and Buried Remnant;
+- [x] first biome-aware rare surface camp with three bounded variants and local wood;
+- [ ] remaining subzones, richer camps/ruins, particles and original sounds;
+- original manual-to-mechanical processing graph, followed by metallurgy, power
+  generation and automation; no copied IndustrialCraft machines or energy rules.
 
 ### TC8 — Other dimensions
 
@@ -207,11 +350,20 @@ same-seed smoke test pass.
 
 ## Verification contract
 
-- `test.cmd` covers deterministic content mechanics.
+- `test.cmd` covers deterministic server/content mechanics, including the Codex
+  grant, Survival transition, condition/claim payloads, one-shot grave/emergence,
+  fertilizer/tree/crop growth, custom-only hydration, early stations, shelter recipes,
+  aquatic contracts, complete wood families, ruined storage, Field Kitchen recipes,
+  sticky jump restoration, nine-biome world contracts, station bases/facing/audio,
+  Sawmill recipes, glass loot, the recoverable no-duplication spear, all 15 expansion
+  fauna profiles and every abandoned-camp variant.
 - `worldtest.cmd` scans real FULL chunks, not GameTest templates.
 - Smoke audit: one fixed seed and 5x5 chunks through the entire build height.
-- Full audit: three fixed seeds and at least 17x17 chunks each.
-- Every biome palette entry must be `gravesown:sown_grave`.
+- Full audit: three fixed seeds and at least 17x17 chunks each, plus a wide sparse
+  uncached biome-source probe that does not load or generate additional chunks.
+- The preset's possible-biome set must equal the reviewed nine-biome allowlist;
+  strict Full verification must observe every expected biome through deep or wide
+  samples across its three seeds.
 - Every block and fluid id must be Gravesown or explicitly allowlisted.
 - No vanilla block entity, structure or bonus chest may enter generated chunks.
 - Ore counts and min/max Y are reported and bounded.

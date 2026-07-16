@@ -5,7 +5,7 @@ $javaHome = Use-ProjectJava
 Write-Host "Using JAVA_HOME=$javaHome"
 
 Write-Step 'Running checks and building Gravesown'
-Invoke-ProjectGradle 'clean' 'check' 'build'
+Invoke-ProjectGradle 'clean' 'check' 'build' '--offline' '--no-daemon'
 
 $releaseJar = Get-ReleaseJar
 $distDir = Join-Path $script:ProjectRoot 'dist'

@@ -1,0 +1,7 @@
+{
+  "type":"gravesown:field_kitchen",
+  "ingredients":[{"item":"gravesown:tainted_grazer_meat"},{"item":"gravesown:cinder_bloom"},{"item":"gravesown:gloamwater_bucket"}],
+  "cleaver":{"item":"gravesown:bone_cleaver"},
+  "hook":{"item":"gravesown:stirring_hook"},
+  "result":{"id":"gravesown:charred_marrow_pot","count":2}
+}

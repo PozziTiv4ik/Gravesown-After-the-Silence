@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "P": { "item": "gravesown:ribroot_planks" }
+    "P": { "tag": "gravesown:planks" }
   },
   "pattern": [
     "P",

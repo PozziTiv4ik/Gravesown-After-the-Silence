@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "gravesown:block/sawmill" },
+    "facing=east": { "model": "gravesown:block/sawmill", "y": 90 },
+    "facing=south": { "model": "gravesown:block/sawmill", "y": 180 },
+    "facing=west": { "model": "gravesown:block/sawmill", "y": 270 }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "gravesown:ribroot_cut_planks",
+    "gravesown:emberbark_cut_planks",
+    "gravesown:palevine_cut_planks",
+    "gravesown:cairnwood_cut_planks",
+    "gravesown:suturewood_cut_planks",
+    "gravesown:mosswake_cut_planks",
+    "gravesown:sunveil_cut_planks"
+  ]
+}

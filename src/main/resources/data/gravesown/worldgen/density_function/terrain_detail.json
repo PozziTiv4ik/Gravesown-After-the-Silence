@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:cache_2d",
+  "argument": {
+    "type": "minecraft:noise",
+    "noise": "gravesown:terrain_detail",
+    "xz_scale": 0.45,
+    "y_scale": 0.0
+  }
+}

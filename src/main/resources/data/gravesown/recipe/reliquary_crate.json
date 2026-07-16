@@ -1,0 +1,6 @@
+{
+  "type":"gravesown:gravework_shaped",
+  "pattern":["PPPP","PSSP","PSSP","PPPP"],
+  "key":{"P":{"tag":"gravesown:planks"},"S":{"item":"gravesown:ribroot_splint"}},
+  "result":{"id":"gravesown:reliquary_crate","count":1}
+}

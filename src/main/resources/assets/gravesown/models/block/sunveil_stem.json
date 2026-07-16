@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "gravesown:block/sunveil_stem_top",
+    "side": "gravesown:block/sunveil_stem"
+  }
+}

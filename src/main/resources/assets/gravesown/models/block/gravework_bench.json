@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "gravesown:block/gravework_bench_bottom",
+    "up": "gravesown:block/gravework_bench_top",
+    "north": "gravesown:block/gravework_bench_front",
+    "south": "gravesown:block/gravework_bench_side",
+    "east": "gravesown:block/gravework_bench_side",
+    "west": "gravesown:block/gravework_bench_side",
+    "particle": "gravesown:block/gravework_bench_side"
+  }
+}

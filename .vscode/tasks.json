@@ -8,6 +8,12 @@
       "problemMatcher": []
     },
     {
+      "label": "Gravesown: Launcher",
+      "type": "shell",
+      "command": "${workspaceFolder}\\launcher.cmd",
+      "problemMatcher": []
+    },
+    {
       "label": "Gravesown: Play",
       "type": "shell",
       "command": "${workspaceFolder}\\play.cmd",
@@ -47,6 +53,24 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "Gravesown: GitHub Ready",
+      "type": "shell",
+      "command": "${workspaceFolder}\\github-ready.cmd",
+      "problemMatcher": "$javac"
+    },
+    {
+      "label": "Gravesown: Package Release",
+      "type": "shell",
+      "command": "${workspaceFolder}\\package-release.cmd",
+      "problemMatcher": "$javac"
+    },
+    {
+      "label": "Gravesown: Clean Dev Storage",
+      "type": "shell",
+      "command": "${workspaceFolder}\\clean-storage.cmd",
+      "problemMatcher": []
     },
     {
       "label": "Gravesown: Doctor",

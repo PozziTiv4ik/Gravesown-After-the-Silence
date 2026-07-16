@@ -2,6 +2,14 @@
   "replace": false,
   "values": [
     "gravesown:ashen_sod",
-    "gravesown:grave_loam"
+    "gravesown:grave_loam",
+    "gravesown:rootfelt",
+    "gravesown:fibrous_loam",
+    "gravesown:suture_silt",
+    "gravesown:dried_ichor",
+    "gravesown:abyssal_silt",
+    "gravesown:gloam_muck",
+    "gravesown:gloam_sand",
+    "gravesown:gloam_farmland"
   ]
 }

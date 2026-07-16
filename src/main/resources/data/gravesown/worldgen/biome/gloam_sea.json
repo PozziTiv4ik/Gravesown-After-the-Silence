@@ -1,0 +1,62 @@
+{
+  "carvers": {},
+  "downfall": 0.9,
+  "effects": {
+    "fog_color": 8364960,
+    "sky_color": 7513541,
+    "water_color": 3112827,
+    "water_fog_color": 1064512
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    ["gravesown:gloam_sea_growth","gravesown:abandoned_camps_very_rare"],
+    []
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [
+      {
+        "type": "gravesown:veilfin",
+        "maxCount": 6,
+        "minCount": 3,
+        "weight": 14
+      },
+      {
+        "type": "gravesown:rootskimmer",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 10
+      },
+      {
+        "type": "gravesown:silt_ray",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      }
+    ],
+    "water_creature": [
+      {
+        "type": "gravesown:rotfin",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 5
+      }
+    ]
+  },
+  "temperature": 0.48
+}

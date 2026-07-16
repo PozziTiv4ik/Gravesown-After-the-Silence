@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [{"item": "gravesown:pallid_bulb"}],
+  "result": {"id": "gravesown:gravebloom_dust", "count": 2}
+}

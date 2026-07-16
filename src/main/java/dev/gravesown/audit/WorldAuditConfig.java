@@ -2,8 +2,10 @@ package dev.gravesown.audit;
 
 import dev.gravesown.Gravesown;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 import net.minecraft.resources.ResourceLocation;
 
 public record WorldAuditConfig(
@@ -12,8 +14,10 @@ public record WorldAuditConfig(
         String reportId,
         Path reportDirectory,
         int radiusChunks,
+        int biomeProbeRadiusChunks,
+        int biomeProbeStepChunks,
         int sampleLimit,
-        ResourceLocation requiredBiome
+        Set<ResourceLocation> expectedBiomes
 ) {
     static final String ENABLED_PROPERTY = "gravesown.worldAudit.enabled";
     private static final String REPORT_DIRECTORY_PROPERTY = "gravesown.worldAudit.reportDir";
@@ -21,10 +25,15 @@ public record WorldAuditConfig(
     private static final String ENV_PROFILE = "GRAVESOWN_WORLD_AUDIT_PROFILE";
     private static final String ENV_REPORT_ID = "GRAVESOWN_WORLD_AUDIT_REPORT_ID";
     private static final String ENV_RADIUS = "GRAVESOWN_WORLD_AUDIT_RADIUS";
+    private static final String ENV_BIOME_PROBE_RADIUS = "GRAVESOWN_WORLD_AUDIT_BIOME_PROBE_RADIUS";
+    private static final String ENV_BIOME_PROBE_STEP = "GRAVESOWN_WORLD_AUDIT_BIOME_PROBE_STEP";
     private static final String ENV_SAMPLE_LIMIT = "GRAVESOWN_WORLD_AUDIT_SAMPLE_LIMIT";
-    private static final String ENV_REQUIRED_BIOME = "GRAVESOWN_WORLD_AUDIT_REQUIRED_BIOME";
+    private static final String ENV_EXPECTED_BIOMES = "GRAVESOWN_WORLD_AUDIT_EXPECTED_BIOMES";
+    private static final String LEGACY_ENV_REQUIRED_BIOME = "GRAVESOWN_WORLD_AUDIT_REQUIRED_BIOME";
 
     private static final int MAX_RADIUS_CHUNKS = 16;
+    private static final int MAX_BIOME_PROBE_RADIUS_CHUNKS = 512;
+    private static final int MAX_BIOME_PROBE_STEP_CHUNKS = 64;
     private static final int MAX_SAMPLE_LIMIT = 500;
     private static final Set<ResourceLocation> TECHNICAL_BLOCK_ALLOWLIST = Set.of(
             ResourceLocation.withDefaultNamespace("air"),
@@ -33,6 +42,24 @@ public record WorldAuditConfig(
     private static final Set<ResourceLocation> TECHNICAL_FLUID_ALLOWLIST = Set.of(
             ResourceLocation.withDefaultNamespace("empty")
     );
+    private static final String DEFAULT_EXPECTED_BIOMES = String.join(",",
+            Gravesown.MOD_ID + ":sown_grave",
+            Gravesown.MOD_ID + ":mosswake_woods",
+            Gravesown.MOD_ID + ":amberquiet_grove",
+            Gravesown.MOD_ID + ":ribroot_groves",
+            Gravesown.MOD_ID + ":marrow_rifts",
+            Gravesown.MOD_ID + ":suture_mire",
+            Gravesown.MOD_ID + ":gloam_sea",
+            Gravesown.MOD_ID + ":ember_thicket",
+            Gravesown.MOD_ID + ":pallid_weald"
+    );
+
+    public WorldAuditConfig {
+        expectedBiomes = Set.copyOf(expectedBiomes);
+        if (expectedBiomes.isEmpty()) {
+            throw new IllegalArgumentException("expectedBiomes must contain at least one biome");
+        }
+    }
 
     public static boolean isEnabled() {
         return Boolean.getBoolean(ENABLED_PROPERTY);
@@ -51,10 +78,20 @@ public record WorldAuditConfig(
         String profile = safeId(environment(ENV_PROFILE, "smoke"), "smoke");
         String reportId = safeId(environment(ENV_REPORT_ID, profile), profile);
         int radius = boundedInteger(ENV_RADIUS, 2, 0, MAX_RADIUS_CHUNKS);
-        int samples = boundedInteger(ENV_SAMPLE_LIMIT, 50, 1, MAX_SAMPLE_LIMIT);
-        ResourceLocation requiredBiome = ResourceLocation.parse(
-                environment(ENV_REQUIRED_BIOME, Gravesown.MOD_ID + ":sown_grave")
+        int biomeProbeRadius = boundedInteger(
+                ENV_BIOME_PROBE_RADIUS,
+                0,
+                0,
+                MAX_BIOME_PROBE_RADIUS_CHUNKS
         );
+        int biomeProbeStep = boundedInteger(
+                ENV_BIOME_PROBE_STEP,
+                4,
+                1,
+                MAX_BIOME_PROBE_STEP_CHUNKS
+        );
+        int samples = boundedInteger(ENV_SAMPLE_LIMIT, 50, 1, MAX_SAMPLE_LIMIT);
+        Set<ResourceLocation> expectedBiomes = expectedBiomesFromEnvironment();
         Path reportDirectory = Path.of(System.getProperty(
                 REPORT_DIRECTORY_PROPERTY,
                 "build/reports/gravesown/world-audit"
@@ -66,9 +103,15 @@ public record WorldAuditConfig(
                 reportId,
                 reportDirectory,
                 radius,
+                biomeProbeRadius,
+                biomeProbeStep,
                 samples,
-                requiredBiome
+                expectedBiomes
         );
+    }
+
+    public boolean isAllowedBiome(ResourceLocation id) {
+        return expectedBiomes.contains(id);
     }
 
     public boolean isAllowedBlock(ResourceLocation id) {
@@ -98,6 +141,26 @@ public record WorldAuditConfig(
     private static String environment(String name, String fallback) {
         String value = System.getenv(name);
         return value == null || value.isBlank() ? fallback : value.trim();
+    }
+
+    private static Set<ResourceLocation> expectedBiomesFromEnvironment() {
+        String configured = System.getenv(ENV_EXPECTED_BIOMES);
+        if (configured == null || configured.isBlank()) {
+            String legacyRequiredBiome = System.getenv(LEGACY_ENV_REQUIRED_BIOME);
+            configured = legacyRequiredBiome == null || legacyRequiredBiome.isBlank()
+                    ? DEFAULT_EXPECTED_BIOMES
+                    : legacyRequiredBiome;
+        }
+
+        Set<ResourceLocation> expected = Arrays.stream(configured.split(",", -1))
+                .map(String::trim)
+                .filter(value -> !value.isEmpty())
+                .map(ResourceLocation::parse)
+                .collect(Collectors.toUnmodifiableSet());
+        if (expected.isEmpty()) {
+            throw new IllegalArgumentException(ENV_EXPECTED_BIOMES + " must contain at least one biome id");
+        }
+        return expected;
     }
 
     private static int boundedInteger(String name, int fallback, int minimum, int maximum) {

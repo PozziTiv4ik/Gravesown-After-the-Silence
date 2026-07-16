@@ -34,6 +34,19 @@ base {
     archivesName = mod_id
 }
 
+// Runtime state is deliberately outside the Git checkout. A clone can be replaced,
+// moved or deleted without touching player worlds, logs or dependency caches.
+def gravesownHomePath = System.getenv('GRAVESOWN_HOME')
+if (gravesownHomePath == null || gravesownHomePath.isBlank()) {
+    def localAppData = System.getenv('LOCALAPPDATA')
+    gravesownHomePath = localAppData != null && !localAppData.isBlank()
+            ? new File(localAppData, 'Gravesown').absolutePath
+            : new File(System.getProperty('user.home'), '.gravesown').absolutePath
+}
+def gravesownRunDirectory = { String name ->
+    new File(gravesownHomePath, "runs/${name}")
+}
+
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
@@ -54,6 +67,7 @@ neoForge {
     runs {
         client {
             client()
+            gameDirectory = gravesownRunDirectory('client')
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -63,14 +77,15 @@ neoForge {
         // prepares its save and the client-side runner exits after validation.
         clientSmoke {
             client()
-            gameDirectory = project.file('run-clienttest')
-            programArguments.addAll '--quickPlaySingleplayer', 'tc4-client-smoke'
+            gameDirectory = gravesownRunDirectory('tests/client-smoke')
+            programArguments.addAll '--quickPlaySingleplayer', 'tc4-client-smoke', '--width', '1920', '--height', '1080'
             systemProperty 'gravesown.clientSmoke.enabled', 'true'
             systemProperty 'gravesown.clientSmoke.expectedSeed', '-7046029254386353131'
         }
 
         server {
             server()
+            gameDirectory = gravesownRunDirectory('server')
             programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
@@ -79,7 +94,7 @@ neoForge {
         // FULL chunks after startup, writes reports and then stops the server.
         worldTest {
             server()
-            gameDirectory = project.file('run-worldtest')
+            gameDirectory = gravesownRunDirectory('tests/worldtest')
             programArgument '--nogui'
             systemProperty 'gravesown.worldAudit.enabled', 'true'
             systemProperty 'gravesown.worldAudit.reportDir',
@@ -91,11 +106,13 @@ neoForge {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             type = "gameTestServer"
+            gameDirectory = gravesownRunDirectory('tests/gametest')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         data {
             data()
+            gameDirectory = gravesownRunDirectory('tests/data')
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // gameDirectory = project.file('run-data')

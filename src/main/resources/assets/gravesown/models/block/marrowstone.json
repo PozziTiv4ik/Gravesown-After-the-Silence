@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "gravesown:block/fibrous_loam",
+    "side": "gravesown:block/marrowstone_side",
+    "top": "gravesown:block/marrowstone_top"
+  }
+}

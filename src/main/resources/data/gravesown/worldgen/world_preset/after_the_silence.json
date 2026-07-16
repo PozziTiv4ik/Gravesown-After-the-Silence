@@ -5,8 +5,117 @@
       "generator": {
         "type": "minecraft:noise",
         "biome_source": {
-          "type": "minecraft:fixed",
-          "biome": "gravesown:sown_grave"
+          "type": "minecraft:multi_noise",
+          "biomes": [
+            {
+              "biome": "gravesown:sown_grave",
+              "parameters": {
+                "temperature": [-2.0, -0.75],
+                "humidity": [-2.0, 0.0],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:mosswake_woods",
+              "parameters": {
+                "temperature": [-0.75, -0.25],
+                "humidity": [-2.0, 0.0],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:amberquiet_grove",
+              "parameters": {
+                "temperature": [-0.25, 0.0],
+                "humidity": [-2.0, 0.0],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:ribroot_groves",
+              "parameters": {
+                "temperature": [-0.25, 0.0],
+                "humidity": [0.0, 0.62],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:marrow_rifts",
+              "parameters": {
+                "temperature": [0.0, 0.35],
+                "humidity": [-2.0, 0.0],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:pallid_weald",
+              "parameters": {
+                "temperature": [-2.0, -0.25],
+                "humidity": [0.0, 0.62],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:ember_thicket",
+              "parameters": {
+                "temperature": [0.35, 2.0],
+                "humidity": [-2.0, 0.0],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:suture_mire",
+              "parameters": {
+                "temperature": [0.0, 2.0],
+                "humidity": [0.0, 0.62],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            },
+            {
+              "biome": "gravesown:gloam_sea",
+              "parameters": {
+                "temperature": [-2.0, 2.0],
+                "humidity": [0.62, 2.0],
+                "continentalness": [-2.0, 2.0],
+                "erosion": [-2.0, 2.0],
+                "depth": [-2.0, 2.0],
+                "weirdness": [-2.0, 2.0],
+                "offset": 0.0
+              }
+            }
+          ]
         },
         "settings": "gravesown:sown_grave"
       }

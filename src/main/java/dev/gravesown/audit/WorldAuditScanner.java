@@ -29,6 +29,7 @@ public final class WorldAuditScanner {
 
         try {
             scanRegion(level, config, report);
+            scanWideBiomeSource(level, config, report);
         } catch (Throwable throwable) {
             report.error = throwable.getClass().getName() + ": " + String.valueOf(throwable.getMessage());
             Gravesown.LOGGER.error("Gravesown world audit failed while scanning", throwable);
@@ -53,7 +54,10 @@ public final class WorldAuditScanner {
         report.dimension = level.dimension().location().toString();
         report.levelName = server.getWorldData().getLevelName();
         report.seed = server.getWorldData().worldGenOptions().seed();
-        report.contract.requiredBiome = config.requiredBiome().toString();
+        report.contract.expectedBiomes = config.expectedBiomes().stream()
+                .map(ResourceLocation::toString)
+                .sorted()
+                .toList();
         report.contract.allowedContentNamespace = Gravesown.MOD_ID;
         report.contract.technicalBlockAllowlist = config.technicalBlockAllowlist().stream()
                 .map(ResourceLocation::toString)
@@ -69,11 +73,63 @@ public final class WorldAuditScanner {
         report.region.centerChunkX = center.x;
         report.region.centerChunkZ = center.z;
         report.region.radiusChunks = config.radiusChunks();
+        report.region.biomeProbeRadiusChunks = config.biomeProbeRadiusChunks();
+        report.region.biomeProbeStepChunks = config.biomeProbeStepChunks();
         int side = config.radiusChunks() * 2 + 1;
         report.region.chunkCount = side * side;
         report.region.minY = level.getMinBuildHeight();
         report.region.maxYExclusive = level.getMaxBuildHeight();
         return report;
+    }
+
+    /**
+     * Samples the uncached biome source without loading or generating chunks. The deep FULL-chunk
+     * scan remains responsible for blocks, fluids, block entities, and generated terrain; this
+     * wide grid exists only so macro-scale climate regions can be covered economically.
+     */
+    private static void scanWideBiomeSource(
+            ServerLevel level,
+            WorldAuditConfig config,
+            WorldAuditReport report
+    ) {
+        int radius = config.biomeProbeRadiusChunks();
+        if (radius == 0) {
+            return;
+        }
+
+        int step = config.biomeProbeStepChunks();
+        int centerX = report.region.centerChunkX;
+        int centerZ = report.region.centerChunkZ;
+        int quartY = QuartPos.fromBlock(level.getSeaLevel());
+        for (int offsetZ = -radius; offsetZ <= radius; offsetZ += step) {
+            for (int offsetX = -radius; offsetX <= radius; offsetX += step) {
+                int chunkX = centerX + offsetX;
+                int chunkZ = centerZ + offsetZ;
+                int blockX = (chunkX << 4) + 8;
+                int blockZ = (chunkZ << 4) + 8;
+                Holder<Biome> biome = level.getUncachedNoiseBiome(
+                        QuartPos.fromBlock(blockX),
+                        quartY,
+                        QuartPos.fromBlock(blockZ)
+                );
+                ResourceLocation biomeId = biome.unwrapKey()
+                        .map(key -> key.location())
+                        .orElse(ResourceLocation.fromNamespaceAndPath("unregistered", "biome"));
+                report.recordBiomeProbe(biomeId.toString());
+                if (!config.isAllowedBiome(biomeId)) {
+                    report.recordViolation(
+                            "biome_probe",
+                            biomeId.toString(),
+                            blockX,
+                            level.getSeaLevel(),
+                            blockZ,
+                            chunkX,
+                            chunkZ,
+                            config.sampleLimit()
+                    );
+                }
+            }
+        }
     }
 
     private static String modVersion(String modId) {
@@ -180,7 +236,7 @@ public final class WorldAuditScanner {
                             .map(key -> key.location())
                             .orElse(ResourceLocation.fromNamespaceAndPath("unregistered", "biome"));
                     report.recordBiome(biomeId.toString());
-                    if (!config.requiredBiome().equals(biomeId)) {
+                    if (!config.isAllowedBiome(biomeId)) {
                         report.recordViolation(
                                 "biome",
                                 biomeId.toString(),

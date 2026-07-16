@@ -35,86 +35,245 @@ function Fill-Pixels {
     $Graphics.FillRectangle($Brush, $X, $Y, $Width, $Height)
 }
 
+function Clear-Pixels {
+    param(
+        [Parameter(Mandatory = $true)][System.Drawing.Bitmap]$Bitmap,
+        [Parameter(Mandatory = $true)][int]$X,
+        [Parameter(Mandatory = $true)][int]$Y,
+        [Parameter(Mandatory = $true)][int]$Width,
+        [Parameter(Mandatory = $true)][int]$Height
+    )
+    for ($pixelY = $Y; $pixelY -lt ($Y + $Height); $pixelY++) {
+        for ($pixelX = $X; $pixelX -lt ($X + $Width); $pixelX++) {
+            $Bitmap.SetPixel($pixelX, $pixelY, [System.Drawing.Color]::Transparent)
+        }
+    }
+}
+
+function Paint-EntityAtlasUnderlay {
+    param(
+        [Parameter(Mandatory = $true)][System.Drawing.Bitmap]$Bitmap,
+        [Parameter(Mandatory = $true)][System.Drawing.Graphics]$Graphics,
+        [Parameter(Mandatory = $true)][System.Drawing.Brush]$BaseBrush,
+        [Parameter(Mandatory = $true)][System.Drawing.Brush]$PatchBrush,
+        [Parameter(Mandatory = $true)][System.Drawing.Color]$AccentColor,
+        [Parameter(Mandatory = $true)][int]$Width,
+        [Parameter(Mandatory = $true)][int]$Height
+    )
+
+    # Model cubes can intentionally share UV origins, and their complete unfolded
+    # footprints are larger than the obvious front face. A mottled opaque underlay
+    # keeps every side of every added volume visible; the anatomy-specific passes
+    # below then replace it with scars, bone, flesh and seams where they matter.
+    Fill-Pixels $Graphics $BaseBrush 0 0 $Width $Height
+    for ($tileY = 0; $tileY -lt $Height; $tileY += 8) {
+        for ($tileX = 0; $tileX -lt $Width; $tileX += 8) {
+            $tileIndex = ([int]($tileX / 8) * 5) + ([int]($tileY / 8) * 3)
+            if (($tileIndex % 3) -eq 0) {
+                Fill-Pixels $Graphics $PatchBrush ($tileX + 1) ($tileY + 2) 4 1
+            }
+            elseif (($tileIndex % 3) -eq 1) {
+                Fill-Pixels $Graphics $PatchBrush ($tileX + 4) ($tileY + 5) 3 2
+            }
+            else {
+                Fill-Pixels $Graphics $PatchBrush $tileX ($tileY + 6) 3 1
+            }
+
+            $accentX = $tileX + (($tileIndex + 2) % 7)
+            $accentY = $tileY + (($tileIndex * 2 + 1) % 7)
+            if ($accentX -lt $Width -and $accentY -lt $Height) {
+                $Bitmap.SetPixel($accentX, $accentY, $AccentColor)
+            }
+        }
+    }
+}
+
+function Paint-EntityUvIsland {
+    param(
+        [Parameter(Mandatory = $true)][System.Drawing.Bitmap]$Bitmap,
+        [Parameter(Mandatory = $true)][System.Drawing.Graphics]$Graphics,
+        [Parameter(Mandatory = $true)][System.Drawing.Brush]$PrimaryBrush,
+        [Parameter(Mandatory = $true)][System.Drawing.Brush]$SeamBrush,
+        [Parameter(Mandatory = $true)][System.Drawing.Color]$AccentColor,
+        [Parameter(Mandatory = $true)][int]$X,
+        [Parameter(Mandatory = $true)][int]$Y,
+        [Parameter(Mandatory = $true)][int]$Width,
+        [Parameter(Mandatory = $true)][int]$Height,
+        [Parameter(Mandatory = $true)][int]$Seed
+    )
+
+    Fill-Pixels $Graphics $PrimaryBrush $X $Y $Width $Height
+    if ($Width -gt 2 -and $Height -gt 2) {
+        $seamX = $X + 1 + ($Seed % ($Width - 2))
+        $seamY = $Y + 1 + (($Seed * 3) % ($Height - 2))
+        Fill-Pixels $Graphics $SeamBrush $seamX $Y 1 $Height
+        Fill-Pixels $Graphics $SeamBrush $X $seamY $Width 1
+    }
+    for ($mark = 0; $mark -lt 3; $mark++) {
+        $markX = $X + (($Seed + $mark * 5) % $Width)
+        $markY = $Y + (($Seed * 2 + $mark * 3) % $Height)
+        $Bitmap.SetPixel($markX, $markY, $AccentColor)
+    }
+}
+
 function Save-HollowGrazerTexture {
     $output = Join-Path $script:ProjectRoot 'src\main\resources\assets\gravesown\textures\entity\hollow_grazer.png'
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $output) | Out-Null
 
-    $bitmap = New-PixelBitmap -Width 128 -Height 64
+    $bitmap = New-PixelBitmap -Width 128 -Height 128
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
     $graphics.Clear([System.Drawing.Color]::Transparent)
 
-    $shadow = New-Object System.Drawing.SolidBrush (Convert-HexColor '#171515')
-    $soil = New-Object System.Drawing.SolidBrush (Convert-HexColor '#292522')
-    $hide = New-Object System.Drawing.SolidBrush (Convert-HexColor '#554943')
-    $bruise = New-Object System.Drawing.SolidBrush (Convert-HexColor '#725052')
-    $bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B6A986')
-    $sick = New-Object System.Drawing.SolidBrush (Convert-HexColor '#8A9A4A')
-    $wound = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7E292B')
+    $void = New-Object System.Drawing.SolidBrush (Convert-HexColor '#100D12')
+    $crust = New-Object System.Drawing.SolidBrush (Convert-HexColor '#211C20')
+    $hideDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#382A2E')
+    $hide = New-Object System.Drawing.SolidBrush (Convert-HexColor '#563B3E')
+    $flesh = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7D3D43')
+    $sinew = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B35A4C')
+    $boneDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#776C55')
+    $bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B6A780')
+    $boneLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#D7C79C')
+    $mold = New-Object System.Drawing.SolidBrush (Convert-HexColor '#778745')
 
     try {
-        # Head UV: blank sealed face with bone seams and one sickly sensory pore.
-        Fill-Pixels $graphics $hide 0 0 28 14
-        Fill-Pixels $graphics $soil 7 7 7 7
-        Fill-Pixels $graphics $shadow 7 12 7 2
-        Fill-Pixels $graphics $bone 10 7 1 5
-        Fill-Pixels $graphics $bruise 8 8 2 2
-        Fill-Pixels $graphics $sick 12 9 1 1
-        Fill-Pixels $graphics $shadow 21 7 7 7
+        Paint-EntityAtlasUnderlay $bitmap $graphics $hideDark $crust (Convert-HexColor '#493148') 128 128
 
-        # Hidden jaw: dark flesh rim with irregular old teeth.
-        Fill-Pixels $graphics $bruise 0 14 32 11
-        Fill-Pixels $graphics $shadow 8 22 8 3
-        Fill-Pixels $graphics $wound 9 22 6 1
-        foreach ($x in @(9, 11, 14)) {
-            Fill-Pixels $graphics $bone $x 23 1 2
+        # A split burial-mask skull. Broken plates and pits replace the former
+        # featureless face while keeping the creature blind and readable.
+        Fill-Pixels $graphics $hideDark 0 0 28 14
+        Fill-Pixels $graphics $hide 1 1 26 12
+        Fill-Pixels $graphics $boneDark 7 1 7 12
+        Fill-Pixels $graphics $bone 8 1 5 11
+        Fill-Pixels $graphics $boneLight 9 2 3 3
+        Fill-Pixels $graphics $void 14 7 7 7
+        Fill-Pixels $graphics $crust 15 8 5 5
+        Fill-Pixels $graphics $flesh 21 7 6 7
+        Fill-Pixels $graphics $sinew 22 8 1 5
+        Fill-Pixels $graphics $void 9 9 3 2
+        Fill-Pixels $graphics $mold 10 9 1 1
+        foreach ($point in @(@(3, 2), @(5, 5), @(18, 3), @(24, 4), @(4, 11), @(19, 12))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#211C20'))
+        }
+        foreach ($point in @(@(9, 4), @(11, 6), @(8, 8), @(12, 11))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#776C55'))
         }
 
-        # Asymmetric bone growths.
-        Fill-Pixels $graphics $bone 0 28 14 8
-        Fill-Pixels $graphics $shadow 2 30 2 3
-        Fill-Pixels $graphics $bone 14 28 12 10
-        Fill-Pixels $graphics $soil 18 31 2 4
-
-        # Body: soil hide, bruised plates and exposed rib fragments.
-        Fill-Pixels $graphics $hide 32 0 44 28
-        Fill-Pixels $graphics $soil 32 10 10 18
-        Fill-Pixels $graphics $bruise 42 10 12 18
-        Fill-Pixels $graphics $shadow 43 24 10 3
-        Fill-Pixels $graphics $wound 47 15 3 7
-        foreach ($y in @(12, 16, 20)) {
-            Fill-Pixels $graphics $bone 42 $y 5 1
+        # The jaw is a wet inner cavity with an irregular bone comb and raw hinge.
+        Fill-Pixels $graphics $flesh 0 14 32 11
+        Fill-Pixels $graphics $hideDark 1 15 30 3
+        Fill-Pixels $graphics $void 8 19 16 6
+        Fill-Pixels $graphics $sinew 7 18 18 2
+        foreach ($x in @(9, 12, 15, 19, 22)) {
+            Fill-Pixels $graphics $boneDark $x 19 2 4
+            Fill-Pixels $graphics $boneLight $x 19 1 3
         }
-        Fill-Pixels $graphics $soil 54 10 10 18
-        Fill-Pixels $graphics $hide 64 10 12 18
+        Fill-Pixels $graphics $mold 4 16 2 1
+        Fill-Pixels $graphics $crust 26 18 4 3
 
-        # Spine and four deliberately mismatched legs.
-        Fill-Pixels $graphics $bone 32 28 28 15
-        Fill-Pixels $graphics $shadow 46 40 12 3
-        Fill-Pixels $graphics $soil 0 36 16 15
-        Fill-Pixels $graphics $hide 16 36 12 14
-        Fill-Pixels $graphics $bruise 28 43 12 17
-        Fill-Pixels $graphics $soil 40 43 16 17
-        Fill-Pixels $graphics $bone 31 55 2 5
-        Fill-Pixels $graphics $bone 47 56 3 4
+        # Uneven horn/bone growths, chipped and crusted rather than clean blocks.
+        Fill-Pixels $graphics $boneDark 0 28 14 8
+        Fill-Pixels $graphics $bone 1 28 12 7
+        Fill-Pixels $graphics $boneLight 2 29 8 2
+        Fill-Pixels $graphics $void 2 32 3 3
+        Fill-Pixels $graphics $crust 9 33 4 2
+        Fill-Pixels $graphics $boneDark 14 28 12 10
+        Fill-Pixels $graphics $bone 15 28 10 9
+        Fill-Pixels $graphics $flesh 18 31 3 5
+        Fill-Pixels $graphics $sinew 19 31 1 5
+        Fill-Pixels $graphics $mold 23 29 2 2
 
-        # Sparse pixels keep the sheet Minecraft-like instead of airbrushed.
+        # Torso: old hide islands stretched over red tissue, a split belly and
+        # exposed rib staples. Small clusters create scale without blur.
+        Fill-Pixels $graphics $hideDark 32 0 44 28
+        Fill-Pixels $graphics $hide 34 1 40 26
+        Fill-Pixels $graphics $crust 32 10 9 18
+        Fill-Pixels $graphics $flesh 41 10 15 18
+        Fill-Pixels $graphics $sinew 43 11 2 15
+        Fill-Pixels $graphics $void 50 13 5 13
+        foreach ($y in @(12, 16, 20, 24)) {
+            Fill-Pixels $graphics $boneDark 39 $y 9 2
+            Fill-Pixels $graphics $bone 40 $y 7 1
+        }
+        Fill-Pixels $graphics $hideDark 56 10 9 18
+        Fill-Pixels $graphics $hide 65 10 11 18
+        Fill-Pixels $graphics $mold 67 13 3 2
+        Fill-Pixels $graphics $boneDark 70 20 4 5
         foreach ($point in @(
-            @(4, 4), @(17, 6), @(36, 13), @(39, 21), @(57, 4),
-            @(67, 16), @(6, 42), @(22, 44), @(35, 51), @(51, 48)
+            @(35, 4), @(38, 8), @(45, 3), @(52, 6), @(59, 3), @(69, 6),
+            @(36, 17), @(60, 22), @(68, 24), @(73, 12)
         )) {
-            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#171515'))
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#100D12'))
         }
+        foreach ($point in @(@(47, 11), @(48, 18), @(42, 22), @(63, 14), @(71, 11))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#B35A4C'))
+        }
+
+        # Cracked spine and four materially different legs sell the stitched
+        # ecosystem silhouette even when the mob is standing still.
+        Fill-Pixels $graphics $boneDark 32 28 28 15
+        Fill-Pixels $graphics $bone 34 29 24 12
+        Fill-Pixels $graphics $boneLight 35 30 21 2
+        foreach ($x in @(39, 46, 53)) {
+            Fill-Pixels $graphics $void $x 33 2 8
+            Fill-Pixels $graphics $flesh ($x + 1) 36 2 4
+        }
+        Fill-Pixels $graphics $hideDark 0 36 16 15
+        Fill-Pixels $graphics $crust 1 37 14 13
+        Fill-Pixels $graphics $hideDark 16 36 12 14
+        Fill-Pixels $graphics $hide 17 37 10 12
+        Fill-Pixels $graphics $flesh 28 43 12 17
+        Fill-Pixels $graphics $sinew 29 47 10 2
+        Fill-Pixels $graphics $crust 40 43 16 17
+        Fill-Pixels $graphics $boneDark 41 44 14 5
+        Fill-Pixels $graphics $bone 43 45 10 3
+        Fill-Pixels $graphics $void 0 48 16 3
+        Fill-Pixels $graphics $void 16 47 12 3
+        Fill-Pixels $graphics $void 28 57 12 3
+        Fill-Pixels $graphics $void 40 57 16 3
+        Fill-Pixels $graphics $mold 5 41 2 2
+        Fill-Pixels $graphics $boneLight 31 54 2 4
+        Fill-Pixels $graphics $boneLight 49 52 3 4
+
+        # Dedicated lower-atlas UV islands for the added volume. Coordinates and
+        # extents match HollowGrazerModel's complete unfolded cube footprints.
+        Paint-EntityUvIsland $bitmap $graphics $bone $boneDark (Convert-HexColor '#D7C79C') 0 64 14 7 1       # left skull growth
+        Paint-EntityUvIsland $bitmap $graphics $boneDark $crust (Convert-HexColor '#B6A780') 14 64 10 8 2    # right skull growth
+        Paint-EntityUvIsland $bitmap $graphics $bone $boneDark (Convert-HexColor '#D7C79C') 24 64 16 7 3     # crown plate
+        Paint-EntityUvIsland $bitmap $graphics $flesh $hideDark (Convert-HexColor '#B35A4C') 40 64 10 6 4    # cheek tumour
+        Paint-EntityUvIsland $bitmap $graphics $bone $boneDark (Convert-HexColor '#D7C79C') 50 64 4 4 5      # left tooth
+        Paint-EntityUvIsland $bitmap $graphics $boneDark $void (Convert-HexColor '#D7C79C') 54 64 4 4 6      # right tooth
+        Paint-EntityUvIsland $bitmap $graphics $flesh $void (Convert-HexColor '#B35A4C') 58 64 10 4 7         # inner jaw knot
+        Paint-EntityUvIsland $bitmap $graphics $hide $crust (Convert-HexColor '#778745') 68 64 24 9 8         # rear hide pad
+        Paint-EntityUvIsland $bitmap $graphics $boneDark $void (Convert-HexColor '#D7C79C') 92 64 28 15 9    # exposed spine
+        Paint-EntityUvIsland $bitmap $graphics $bone $boneDark (Convert-HexColor '#D7C79C') 0 80 6 5 10      # spine barb one
+        Paint-EntityUvIsland $bitmap $graphics $boneDark $void (Convert-HexColor '#B6A780') 6 80 6 4 11      # spine barb two
+        Paint-EntityUvIsland $bitmap $graphics $bone $crust (Convert-HexColor '#D7C79C') 12 80 6 4 12        # spine barb three
+        Paint-EntityUvIsland $bitmap $graphics $crust $flesh (Convert-HexColor '#B35A4C') 18 80 22 12 13     # right shoulder mass
+        Paint-EntityUvIsland $bitmap $graphics $flesh $sinew (Convert-HexColor '#D7C79C') 40 80 10 7 14      # right shoulder spur
+        Paint-EntityUvIsland $bitmap $graphics $hide $hideDark (Convert-HexColor '#778745') 50 80 18 10 15  # left shoulder mass
+        Paint-EntityUvIsland $bitmap $graphics $boneDark $flesh (Convert-HexColor '#D7C79C') 68 80 8 5 16    # left shoulder hook
+        Paint-EntityUvIsland $bitmap $graphics $flesh $hideDark (Convert-HexColor '#B35A4C') 76 80 18 8 17   # tail stump
+        Paint-EntityUvIsland $bitmap $graphics $sinew $void (Convert-HexColor '#D7C79C') 94 80 12 6 18       # tail cord
+        Paint-EntityUvIsland $bitmap $graphics $crust $flesh (Convert-HexColor '#B35A4C') 106 80 14 9 19     # hind-leg growth
+        Paint-EntityUvIsland $bitmap $graphics $hideDark $void (Convert-HexColor '#776C55') 0 92 18 7 20    # right hind hoof
+        Paint-EntityUvIsland $bitmap $graphics $hide $crust (Convert-HexColor '#D7C79C') 18 92 16 7 21      # left hind hoof
+        Paint-EntityUvIsland $bitmap $graphics $flesh $void (Convert-HexColor '#B6A780') 34 92 16 6 22       # right front hoof
+        Paint-EntityUvIsland $bitmap $graphics $boneDark $flesh (Convert-HexColor '#D7C79C') 50 92 14 10 23 # foreleg splint
+        Paint-EntityUvIsland $bitmap $graphics $crust $void (Convert-HexColor '#778745') 64 92 18 7 24      # left front hoof
 
         $bitmap.Save($output, [System.Drawing.Imaging.ImageFormat]::Png)
     }
     finally {
-        $shadow.Dispose()
-        $soil.Dispose()
+        $void.Dispose()
+        $crust.Dispose()
+        $hideDark.Dispose()
         $hide.Dispose()
-        $bruise.Dispose()
+        $flesh.Dispose()
+        $sinew.Dispose()
+        $boneDark.Dispose()
         $bone.Dispose()
-        $sick.Dispose()
-        $wound.Dispose()
+        $boneLight.Dispose()
+        $mold.Dispose()
         $graphics.Dispose()
         $bitmap.Dispose()
     }
@@ -170,15 +329,21 @@ function Save-ModIcon {
 
 function New-GravesownPalette {
     return @{
-        shadow = New-Object System.Drawing.SolidBrush (Convert-HexColor '#171515')
+        shadow = New-Object System.Drawing.SolidBrush (Convert-HexColor '#100D12')
         soil = New-Object System.Drawing.SolidBrush (Convert-HexColor '#292522')
         hide = New-Object System.Drawing.SolidBrush (Convert-HexColor '#554943')
         bruise = New-Object System.Drawing.SolidBrush (Convert-HexColor '#725052')
-        sinew = New-Object System.Drawing.SolidBrush (Convert-HexColor '#9B5548')
-        bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B6A986')
-        pale = New-Object System.Drawing.SolidBrush (Convert-HexColor '#D0C39D')
-        sick = New-Object System.Drawing.SolidBrush (Convert-HexColor '#8A9A4A')
-        wound = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7E292B')
+        sinew = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B35A4C')
+        bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#B6A780')
+        pale = New-Object System.Drawing.SolidBrush (Convert-HexColor '#D7C79C')
+        sick = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7C8F47')
+        wound = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7D3D43')
+        crust = New-Object System.Drawing.SolidBrush (Convert-HexColor '#211C20')
+        hideDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#382A2E')
+        flesh = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7D3D43')
+        fleshLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#A54E50')
+        boneDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#776C55')
+        vein = New-Object System.Drawing.SolidBrush (Convert-HexColor '#493148')
         woodDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#24191F')
         wood = New-Object System.Drawing.SolidBrush (Convert-HexColor '#3B2730')
         woodLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5A3D49')
@@ -187,7 +352,162 @@ function New-GravesownPalette {
         stoneLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5C5661')
         membrane = New-Object System.Drawing.SolidBrush (Convert-HexColor '#404C36')
         membraneLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#657052')
+        armorShadow = New-Object System.Drawing.SolidBrush (Convert-HexColor '#171319')
+        armorDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#2B2228')
+        armorHide = New-Object System.Drawing.SolidBrush (Convert-HexColor '#4D343B')
+        armorBruise = New-Object System.Drawing.SolidBrush (Convert-HexColor '#713D47')
+        armorSinew = New-Object System.Drawing.SolidBrush (Convert-HexColor '#A9594E')
+        armorBone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#C0AD7F')
     }
+}
+
+function Save-WoundscentTexture {
+    $output = Join-Path $script:ProjectRoot 'src\main\resources\assets\gravesown\textures\entity\woundscent.png'
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $output) | Out-Null
+
+    $bitmap = New-PixelBitmap -Width 128 -Height 128
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    $graphics.Clear([System.Drawing.Color]::Transparent)
+    $p = New-GravesownPalette
+
+    try {
+        Paint-EntityAtlasUnderlay $bitmap $graphics $p.hideDark $p.crust (Convert-HexColor '#493148') 128 128
+
+        # Blind head: stitched eyelid scars, a wet scent cleft and a bone brow
+        # produce a readable face without conventional eyes.
+        Fill-Pixels $graphics $p.hideDark 0 0 30 14
+        Fill-Pixels $graphics $p.hide 1 1 28 12
+        Fill-Pixels $graphics $p.crust 7 6 8 7
+        Fill-Pixels $graphics $p.flesh 15 6 8 7
+        Fill-Pixels $graphics $p.shadow 9 7 12 2
+        Fill-Pixels $graphics $p.sinew 10 7 1 5
+        Fill-Pixels $graphics $p.sinew 19 7 1 5
+        Fill-Pixels $graphics $p.boneDark 11 5 8 2
+        Fill-Pixels $graphics $p.bone 12 5 6 1
+        Fill-Pixels $graphics $p.sick 22 9 3 2
+        Fill-Pixels $graphics $p.vein 3 3 5 1
+        foreach ($point in @(@(2, 10), @(5, 12), @(25, 3), @(27, 6), @(14, 3))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#100D12'))
+        }
+
+        # Muzzle has porous nostrils and short backward teeth, not a flat black box.
+        Fill-Pixels $graphics $p.flesh 0 14 20 8
+        Fill-Pixels $graphics $p.fleshLight 2 15 16 4
+        Fill-Pixels $graphics $p.shadow 5 17 10 5
+        Fill-Pixels $graphics $p.sick 3 16 2 2
+        Fill-Pixels $graphics $p.sick 15 16 2 2
+        foreach ($x in @(6, 9, 12, 15)) {
+            Fill-Pixels $graphics $p.boneDark $x 18 2 3
+            $bitmap.SetPixel($x, 18, (Convert-HexColor '#D7C79C'))
+        }
+        Fill-Pixels $graphics $p.sinew 1 20 18 1
+
+        # Paired scent lobes are veined membranes with luminous tips.
+        Fill-Pixels $graphics $p.vein 30 0 6 8
+        Fill-Pixels $graphics $p.flesh 31 1 4 6
+        Fill-Pixels $graphics $p.sinew 32 2 2 4
+        Fill-Pixels $graphics $p.sick 31 5 3 2
+        Fill-Pixels $graphics $p.crust 36 0 6 8
+        Fill-Pixels $graphics $p.bruise 37 1 4 6
+        Fill-Pixels $graphics $p.sinew 38 2 2 4
+        Fill-Pixels $graphics $p.sick 39 5 2 2
+        Fill-Pixels $graphics $p.shadow 30 7 12 1
+
+        # Torso alternates mud-crusted hide and exposed muscle around a stitched
+        # central incision. Bone staples cross instead of forming clean stripes.
+        Fill-Pixels $graphics $p.crust 0 24 38 24
+        Fill-Pixels $graphics $p.hideDark 2 25 34 22
+        Fill-Pixels $graphics $p.hide 4 26 13 20
+        Fill-Pixels $graphics $p.flesh 17 27 12 20
+        Fill-Pixels $graphics $p.shadow 28 26 8 20
+        Fill-Pixels $graphics $p.sinew 18 29 2 17
+        Fill-Pixels $graphics $p.fleshLight 21 29 3 15
+        foreach ($y in @(30, 34, 39, 44)) {
+            Fill-Pixels $graphics $p.boneDark 14 $y 10 2
+            Fill-Pixels $graphics $p.bone 15 $y 8 1
+        }
+        Fill-Pixels $graphics $p.sick 25 35 3 2
+        Fill-Pixels $graphics $p.vein 7 31 7 1
+        Fill-Pixels $graphics $p.vein 5 38 9 1
+        foreach ($point in @(@(3, 28), @(10, 27), @(33, 31), @(7, 44), @(31, 43))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#100D12'))
+        }
+
+        # Raised vertebrae are dirty and cracked; the tail ends as a sinew cord.
+        Fill-Pixels $graphics $p.boneDark 38 16 26 14
+        Fill-Pixels $graphics $p.bone 39 17 24 12
+        Fill-Pixels $graphics $p.pale 40 18 22 2
+        foreach ($x in @(45, 51, 58)) {
+            Fill-Pixels $graphics $p.shadow $x 19 2 9
+            Fill-Pixels $graphics $p.flesh ($x + 1) 23 2 5
+        }
+        Fill-Pixels $graphics $p.sick 60 18 2 2
+        Fill-Pixels $graphics $p.hideDark 48 36 16 8
+        Fill-Pixels $graphics $p.flesh 49 37 10 5
+        Fill-Pixels $graphics $p.sinew 52 38 11 2
+        Fill-Pixels $graphics $p.shadow 59 40 5 4
+
+        # Long forelimbs look freshly flayed; hind limbs carry old grave crust.
+        Fill-Pixels $graphics $p.flesh 0 48 12 14
+        Fill-Pixels $graphics $p.fleshLight 2 49 8 9
+        Fill-Pixels $graphics $p.hideDark 12 48 12 14
+        Fill-Pixels $graphics $p.hide 14 49 8 9
+        Fill-Pixels $graphics $p.crust 24 48 12 12
+        Fill-Pixels $graphics $p.boneDark 26 49 8 7
+        Fill-Pixels $graphics $p.shadow 36 48 12 12
+        Fill-Pixels $graphics $p.hideDark 38 49 8 7
+        foreach ($x in @(2, 7, 14, 19)) {
+            Fill-Pixels $graphics $p.sinew $x 53 2 1
+        }
+        Fill-Pixels $graphics $p.bone 27 50 2 5
+        Fill-Pixels $graphics $p.bone 42 51 2 5
+        Fill-Pixels $graphics $p.sick 32 54 2 2
+        Fill-Pixels $graphics $p.shadow 0 59 24 3
+        Fill-Pixels $graphics $p.shadow 24 57 24 3
+
+        # Dedicated lower-atlas UV islands for every added sensory, body and limb
+        # volume. Their rectangles mirror WoundscentModel's full cube footprints.
+        Paint-EntityUvIsland $bitmap $graphics $p.boneDark $p.shadow (Convert-HexColor '#D7C79C') 0 64 24 5 31    # blind brow
+        Paint-EntityUvIsland $bitmap $graphics $p.crust $p.flesh (Convert-HexColor '#7C8F47') 24 64 12 6 32       # left face cyst
+        Paint-EntityUvIsland $bitmap $graphics $p.flesh $p.vein (Convert-HexColor '#B35A4C') 36 64 13 8 33        # right face cyst
+        Paint-EntityUvIsland $bitmap $graphics $p.bone $p.shadow (Convert-HexColor '#D7C79C') 49 64 4 4 34        # left tooth
+        Paint-EntityUvIsland $bitmap $graphics $p.boneDark $p.shadow (Convert-HexColor '#D7C79C') 53 64 4 4 35    # right tooth
+        Paint-EntityUvIsland $bitmap $graphics $p.vein $p.sinew (Convert-HexColor '#7C8F47') 57 64 6 7 36          # left scent stem
+        Paint-EntityUvIsland $bitmap $graphics $p.flesh $p.vein (Convert-HexColor '#7C8F47') 63 64 8 5 37          # left scent bulb
+        Paint-EntityUvIsland $bitmap $graphics $p.sinew $p.vein (Convert-HexColor '#7C8F47') 71 64 4 6 38          # left scent tip
+        Paint-EntityUvIsland $bitmap $graphics $p.sick $p.vein (Convert-HexColor '#D7C79C') 75 64 6 3 39           # left feeler
+        Paint-EntityUvIsland $bitmap $graphics $p.crust $p.sinew (Convert-HexColor '#7C8F47') 81 64 6 7 40         # right scent stem
+        Paint-EntityUvIsland $bitmap $graphics $p.bruise $p.vein (Convert-HexColor '#7C8F47') 87 64 7 6 41         # right scent bulb
+        Paint-EntityUvIsland $bitmap $graphics $p.vein $p.sinew (Convert-HexColor '#7C8F47') 94 64 4 5 42          # right scent tip
+        Paint-EntityUvIsland $bitmap $graphics $p.sick $p.shadow (Convert-HexColor '#B35A4C') 98 64 6 3 43         # right feeler
+        Paint-EntityUvIsland $bitmap $graphics $p.boneDark $p.shadow (Convert-HexColor '#D7C79C') 0 73 26 14 44   # buried back ridge
+        Paint-EntityUvIsland $bitmap $graphics $p.crust $p.flesh (Convert-HexColor '#B35A4C') 26 73 20 14 45      # right torso lobe
+        Paint-EntityUvIsland $bitmap $graphics $p.hide $p.vein (Convert-HexColor '#7C8F47') 46 73 15 10 46         # left torso lobe
+        Paint-EntityUvIsland $bitmap $graphics $p.bone $p.shadow (Convert-HexColor '#B35A4C') 61 73 26 14 47       # raised vertebrae
+        Paint-EntityUvIsland $bitmap $graphics $p.boneDark $p.flesh (Convert-HexColor '#D7C79C') 87 73 6 4 48     # spine barb one
+        Paint-EntityUvIsland $bitmap $graphics $p.bone $p.shadow (Convert-HexColor '#7C8F47') 93 73 6 4 49         # spine barb two
+        Paint-EntityUvIsland $bitmap $graphics $p.boneDark $p.vein (Convert-HexColor '#D7C79C') 99 73 6 4 50      # spine barb three
+        Paint-EntityUvIsland $bitmap $graphics $p.flesh $p.shadow (Convert-HexColor '#B35A4C') 105 73 16 8 51     # tail base
+        Paint-EntityUvIsland $bitmap $graphics $p.crust $p.flesh (Convert-HexColor '#7C8F47') 0 88 14 7 52        # tail knot
+        Paint-EntityUvIsland $bitmap $graphics $p.sinew $p.vein (Convert-HexColor '#D7C79C') 14 88 15 8 53        # tail cord
+        Paint-EntityUvIsland $bitmap $graphics $p.hideDark $p.shadow (Convert-HexColor '#776C55') 29 88 16 6 54  # right hind foot
+        Paint-EntityUvIsland $bitmap $graphics $p.boneDark $p.flesh (Convert-HexColor '#D7C79C') 45 88 11 8 55    # hind-leg spur
+        Paint-EntityUvIsland $bitmap $graphics $p.crust $p.shadow (Convert-HexColor '#7C8F47') 56 88 16 6 56      # left hind foot
+        Paint-EntityUvIsland $bitmap $graphics $p.flesh $p.sinew (Convert-HexColor '#D7C79C') 72 88 12 9 57       # foreleg wound
+        Paint-EntityUvIsland $bitmap $graphics $p.hide $p.shadow (Convert-HexColor '#B35A4C') 84 88 17 6 58       # right front foot
+        Paint-EntityUvIsland $bitmap $graphics $p.bruise $p.shadow (Convert-HexColor '#7C8F47') 101 88 17 6 59   # left front foot
+
+        $bitmap.Save($output, [System.Drawing.Imaging.ImageFormat]::Png)
+    }
+    finally {
+        foreach ($brush in $p.Values) {
+            $brush.Dispose()
+        }
+        $graphics.Dispose()
+        $bitmap.Dispose()
+    }
+
+    Write-Host "Created $output"
 }
 
 function Save-ItemTexture {
@@ -281,53 +601,86 @@ function Save-QuietskinItemTextures {
 
     Save-ItemTexture 'quietskin_hood' {
         param($bitmap, $graphics, $p)
-        Fill-Pixels $graphics $p.shadow 3 3 10 11
-        Fill-Pixels $graphics $p.hide 4 2 8 10
-        Fill-Pixels $graphics $p.bruise 5 4 6 3
-        Fill-Pixels $graphics $p.shadow 5 7 6 5
-        Fill-Pixels $graphics $p.sinew 7 2 1 5
-        Fill-Pixels $graphics $p.bone 8 3 1 3
-        Fill-Pixels $graphics $p.sick 11 9 1 2
+        # Open-faced hood: a hard outer silhouette, transparent face window,
+        # bone brow and mismatched hanging cheek guards.
+        Fill-Pixels $graphics $p.armorShadow 3 2 10 12
+        Fill-Pixels $graphics $p.armorDark 4 1 8 13
+        Fill-Pixels $graphics $p.armorHide 5 2 6 11
+        Fill-Pixels $graphics $p.armorBruise 5 2 6 3
+        Clear-Pixels $bitmap 6 5 5 6
+        Fill-Pixels $graphics $p.armorShadow 5 5 1 7
+        Fill-Pixels $graphics $p.armorShadow 11 5 1 5
+        Fill-Pixels $graphics $p.armorBone 6 4 5 1
+        Fill-Pixels $graphics $p.pale 7 4 2 1
+        Fill-Pixels $graphics $p.armorSinew 4 4 1 8
+        Fill-Pixels $graphics $p.armorSinew 11 8 1 4
+        Fill-Pixels $graphics $p.armorHide 5 11 2 3
+        Fill-Pixels $graphics $p.armorBruise 10 11 2 3
+        Fill-Pixels $graphics $p.armorBone 6 12 2 1
+        $bitmap.SetPixel(11, 6, (Convert-HexColor '#7C8F47'))
     }
 
     Save-ItemTexture 'quietskin_coat' {
         param($bitmap, $graphics, $p)
-        Fill-Pixels $graphics $p.shadow 3 3 10 12
-        Fill-Pixels $graphics $p.hide 4 2 8 12
-        Fill-Pixels $graphics $p.bruise 5 4 6 8
-        Fill-Pixels $graphics $p.soil 2 4 3 7
-        Fill-Pixels $graphics $p.soil 11 4 3 7
-        Fill-Pixels $graphics $p.sinew 7 3 1 10
+        Fill-Pixels $graphics $p.armorShadow 2 3 12 12
+        Fill-Pixels $graphics $p.armorDark 2 4 4 9
+        Fill-Pixels $graphics $p.armorDark 10 4 4 9
+        Fill-Pixels $graphics $p.armorHide 4 2 8 13
+        Fill-Pixels $graphics $p.armorBruise 5 3 3 10
+        Fill-Pixels $graphics $p.armorDark 8 3 3 11
+        Fill-Pixels $graphics $p.armorShadow 7 4 2 10
+        Fill-Pixels $graphics $p.armorSinew 6 4 1 9
+        Fill-Pixels $graphics $p.armorSinew 10 6 1 7
         foreach ($y in @(5, 8, 11)) {
-            Fill-Pixels $graphics $p.bone 8 $y 1 1
+            Fill-Pixels $graphics $p.armorBone 7 $y 3 1
+            $bitmap.SetPixel(8, $y, (Convert-HexColor '#D7C79C'))
         }
+        Fill-Pixels $graphics $p.armorBone 4 3 2 1
+        Fill-Pixels $graphics $p.sick 5 10 1 2
+        Fill-Pixels $graphics $p.armorShadow 2 12 4 3
+        Fill-Pixels $graphics $p.armorShadow 10 12 4 3
+        $bitmap.SetPixel(5, 6, (Convert-HexColor '#171319'))
+        $bitmap.SetPixel(10, 4, (Convert-HexColor '#C0AD7F'))
     }
 
     Save-ItemTexture 'quietskin_legwraps' {
         param($bitmap, $graphics, $p)
-        Fill-Pixels $graphics $p.shadow 3 2 10 13
-        Fill-Pixels $graphics $p.hide 4 2 8 5
-        Fill-Pixels $graphics $p.bruise 4 7 3 7
-        Fill-Pixels $graphics $p.soil 9 7 3 7
-        foreach ($y in @(8, 11)) {
-            Fill-Pixels $graphics $p.sinew 4 $y 3 1
-            Fill-Pixels $graphics $p.sinew 9 $y 3 1
-        }
-        Fill-Pixels $graphics $p.bone 7 3 2 1
+        Fill-Pixels $graphics $p.armorShadow 3 2 10 13
+        Fill-Pixels $graphics $p.armorDark 4 2 8 5
+        Fill-Pixels $graphics $p.armorHide 5 3 6 3
+        Fill-Pixels $graphics $p.armorBruise 4 6 4 8
+        Fill-Pixels $graphics $p.armorDark 9 6 3 8
+        Fill-Pixels $graphics $p.armorShadow 7 6 2 9
+        Fill-Pixels $graphics $p.armorSinew 4 5 8 1
+        Fill-Pixels $graphics $p.armorSinew 4 8 4 1
+        Fill-Pixels $graphics $p.armorSinew 4 11 4 1
+        Fill-Pixels $graphics $p.armorSinew 9 9 3 1
+        Fill-Pixels $graphics $p.armorSinew 9 12 3 1
+        Fill-Pixels $graphics $p.armorBone 6 3 4 1
+        Fill-Pixels $graphics $p.pale 7 4 2 1
+        Fill-Pixels $graphics $p.armorBone 10 7 1 3
+        Fill-Pixels $graphics $p.armorShadow 3 13 5 2
+        Fill-Pixels $graphics $p.armorShadow 9 13 4 2
+        $bitmap.SetPixel(5, 7, (Convert-HexColor '#171319'))
     }
 
     Save-ItemTexture 'quietskin_boots' {
         param($bitmap, $graphics, $p)
-        Fill-Pixels $graphics $p.shadow 2 5 5 9
-        Fill-Pixels $graphics $p.shadow 9 5 5 9
-        Fill-Pixels $graphics $p.hide 3 4 4 8
-        Fill-Pixels $graphics $p.hide 9 4 4 8
-        Fill-Pixels $graphics $p.soil 2 11 6 3
-        Fill-Pixels $graphics $p.soil 8 11 6 3
-        Fill-Pixels $graphics $p.sinew 3 7 4 1
-        Fill-Pixels $graphics $p.sinew 9 7 4 1
-        Fill-Pixels $graphics $p.bone 5 5 1 2
-        Fill-Pixels $graphics $p.bone 10 5 1 2
+        Fill-Pixels $graphics $p.armorShadow 2 5 6 10
+        Fill-Pixels $graphics $p.armorShadow 8 5 6 10
+        Fill-Pixels $graphics $p.armorHide 3 3 4 8
+        Fill-Pixels $graphics $p.armorBruise 9 4 4 7
+        Fill-Pixels $graphics $p.armorDark 2 10 6 5
+        Fill-Pixels $graphics $p.armorDark 8 10 6 5
+        Fill-Pixels $graphics $p.armorSinew 3 7 4 1
+        Fill-Pixels $graphics $p.armorSinew 9 8 4 1
+        Fill-Pixels $graphics $p.armorBone 5 4 1 3
+        Fill-Pixels $graphics $p.armorBone 10 5 1 3
+        Fill-Pixels $graphics $p.pale 3 12 4 1
+        Fill-Pixels $graphics $p.pale 10 12 3 1
+        Fill-Pixels $graphics $p.armorShadow 3 14 5 1
+        Fill-Pixels $graphics $p.armorShadow 9 14 5 1
+        $bitmap.SetPixel(12, 5, (Convert-HexColor '#7C8F47'))
     }
 }
 
@@ -337,46 +690,75 @@ function Save-QuietskinArmorTextures {
 
     foreach ($layer in @(1, 2)) {
         $output = Join-Path $outputDir "quietskin_layer_$layer.png"
-        $bitmap = New-PixelBitmap -Width 64 -Height 32
+        $bitmap = New-PixelBitmap -Width 128 -Height 128
         $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
         $graphics.Clear([System.Drawing.Color]::Transparent)
         $p = New-GravesownPalette
 
         try {
             if ($layer -eq 1) {
-                # Hood and outer hood layer.
-                Fill-Pixels $graphics $p.hide 0 0 32 16
-                Fill-Pixels $graphics $p.soil 32 0 32 16
-                Fill-Pixels $graphics $p.bruise 8 3 8 8
-                Fill-Pixels $graphics $p.shadow 8 11 8 3
-                Fill-Pixels $graphics $p.sinew 16 1 1 14
-                Fill-Pixels $graphics $p.bone 17 5 1 4
-                Fill-Pixels $graphics $p.sick 44 8 2 2
+                # HOOD. These rectangles are complete unfolded cube footprints
+                # owned by QuietskinArmorModel. The face is open because the model
+                # has no front plate below the narrow bone brow.
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorDark (Convert-HexColor '#A9594E') 0 0 40 12 101
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorShadow (Convert-HexColor '#4D343B') 40 0 24 10 102
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorDark (Convert-HexColor '#C0AD7F') 64 0 18 15 103
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorShadow (Convert-HexColor '#A9594E') 82 0 18 14 104
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.boneDark (Convert-HexColor '#D7C79C') 100 0 18 2 105
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorDark (Convert-HexColor '#D7C79C') 100 2 20 10 106
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorShadow (Convert-HexColor '#C0AD7F') 120 0 8 5 107
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorShadow (Convert-HexColor '#7C8F47') 120 5 8 4 108
 
-                # Coat body and arms.
-                Fill-Pixels $graphics $p.hide 16 16 24 16
-                Fill-Pixels $graphics $p.bruise 20 18 12 12
-                Fill-Pixels $graphics $p.soil 40 16 16 16
-                Fill-Pixels $graphics $p.sinew 27 17 1 14
-                foreach ($y in @(20, 24, 28)) {
-                    Fill-Pixels $graphics $p.bone 28 $y 1 1
-                }
+                # COAT. Overlapping hide slabs, oblique harness, bone closures,
+                # back splint and two deliberately mismatched shoulders/arms.
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorDark (Convert-HexColor '#A9594E') 0 16 10 12 201
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorShadow (Convert-HexColor '#C0AD7F') 10 16 12 11 202
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorHide (Convert-HexColor '#A9594E') 22 16 20 13 203
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorShadow (Convert-HexColor '#7C8F47') 42 16 10 14 204
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorDark (Convert-HexColor '#C0AD7F') 52 16 10 15 205
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorShadow (Convert-HexColor '#D7C79C') 62 16 20 2 206
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorSinew (Convert-HexColor '#C0AD7F') 62 18 20 3 207
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.boneDark (Convert-HexColor '#D7C79C') 82 16 10 2 208
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#A9594E') 92 16 8 2 209
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorBone (Convert-HexColor '#7C8F47') 100 16 10 6 210
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#D7C79C') 110 16 6 7 211
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorHide (Convert-HexColor '#C0AD7F') 0 32 22 10 212
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#A9594E') 22 32 16 8 213
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorDark (Convert-HexColor '#C0AD7F') 38 32 20 7 214
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorShadow (Convert-HexColor '#7C8F47') 58 32 20 10 215
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorDark (Convert-HexColor '#A9594E') 78 32 20 8 216
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#D7C79C') 98 32 14 10 217
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorDark (Convert-HexColor '#C0AD7F') 0 44 20 7 218
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#D7C79C') 20 44 6 4 219
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorSinew (Convert-HexColor '#C0AD7F') 26 44 6 7 220
 
-                # Boots share the standard leg UV region.
-                Fill-Pixels $graphics $p.soil 0 16 16 16
-                Fill-Pixels $graphics $p.hide 4 17 8 9
-                Fill-Pixels $graphics $p.sinew 4 22 8 1
-                Fill-Pixels $graphics $p.shadow 0 27 16 5
+                # BOOTS. Raised shin shells, broad scavenged toe caps, ankle
+                # bindings and an asymmetric bone splint/buckle.
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorHide (Convert-HexColor '#A9594E') 0 68 20 11 401
+                Paint-EntityUvIsland $bitmap $graphics $p.armorShadow $p.armorDark (Convert-HexColor '#C0AD7F') 20 68 24 10 402
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorDark (Convert-HexColor '#D7C79C') 44 68 24 8 403
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#D7C79C') 68 68 6 7 404
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorDark (Convert-HexColor '#7C8F47') 74 68 20 10 405
+                Paint-EntityUvIsland $bitmap $graphics $p.armorShadow $p.armorHide (Convert-HexColor '#C0AD7F') 94 68 24 9 406
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorDark (Convert-HexColor '#D7C79C') 0 80 20 7 407
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#7C8F47') 20 80 6 3 408
             }
             else {
-                # Inner armor layer used by legwraps.
-                Fill-Pixels $graphics $p.hide 0 16 16 16
-                Fill-Pixels $graphics $p.bruise 4 17 8 14
-                Fill-Pixels $graphics $p.sinew 4 20 8 1
-                Fill-Pixels $graphics $p.sinew 4 25 8 1
-                Fill-Pixels $graphics $p.soil 16 16 24 16
-                Fill-Pixels $graphics $p.shadow 22 25 12 5
-                Fill-Pixels $graphics $p.bone 27 18 1 7
+                # LEGWRAPS. A thick waist harness, hanging hip patches, separated
+                # thigh plates, knee shells and uneven binding bands.
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorSinew (Convert-HexColor '#C0AD7F') 32 44 28 8 301
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorShadow (Convert-HexColor '#D7C79C') 60 44 8 6 302
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorDark (Convert-HexColor '#7C8F47') 68 44 6 5 303
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorShadow (Convert-HexColor '#A9594E') 74 44 12 7 304
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorBruise (Convert-HexColor '#C0AD7F') 86 44 12 12 305
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#D7C79C') 98 44 14 5 306
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorDark (Convert-HexColor '#C0AD7F') 0 56 20 6 307
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorSinew (Convert-HexColor '#7C8F47') 20 56 20 6 308
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBruise $p.armorShadow (Convert-HexColor '#A9594E') 40 56 12 6 309
+                Paint-EntityUvIsland $bitmap $graphics $p.armorHide $p.armorDark (Convert-HexColor '#C0AD7F') 52 56 12 11 310
+                Paint-EntityUvIsland $bitmap $graphics $p.armorBone $p.armorShadow (Convert-HexColor '#D7C79C') 64 56 14 4 311
+                Paint-EntityUvIsland $bitmap $graphics $p.armorSinew $p.armorDark (Convert-HexColor '#D7C79C') 78 56 20 6 312
+                Paint-EntityUvIsland $bitmap $graphics $p.armorDark $p.armorSinew (Convert-HexColor '#7C8F47') 98 56 20 6 313
             }
 
             $bitmap.Save($output, [System.Drawing.Imaging.ImageFormat]::Png)
@@ -411,6 +793,7 @@ function New-FoundationPalette {
         vein = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5A3B46')
         bone = New-Object System.Drawing.SolidBrush (Convert-HexColor '#8F8368')
         rust = New-Object System.Drawing.SolidBrush (Convert-HexColor '#572D33')
+        wound = New-Object System.Drawing.SolidBrush (Convert-HexColor '#7E292B')
         woodDark = New-Object System.Drawing.SolidBrush (Convert-HexColor '#24191F')
         wood = New-Object System.Drawing.SolidBrush (Convert-HexColor '#3B2730')
         woodLight = New-Object System.Drawing.SolidBrush (Convert-HexColor '#5A3D49')
@@ -566,6 +949,120 @@ function Save-FoundationBlockTextures {
         foreach ($point in @(@(0, 4), @(7, 4), @(15, 4), @(2, 10), @(8, 10), @(14, 10))) {
             $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#121116'))
         }
+    }
+
+    Save-BlockTexture 'rootfelt' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.woodDark 0 0 16 16
+        Fill-Pixels $graphics $p.wood 1 1 14 14
+        foreach ($root in @(
+            @(0, 2, 8, 2), @(6, 5, 10, 2), @(0, 9, 11, 2), @(8, 13, 8, 2)
+        )) {
+            Fill-Pixels $graphics $p.woodDark $root[0] $root[1] $root[2] $root[3]
+        }
+        Fill-Pixels $graphics $p.woodLight 2 3 5 1
+        Fill-Pixels $graphics $p.woodLight 9 7 5 1
+        Fill-Pixels $graphics $p.membrane 2 12 5 2
+        Fill-Pixels $graphics $p.bone 12 3 2 1
+        foreach ($point in @(@(4, 6), @(5, 6), @(11, 11), @(13, 12))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#572D33'))
+        }
+    }
+
+    Save-BlockTexture 'fibrous_loam' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.loamDark 0 0 16 16
+        Fill-Pixels $graphics $p.loam 1 1 14 14
+        foreach ($patch in @(
+            @(0, 4, 5, 3), @(9, 1, 6, 3), @(5, 9, 8, 3), @(0, 14, 6, 2)
+        )) {
+            Fill-Pixels $graphics $p.loamDark $patch[0] $patch[1] $patch[2] $patch[3]
+        }
+        foreach ($fiber in @(
+            @(1, 3, 7, 1), @(7, 6, 8, 1), @(2, 11, 6, 1), @(9, 14, 6, 1)
+        )) {
+            Fill-Pixels $graphics $p.woodLight $fiber[0] $fiber[1] $fiber[2] $fiber[3]
+        }
+        Fill-Pixels $graphics $p.rust 5 6 1 4
+        Fill-Pixels $graphics $p.bone 13 9 2 1
+    }
+
+    Save-BlockTexture 'scar_shale' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.stoneDark 0 0 16 16
+        foreach ($plate in @(
+            @(0, 1, 7, 3), @(9, 0, 7, 4), @(2, 6, 9, 3),
+            @(11, 6, 5, 4), @(0, 11, 6, 4), @(7, 12, 9, 4)
+        )) {
+            Fill-Pixels $graphics $p.deepLight $plate[0] $plate[1] $plate[2] $plate[3]
+        }
+        foreach ($point in @(
+            @(1, 5), @(2, 5), @(6, 4), @(7, 5), @(10, 4), @(11, 5),
+            @(5, 10), @(6, 10), @(12, 11), @(13, 10), @(14, 10)
+        )) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#572D33'))
+        }
+        Fill-Pixels $graphics $p.stoneLight 3 7 3 1
+        Fill-Pixels $graphics $p.bone 13 2 2 1
+    }
+
+    Save-BlockTexture 'marrowstone' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.bone 0 0 16 16
+        foreach ($mass in @(
+            @(1, 1, 5, 4), @(9, 0, 6, 5), @(4, 7, 8, 4),
+            @(0, 12, 5, 4), @(11, 12, 5, 4)
+        )) {
+            Fill-Pixels $graphics $p.glow $mass[0] $mass[1] $mass[2] $mass[3]
+        }
+        Fill-Pixels $graphics $p.glowLight 2 2 3 2
+        Fill-Pixels $graphics $p.glowLight 7 8 4 2
+        foreach ($cavity in @(
+            @(6, 1, 2, 3), @(12, 5, 3, 2), @(1, 7, 3, 3), @(7, 12, 3, 3)
+        )) {
+            Fill-Pixels $graphics $p.rust $cavity[0] $cavity[1] $cavity[2] $cavity[3]
+        }
+        Fill-Pixels $graphics $p.void 7 2 1 2
+        Fill-Pixels $graphics $p.void 2 8 1 2
+        Fill-Pixels $graphics $p.stoneDark 13 13 2 2
+    }
+
+    Save-BlockTexture 'suture_silt' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.void 0 0 16 16
+        Fill-Pixels $graphics $p.loamDark 1 1 14 14
+        foreach ($pool in @(
+            @(0, 2, 6, 3), @(8, 1, 7, 4), @(3, 7, 9, 4),
+            @(0, 12, 5, 4), @(10, 12, 6, 4)
+        )) {
+            Fill-Pixels $graphics $p.deep $pool[0] $pool[1] $pool[2] $pool[3]
+        }
+        foreach ($point in @(@(2, 3), @(5, 4), @(10, 2), @(4, 9), @(8, 8), @(13, 13))) {
+            $bitmap.SetPixel($point[0], $point[1], (Convert-HexColor '#404C36'))
+        }
+        Fill-Pixels $graphics $p.bone 1 11 5 1
+        Fill-Pixels $graphics $p.rust 6 10 1 3
+        Fill-Pixels $graphics $p.bone 7 13 6 1
+    }
+
+    Save-BlockTexture 'dried_ichor' {
+        param($bitmap, $graphics, $p)
+        Fill-Pixels $graphics $p.void 0 0 16 16
+        Fill-Pixels $graphics $p.rust 1 1 14 14
+        Fill-Pixels $graphics $p.loamDark 3 2 5 4
+        Fill-Pixels $graphics $p.loamDark 10 1 5 6
+        Fill-Pixels $graphics $p.loamDark 1 9 6 6
+        Fill-Pixels $graphics $p.loamDark 9 10 6 5
+        foreach ($crack in @(
+            @(7, 0), @(7, 1), @(8, 2), @(8, 3), @(7, 4), @(6, 5),
+            @(7, 8), @(8, 9), @(8, 10), @(7, 11), @(6, 12), @(6, 13),
+            @(0, 7), @(1, 7), @(2, 8), @(3, 8), @(12, 7), @(13, 8), @(15, 8)
+        )) {
+            $bitmap.SetPixel($crack[0], $crack[1], (Convert-HexColor '#121116'))
+        }
+        Fill-Pixels $graphics $p.wound 3 3 3 1
+        Fill-Pixels $graphics $p.wound 10 12 3 1
+        Fill-Pixels $graphics $p.bone 12 4 1 1
     }
 }
 
@@ -782,6 +1279,7 @@ function Save-FirstToolItemTextures {
 }
 
 Save-HollowGrazerTexture
+Save-WoundscentTexture
 Save-ModIcon
 Save-QuietskinItemTextures
 Save-QuietskinArmorTextures

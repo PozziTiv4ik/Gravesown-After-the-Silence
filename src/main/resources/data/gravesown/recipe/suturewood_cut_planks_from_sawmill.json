@@ -1,0 +1,5 @@
+{
+  "type": "gravesown:sawmill",
+  "ingredient": { "item": "gravesown:suturewood_planks" },
+  "result": { "id": "gravesown:suturewood_cut_planks", "count": 1 }
+}

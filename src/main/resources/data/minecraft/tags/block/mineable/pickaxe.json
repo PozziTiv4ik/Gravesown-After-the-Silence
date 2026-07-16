@@ -1,7 +1,15 @@
 {
   "replace": false,
   "values": [
+    "gravesown:pitch_kiln",
     "gravesown:hushstone",
-    "gravesown:deep_hushstone"
+    "gravesown:deep_hushstone",
+    "gravesown:scar_shale",
+    "gravesown:marrowstone",
+    "gravesown:veined_shale",
+    "gravesown:splintered_marrowstone",
+    "gravesown:cairnstone",
+    "gravesown:remnant_grave",
+    "gravesown:brinebone"
   ]
 }

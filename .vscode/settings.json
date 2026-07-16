@@ -5,6 +5,8 @@
     "**/.gradle": true,
     "**/.tools": true,
     "**/build": true,
-    "**/run": true
+    "**/run": true,
+    "**/release": true,
+    "**/launcher/dist": true
   }
 }

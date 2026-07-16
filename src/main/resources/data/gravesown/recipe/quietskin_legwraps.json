@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
+  "type": "gravesown:gravework_shaped",
   "key": {
     "H": { "item": "gravesown:ragged_grazer_hide" },
     "S": { "item": "gravesown:taut_sinew" }
   },
   "pattern": [
-    "HHH",
-    "S S",
-    "H H"
+    "HHHH",
+    "S  S",
+    "    ",
+    "H  H"
   ],
   "result": {
     "count": 1,

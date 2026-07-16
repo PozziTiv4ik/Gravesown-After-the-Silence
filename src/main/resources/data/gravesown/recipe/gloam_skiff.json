@@ -1,0 +1,14 @@
+{
+  "type": "gravesown:gravework_shaped",
+  "pattern": [
+    "R  R",
+    "R  R",
+    "RRRR",
+    "SSSS"
+  ],
+  "key": {
+    "R": { "tag": "gravesown:planks" },
+    "S": { "item": "gravesown:taut_sinew" }
+  },
+  "result": { "id": "gravesown:gloam_skiff", "count": 1 }
+}

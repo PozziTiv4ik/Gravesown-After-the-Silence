@@ -1,6 +1,12 @@
 {
   "replace": false,
   "values": [
-    "gravesown:veil_foliage"
+    "gravesown:veil_foliage",
+    "gravesown:emberbark_foliage",
+    "gravesown:palevine_foliage",
+    "gravesown:cairnwood_foliage",
+    "gravesown:suturewood_foliage",
+    "gravesown:mosswake_foliage",
+    "gravesown:sunveil_foliage"
   ]
 }
