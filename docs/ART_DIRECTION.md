@@ -42,6 +42,10 @@ from anatomy, posture and behavior, not random asymmetry or unreadable darkness.
   forms are species-readable ears, tails, beaks, horns, plates, ribs, jaw layers or
   muscle bands. Tiny one-pixel cubes are
   forbidden unless they remain readable at normal FOV.
+- Sharing a server behavior profile never permits sharing a finished silhouette.
+  Every public species must remain recognizable without its texture through distinct
+  body proportions and at least two anatomy cues such as gait, tail, wing, horn,
+  shell, ear, beak or leg construction.
 - Prefer 20–45 meaningful model parts over clouds of micro-cubes. Adjacent detail
   must share a material family and a clear attachment point.
 - Use 128x128 sheets for major land creatures and 64x64 or 128x128 for small fauna.

@@ -51,6 +51,12 @@
 
 ### Fixed
 
+- Exposed all 23 creature spawn eggs in a dedicated Gravesown Fauna tab and the
+  vanilla Spawn Eggs tab, with complete EN/RU names and item models. A required
+  GameTest now prevents any public creature from losing its matching egg.
+- Replaced the fourteen recolored shared land-animal meshes with species-owned
+  silhouettes, proportions, anatomy and motion, plus distinct UV-aware 128x128
+  atlases. The FHD client smoke now tracks the complete fourteen-animal land lineup.
 - Reliquary Crates and Sawmills now have closed opaque undersides, preserve their
   horizontal placement facing and expose their expected open/close or craft sounds.
 - Throwing a Hushstone Spear now consumes only the real held stack, preserves the

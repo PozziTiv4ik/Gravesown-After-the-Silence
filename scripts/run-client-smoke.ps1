@@ -120,7 +120,7 @@ if ($log -notmatch 'GRAVESOWN_CLIENT_SMOKE_RESULT status=PASS') {
 foreach ($requiredMarker in @(
     'GRAVESOWN_CODEX_AUTO_GRANT verified=true count=1 attachment=true',
     'GRAVESOWN_RECIPE_GUIDE verified=true recipes_at_least=33 exact_grid=true search=true categories=true guide=true graph_nodes=6 graph_edges=5 shortcut_request=true',
-    'GRAVESOWN_ENTITY_TRACKING verified=true count=5'
+    'GRAVESOWN_ENTITY_TRACKING verified=true count=14'
 )) {
     if (-not $log.Contains($requiredMarker)) {
         throw "Client smoke passed without required evidence marker: $requiredMarker"

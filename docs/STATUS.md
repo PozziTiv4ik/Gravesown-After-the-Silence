@@ -1,6 +1,6 @@
 # Current status
 
-Updated: 2026-07-16 Europe/Zurich
+Updated: 2026-07-17 Europe/Zurich
 Branch: main; published at `PozziTiv4ik/Gravesown-After-the-Silence`
 Playable state: nine-biome Survival alpha with 23 native creatures, one vehicle,
 early crafting/cooking/farming stations, aquatic life, ruins, camps, a Windows
@@ -8,21 +8,22 @@ launcher and a verified GitHub source/release distribution
 
 ## Current milestone
 
-The current alpha is published to GitHub. Every runtime and cache that previously
-inflated the repository now lives outside Git, a fresh source checkout or Windows
-release ZIP has a one-command bootstrap, and automated publication gates reject
-private/generated state and oversized files. The clean Windows GitHub runner has
-verified setup, offline checks, launcher packaging and artifact upload. The existing
-native-ecosystem, survival, launcher and presentation slices remain unchanged and
-server-authoritative.
+The current alpha is published to GitHub. The complete 23-creature roster is now
+discoverable through matching spawn eggs, and the fourteen profile-based land animals
+use species-owned geometry and textures instead of a shared recolored quadruped.
+Runtime/cache isolation, clone bootstrap and publication gates remain intact; gameplay
+continues to be server-authoritative.
 
 ## Implemented and verified
 
 - Added 15 complete endemic species: Ash Hopper, Gloamwing, Rootback, Bark Marten,
   Crag Ram, Rift Puma, Mire Toad, Reed Lynx, Silt Ray, Ember Fox, Cinder Fowl,
   Pallid Hart, Mossboar, Amber Jay and Sunhorn.
-- Each new species has its own id, attributes, server AI/spawn rules, renderer/model,
-  original 128x128 texture, loot, spawn egg, EN/RU localization and summon/test path.
+- Each new species has its own id, attributes, server AI/spawn rules, species-owned
+  renderer/model layer, distinct UV-aware 128x128 texture, loot, spawn egg, EN/RU
+  localization and summon/test path.
+- All 23 eggs appear in the dedicated Gravesown Fauna tab and the vanilla Spawn Eggs
+  tab. A GameTest locks the exact egg-to-entity mapping.
 - Shared land-animal profiles cover bounded prey, flyer, neutral and predator behavior.
   Only Rift Puma and Reed Lynx routinely hunt players; predator weights remain below
   local prey/neutral populations. Silt Ray uses a separate bottom-swimming controller.
@@ -52,18 +53,19 @@ server-authoritative.
 
 ## Verification evidence
 
-- `doctor.cmd` — PASS on 2026-07-16: Java 21, pinned Minecraft 1.21.1,
+- `doctor.cmd` — PASS on 2026-07-17: Java 21, pinned Minecraft 1.21.1,
   NeoForge 21.1.235 and Gradle 9.2.1; offline `compileJava` PASS.
-- `test.cmd` — PASS on 2026-07-16: all 66 required NeoForge GameTests.
-- `gradlew.bat check build --offline --no-daemon` — PASS on 2026-07-16.
+- `test.cmd` — PASS on 2026-07-16: all 67 required NeoForge GameTests, including
+  23 matching public creature eggs and the complete server fauna profile/loot suite.
+- `gradle-offline.cmd check build` — PASS on 2026-07-17.
 - `clean-storage.cmd` — PASS on 2026-07-16: removed 17 ordinary test saves,
   the dedicated-server test world, client smoke world, world-audit world and both
   duplicate project-local Gradle caches; approximately 3.84 GiB freed.
 - Post-clean `doctor.cmd` — PASS on 2026-07-16; post-clean `build.cmd` — PASS
   fully offline in 29 seconds and restored `dist/gravesown-0.1.0-alpha.1.jar`.
-- `github-ready.cmd` — PASS on 2026-07-16: external Java/cache check, offline
+- `github-ready.cmd` — PASS on 2026-07-17: external Java/cache check, offline
   compile, clean check/build, Windows app-image build and diagnostic, Git whitespace
-  check and repository-content audit. Git candidates: 1,565 files / 7.3 MiB; remote
+  check and repository-content audit. Git candidates: 1,579 files / 7.3 MiB; remote
   `origin` targets `PozziTiv4ik/Gravesown-After-the-Silence`.
 - GitHub publication — PASS on 2026-07-16: `main` was pushed without history
   rewriting, the obsolete duplicate online Gradle workflow was removed, and
@@ -77,26 +79,27 @@ server-authoritative.
 - Fresh-copy smoke from the extracted release ZIP — PASS on 2026-07-16:
   `doctor.cmd` selected a distinct path-keyed external project cache, completed an
   offline compile and materialized `Gravesown.class` inside the extracted copy.
-- `artcheck.cmd` — PASS on 2026-07-16: 229 Gravesown PNGs, native dimensions and
-  model references; four contact sheets regenerated.
-- `scripts/generate-all-art.ps1` twice — PASS on 2026-07-15: complete deterministic
-  regeneration produced zero shipped-texture hash differences; final coverage tracks
-  369 shipped PNGs.
+- `artcheck.cmd` — PASS on 2026-07-17: 229 Gravesown PNGs, native dimensions,
+  model references, unique expansion-fauna hashes and four regenerated contact sheets.
+- `scripts/generate-all-art.ps1` twice — PASS on 2026-07-17: all 229 Gravesown PNG
+  hashes were identical; V3 coverage tracks all 369 shipped PNGs across namespaces.
 - `worldtest.cmd -Profile Smoke -Strict` — PASS: 25 FULL chunks, 2,457,600 block
   positions and zero violations.
 - `worldtest.cmd -Profile Full -Strict` — PASS: three seeds, 867 FULL chunks,
   85,229,568 block positions, 12,675 wide biome probes, all nine expected biomes and
   zero violations.
-- `clienttest.cmd` — PASS at 1920x1080: Codex auto-grant, recipe search/categories/
-  graph/shortcut, Creative inventory, five tracked creatures and open-face Quietskin;
-  all five screenshots are 1920x1080 and the client exited automatically.
-- Final artifact: `build/libs/gravesown-0.1.0-alpha.1.jar`, 3.34 MiB,
-  SHA-256 `44A6A8CF2BA0210AE63C0C795DB902BC1D006B607E1ECB90039C1D543785EAD2`.
+- FHD integrated-client run — game PASS on 2026-07-17: all fourteen new land
+  renderers tracked, five 1920x1080 captures written and the client exited
+  automatically. The outer command initially returned FAIL only because its evidence
+  checker still expected the old `count=5`; it now expects `count=14`, and the saved
+  log/capture evidence was revalidated without a redundant second client launch.
+- Final artifact: `build/libs/gravesown-0.1.0-alpha.1.jar`, 3.35 MiB,
+  SHA-256 `F3BDB9AEF0017A506029E87655DF38DA9D5A304230555B76DACA66965BCB7EBD`.
 
 ## Known issues
 
-- New shared fauna profiles are release-quality vertical slices but still need a
-  player balance pass for density, pursuit pressure and long-session population feel.
+- The new species-owned models and eggs are complete, but natural density, pursuit
+  pressure and long-session population feel still need a player balance pass.
 - Feeding, resting/nesting and richer cross-species food-web reactions remain planned.
 - Normal-distance underwater motion and default/slim multi-angle Quietskin presentation
   retain manual visual checks beyond the automated FHD smoke.
@@ -105,7 +108,8 @@ server-authoritative.
 
 ## Important changed areas
 
-- `NativeFauna`, `NativeFaunaSpecies`, Silt Ray, entity registry/rendering and loot
+- `NativeFauna`, species-owned client models/renderers and deterministic fauna art
+- all 23 spawn eggs, creative-tab discovery, item models, EN/RU names and GameTests
 - all nine biome spawn tables and strict world-audit contracts
 - Hushstone Spear item/projectile and server tests
 - Reliquary Crate, Sawmill, abandoned camps and their GameTests

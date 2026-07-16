@@ -1,6 +1,7 @@
 package dev.gravesown.client;
 
 import dev.gravesown.Gravesown;
+import dev.gravesown.entity.NativeFaunaSpecies;
 import dev.gravesown.registry.ModAttachments;
 import dev.gravesown.registry.ModBlocks;
 import dev.gravesown.registry.ModEntities;
@@ -375,11 +376,18 @@ public final class ClientSmokeRunner {
                 VISUAL_MOBS.clear();
                 double x = stageX + 0.5D;
                 double z = stageZ + 0.5D;
-                spawnVisualMob(player, ModEntities.HOLLOW_GRAZER.get().create(player.serverLevel()), x - 6.0D, z + 9.0D);
-                spawnVisualMob(player, ModEntities.RIBSPRING.get().create(player.serverLevel()), x - 3.0D, z + 7.0D);
-                spawnVisualMob(player, ModEntities.STITCHTUSK.get().create(player.serverLevel()), x, z + 10.0D);
-                spawnVisualMob(player, ModEntities.WOUNDSCENT.get().create(player.serverLevel()), x + 3.0D, z + 7.0D);
-                spawnVisualMob(player, ModEntities.BURIED_REMNANT.get().create(player.serverLevel()), x + 6.0D, z + 9.0D);
+                int index = 0;
+                for (ModEntities.NativeFaunaRegistration registration : ModEntities.nativeFauna()) {
+                    int row = index / 5;
+                    int column = index % 5;
+                    spawnVisualMob(
+                            player,
+                            registration.type().get().create(player.serverLevel()),
+                            x - 6.0D + column * 3.0D,
+                            z + 6.0D + row * 3.5D
+                    );
+                    index++;
+                }
                 serverSceneReady = true;
             }
             catch (RuntimeException exception) {
@@ -524,7 +532,7 @@ public final class ClientSmokeRunner {
     }
 
     private static boolean clientTracksVisualMobs(Minecraft client) {
-        if (VISUAL_MOBS.size() != 5 || client.level == null) {
+        if (VISUAL_MOBS.size() != NativeFaunaSpecies.values().length || client.level == null) {
             return false;
         }
         for (Map.Entry<UUID, VisualMobExpectation> entry : VISUAL_MOBS.entrySet()) {

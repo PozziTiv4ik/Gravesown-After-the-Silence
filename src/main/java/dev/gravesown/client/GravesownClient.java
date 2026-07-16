@@ -18,6 +18,7 @@ import dev.gravesown.client.renderer.WoundscentRenderer;
 import dev.gravesown.client.renderer.ThrownSpearRenderer;
 import dev.gravesown.client.renderer.NativeFaunaRenderer;
 import dev.gravesown.client.renderer.SiltRayRenderer;
+import dev.gravesown.entity.NativeFaunaSpecies;
 import dev.gravesown.registry.ModEntities;
 import dev.gravesown.registry.ModItems;
 import dev.gravesown.registry.ModMenus;
@@ -55,7 +56,10 @@ public final class GravesownClient {
         event.registerEntityRenderer(ModEntities.BURIED_REMNANT.get(), BuriedRemnantRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWN_SPEAR.get(), ThrownSpearRenderer::new);
         for (ModEntities.NativeFaunaRegistration registration : ModEntities.nativeFauna()) {
-            event.registerEntityRenderer(registration.type().get(), NativeFaunaRenderer::new);
+            event.registerEntityRenderer(
+                    registration.type().get(),
+                    context -> new NativeFaunaRenderer(context, registration.species())
+            );
         }
         event.registerEntityRenderer(ModEntities.SILT_RAY.get(), SiltRayRenderer::new);
     }
@@ -68,7 +72,12 @@ public final class GravesownClient {
         event.registerLayerDefinition(WoundscentModel.LAYER_LOCATION, WoundscentModel::createBodyLayer);
         event.registerLayerDefinition(BuriedRemnantModel.LAYER_LOCATION, BuriedRemnantModel::createBodyLayer);
         event.registerLayerDefinition(SpearModel.LAYER_LOCATION, SpearModel::createBodyLayer);
-        event.registerLayerDefinition(NativeFaunaModel.LAYER_LOCATION, NativeFaunaModel::createBodyLayer);
+        for (NativeFaunaSpecies species : NativeFaunaSpecies.values()) {
+            event.registerLayerDefinition(
+                    NativeFaunaModel.layer(species),
+                    () -> NativeFaunaModel.createBodyLayer(species)
+            );
+        }
         event.registerLayerDefinition(SiltRayModel.LAYER_LOCATION, SiltRayModel::createBodyLayer);
         event.registerLayerDefinition(QuietskinArmorModel.HOOD_LAYER, QuietskinArmorModel::createHoodLayer);
         event.registerLayerDefinition(QuietskinArmorModel.COAT_LAYER, QuietskinArmorModel::createCoatLayer);

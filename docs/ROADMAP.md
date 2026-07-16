@@ -166,7 +166,7 @@ Automated acceptance: 52/52 GameTests, strict Smoke 25 chunks/0 violations, clea
 check/build, EN/RU resource parity and final 1100x700 launcher preview PASS. The final
 1920x1080 integrated-client smoke proves exact one-time Codex grant, all 54 synchronized
 recipes, exact-grid/search/categories/Guide/branching-chain/`R` behavior, corrected
-Creative Survival inventory geometry, five tracked dry-land entities and the Quietskin
+Creative Survival inventory geometry, fourteen tracked profile-based land entities and the Quietskin
 front view. Natural pacing,
 grave/pond rarity, all three fish underwater and default/slim/back/daylight/hurt-flash
 armor views still need a player-driven visual pass.
@@ -218,6 +218,9 @@ commands or vanilla materials.
 
 - [x] One to three endemic species in every public biome, with at least fifteen new
   passive, neutral, avian/small-fauna and predator entities in the expansion slice.
+- [x] All 23 public creatures have discoverable spawn eggs; the fourteen shared-profile
+  land species use species-owned geometry and distinct UV-aware atlases rather than one
+  recolored quadruped silhouette.
 - [x] Rotfin, Gloamwater and Threadkelp aquatic vertical slice.
 - [x] Stitchtusk, Ribspring and Woundscent vertical slices.
 - [x] Buried Remnant and the one-shot rare Remnant Grave encounter.

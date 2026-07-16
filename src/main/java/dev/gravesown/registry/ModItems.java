@@ -7,6 +7,7 @@ import dev.gravesown.item.SurvivorCodexItem;
 import dev.gravesown.item.GloamSkiffItem;
 import dev.gravesown.item.GravebloomDustItem;
 import dev.gravesown.item.HushstoneSpearItem;
+import java.util.List;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -395,6 +396,94 @@ public final class ModItems {
             "rootskimmer_spawn_egg",
             properties -> new DeferredSpawnEggItem(ModEntities.ROOTSKIMMER, 0x261F1B, 0xA98A69, properties)
     );
+    public static final DeferredItem<DeferredSpawnEggItem> ASH_HOPPER_SPAWN_EGG = ITEMS.registerItem(
+            "ash_hopper_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.ASH_HOPPER, 0x514B42, 0xD6B45E, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> GRAVEWING_SPAWN_EGG = ITEMS.registerItem(
+            "gravewing_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.GRAVEWING, 0x282D36, 0x89919C, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> ROOTBACK_SPAWN_EGG = ITEMS.registerItem(
+            "rootback_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.ROOTBACK, 0x2F3A2E, 0x839172, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> BARK_MARTEN_SPAWN_EGG = ITEMS.registerItem(
+            "bark_marten_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.BARK_MARTEN, 0x3C2C25, 0xC1A06D, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> CRAG_RAM_SPAWN_EGG = ITEMS.registerItem(
+            "crag_ram_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.CRAG_RAM, 0x393B3C, 0xA7A29A, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> RIFT_PUMA_SPAWN_EGG = ITEMS.registerItem(
+            "rift_puma_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.RIFT_PUMA, 0x3B3133, 0xA28279, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> MIRE_TOAD_SPAWN_EGG = ITEMS.registerItem(
+            "mire_toad_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.MIRE_TOAD, 0x344331, 0x8EA57C, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> REED_LYNX_SPAWN_EGG = ITEMS.registerItem(
+            "reed_lynx_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.REED_LYNX, 0x494033, 0xB3A47B, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> SILT_RAY_SPAWN_EGG = ITEMS.registerItem(
+            "silt_ray_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.SILT_RAY, 0x243D43, 0x77969A, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> EMBER_FOX_SPAWN_EGG = ITEMS.registerItem(
+            "ember_fox_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.EMBER_FOX, 0x523124, 0xD0A15E, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> CINDER_FOWL_SPAWN_EGG = ITEMS.registerItem(
+            "cinder_fowl_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.CINDER_FOWL, 0x3D2928, 0xC68A43, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> PALLID_HART_SPAWN_EGG = ITEMS.registerItem(
+            "pallid_hart_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.PALLID_HART, 0x5C5B51, 0xCDC5A9, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> MOSSBOAR_SPAWN_EGG = ITEMS.registerItem(
+            "mossboar_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.MOSSBOAR, 0x303A2D, 0x899676, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> AMBER_JAY_SPAWN_EGG = ITEMS.registerItem(
+            "amber_jay_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.AMBER_JAY, 0x5E452B, 0xDFAA5C, properties)
+    );
+    public static final DeferredItem<DeferredSpawnEggItem> SUNHORN_SPAWN_EGG = ITEMS.registerItem(
+            "sunhorn_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntities.SUNHORN, 0x604B32, 0xEFE08A, properties)
+    );
+
+    public static List<DeferredItem<DeferredSpawnEggItem>> spawnEggs() {
+        return List.of(
+                HOLLOW_GRAZER_SPAWN_EGG,
+                RIBSPRING_SPAWN_EGG,
+                STITCHTUSK_SPAWN_EGG,
+                WOUNDSCENT_SPAWN_EGG,
+                BURIED_REMNANT_SPAWN_EGG,
+                ROTFIN_SPAWN_EGG,
+                VEILFIN_SPAWN_EGG,
+                ROOTSKIMMER_SPAWN_EGG,
+                ASH_HOPPER_SPAWN_EGG,
+                GRAVEWING_SPAWN_EGG,
+                ROOTBACK_SPAWN_EGG,
+                BARK_MARTEN_SPAWN_EGG,
+                CRAG_RAM_SPAWN_EGG,
+                RIFT_PUMA_SPAWN_EGG,
+                MIRE_TOAD_SPAWN_EGG,
+                REED_LYNX_SPAWN_EGG,
+                SILT_RAY_SPAWN_EGG,
+                EMBER_FOX_SPAWN_EGG,
+                CINDER_FOWL_SPAWN_EGG,
+                PALLID_HART_SPAWN_EGG,
+                MOSSBOAR_SPAWN_EGG,
+                AMBER_JAY_SPAWN_EGG,
+                SUNHORN_SPAWN_EGG
+        );
+    }
 
     private static WoodFamilyItems registerWoodFamilyItems(String prefix, ModBlocks.WoodFamily family) {
         DeferredItem<BlockItem> stem = ITEMS.registerSimpleBlockItem(family.stem());

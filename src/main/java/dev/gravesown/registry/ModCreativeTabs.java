@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -140,15 +141,19 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.QUIETSKIN_COAT.get());
                         output.accept(ModItems.QUIETSKIN_LEGWRAPS.get());
                         output.accept(ModItems.QUIETSKIN_BOOTS.get());
-                        output.accept(ModItems.HOLLOW_GRAZER_SPAWN_EGG.get());
-                        output.accept(ModItems.RIBSPRING_SPAWN_EGG.get());
-                        output.accept(ModItems.STITCHTUSK_SPAWN_EGG.get());
-                        output.accept(ModItems.WOUNDSCENT_SPAWN_EGG.get());
-                        output.accept(ModItems.BURIED_REMNANT_SPAWN_EGG.get());
-                        output.accept(ModItems.ROTFIN_SPAWN_EGG.get());
-                        output.accept(ModItems.VEILFIN_SPAWN_EGG.get());
-                        output.accept(ModItems.ROOTSKIMMER_SPAWN_EGG.get());
+                        ModItems.spawnEggs().forEach(egg -> output.accept(egg.get()));
                     })
+                    .build()
+    );
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FAUNA = TABS.register(
+            "fauna",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.gravesown.fauna"))
+                    .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
+                    .icon(() -> ModItems.ASH_HOPPER_SPAWN_EGG.get().getDefaultInstance())
+                    .displayItems((parameters, output) ->
+                            ModItems.spawnEggs().forEach(egg -> output.accept(egg.get())))
                     .build()
     );
 
@@ -171,5 +176,12 @@ public final class ModCreativeTabs {
 
     public static void register(IEventBus modEventBus) {
         TABS.register(modEventBus);
+        modEventBus.addListener(ModCreativeTabs::addSpawnEggsToVanillaTab);
+    }
+
+    private static void addSpawnEggsToVanillaTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            ModItems.spawnEggs().forEach(egg -> event.accept(egg.get()));
+        }
     }
 }

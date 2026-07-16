@@ -1058,3 +1058,26 @@ and player saves survive repository cleanup. A genuinely fresh machine needs one
 networked setup before offline play. The release ZIP is a convenient legal bootstrap,
 not a redistributed standalone Minecraft client. `github-ready.cmd` and
 `package-release.cmd` are required publication gates.
+
+## ADR-0049: Make public fauna discoverable and species-readable
+
+Date: 2026-07-16
+Status: Accepted
+
+Context: The fifteen-species ecosystem expansion registered complete server entities,
+but only the eight older creatures exposed spawn eggs. The fourteen profile-based land
+animals also shared one generic quadruped layer with small optional appendages, so their
+distinct registries and textures still read as palette variants during play.
+
+Decision: Every public creature must expose a matching `*_spawn_egg` in both a dedicated
+Gravesown Fauna creative tab and the vanilla Spawn Eggs tab. A server GameTest locks the
+one-to-one item/entity mapping and the 23-creature count. Shared behavior remains valid,
+but each `NativeFaunaSpecies` now owns a separately baked model layer with recognizable
+proportions, anatomy and animation. Deterministic texture generation paints a distinct
+UV-aware 128x128 atlas for every expansion species, and the art audit rejects duplicate
+atlas hashes. The FHD client smoke tracks all fourteen land profiles in one lineup.
+
+Consequences: Testers can find and summon the complete roster without commands, missing
+eggs fail automation, and future profile reuse cannot silently collapse animals back
+into recolored copies. Natural density and long-session population balance remain a
+separate ecosystem pass rather than being hidden inside presentation changes.

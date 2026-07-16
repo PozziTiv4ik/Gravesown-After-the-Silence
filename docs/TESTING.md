@@ -242,12 +242,12 @@ Safety rules:
   layout/localization and high-zoom Story edge reachability, auto-fits the graph, and captures
   Codex Chain plus Guide at 1920x1080.
   Nearby natural mobs are cleared;
-  the current harness inserts and tracks the four dry-land biome natives plus Buried
-  Remnant by UUID, network id and type before capturing the lineup. It also selects the
+  the current harness inserts and tracks all fourteen profile-based land species by
+  UUID, network id and type before capturing the three-row silhouette lineup. It also selects the
   real Creative Survival Inventory tab and captures its exact layout. It writes Codex,
-  Guide, Creative inventory, five-entity lineup and armor PNGs under
+  Guide, Creative inventory, fourteen-entity lineup and armor PNGs under
   `%LOCALAPPDATA%\Gravesown\runs\tests\client-smoke\screenshots`, then saves
-  and exits. The three aquatic creatures remain outside this dry-land capture.
+  and exits. Aquatic creatures remain outside this dry-land capture.
 
 ## TC4a world-preset acceptance
 
@@ -280,9 +280,9 @@ must use fresh TC4b worlds because old saves can show expected chunk borders.
   background, proves the real fresh-Survival auto-grant and persistent no-duplicate
   flag, verifies the complete synchronized recipe catalog plus search/categories/Guide/exact-grid/
   branching-chain/`R` behavior, captures the corrected Creative Survival inventory,
-  opens/captures the responsive Hub, tracks a five-entity dry-land lineup
-  including Buried Remnant and captures the Quietskin front view. Rotfin, Veilfin and
-  Rootskimmer still need separate manual underwater views.
+  opens/captures the responsive Hub, tracks the fourteen profile-based land species
+  and captures the Quietskin front view. Aquatic creatures still need separate manual
+  underwater views.
 - Run `play.cmd` in a disposable fresh Survival world. Visit all nine regions and
   compare their silhouettes/surfaces: ash/loam, Rootfelt/Fibrous Loam, Scar
   Shale/Marrowstone and Suture Silt/Dried Ichor. Look for abrupt walls, unsafe spawn,

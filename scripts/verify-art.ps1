@@ -74,6 +74,28 @@ foreach ($entry in $entitySizes.GetEnumerator()) {
     Assert-Size ("textures\entity\" + $entry.Key) $entry.Value[0] $entry.Value[1]
 }
 
+# A technically different filename is not enough: every expanded native species
+# must ship a genuinely distinct atlas so new animals cannot regress to palette
+# aliases or accidental copies.
+$expandedFauna = @(
+    'ash_hopper.png', 'gravewing.png', 'rootback.png', 'bark_marten.png',
+    'crag_ram.png', 'rift_puma.png', 'mire_toad.png', 'reed_lynx.png',
+    'silt_ray.png', 'ember_fox.png', 'cinder_fowl.png', 'pallid_hart.png',
+    'mossboar.png', 'amber_jay.png', 'sunhorn.png'
+)
+$faunaHashes = @{}
+foreach ($name in $expandedFauna) {
+    $path = Join-Path $textureRoot "entity\$name"
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { continue }
+    $hash = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
+    if ($faunaHashes.ContainsKey($hash)) {
+        $errors.Add("Native fauna textures $($faunaHashes[$hash]) and $name are identical")
+    }
+    else {
+        $faunaHashes[$hash] = $name
+    }
+}
+
 # Every Gravesown texture id referenced by a model must resolve to a shipped PNG.
 $modelRoot = Join-Path $assetRoot 'models'
 Get-ChildItem -LiteralPath $modelRoot -Recurse -File -Filter '*.json' | ForEach-Object {

@@ -16,33 +16,34 @@ player; file presence alone is never treated as final art acceptance.
 | `rotfin` | Aquatic hunter; Gloamwater ponds in Suture Mire | 10 health, 3 damage; water-creature AI, 16 follow range | Layered bilateral 128x128 model with paired gills/fins, feelers and segmented tail; deterministic texture/renderer | Rotfin Flesh; egg, summon, EN/RU and aquatic GameTests PASS | Implemented; in-pond motion/natural density pending |
 | `veilfin` | Peaceful open-water fish; all Gloamwater, denser Gloam Sea schools | 8 health; submerged wander and avoidance | Bilateral 128x128 schooling-fish model with paired fins and segmented tail; deterministic texture/renderer | Veilfin Fillet; egg, summon, EN/RU and aquatic GameTests PASS | Implemented; natural school motion/density pending |
 | `rootskimmer` | Peaceful bottom fish; all Gloamwater, denser Gloam Sea schools | 9 health; lower-band submerged targets | Broad bilateral 128x128 bottom-fish model with barbels, paired fins and segmented tail; deterministic texture/renderer | Rootskimmer Meat; egg, summon, EN/RU and aquatic GameTests PASS | Implemented; natural school motion/density pending |
-| `ash_hopper` | Small prey; Sown Grave | 8 health; fast player/monster avoidance | Bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `gravewing` | Small gliding bird; Sown Grave | 6 health; panic/avoidance, hopping flight and slow fall | Bilateral winged native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `rootback` | Neutral browser; Ribroot Groves | 30 health, 5 retaliation damage | Layered bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `bark_marten` | Small grove predator; Ribroot Groves | 12 health, 3 damage; hunts native prey, avoids routine player aggression | Layered bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; food-web pacing pending |
-| `crag_ram` | Neutral cliff herbivore; Marrow Rifts | 28 health, 5 retaliation damage | Horned bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `rift_puma` | Large Rifts predator | 34 health, 7 damage; hunts native prey and players at low spawn weight | Layered bilateral predator model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; combat/pacing pending |
-| `mire_toad` | Small prey; Suture Mire | 7 health; evasive ground wander | Broad bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `reed_lynx` | Mire predator; Suture Mire | 25 health, 6 damage; hunts native prey and players at low spawn weight | Layered bilateral predator model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; combat/pacing pending |
+| `ash_hopper` | Small prey; Sown Grave | 8 health; fast player/monster avoidance | Huge hind legs, upright ears, compact chest, leap animation and distinct 128x128 dappled atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `gravewing` | Small gliding bird; Sown Grave | 6 health; panic/avoidance, hopping flight and slow fall | Upright bird body, broad articulated wings, split tail, flap animation and distinct 128x128 membrane atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `rootback` | Neutral browser; Ribroot Groves | 30 health, 5 retaliation damage | Low wide body, layered shell, root horns, heavy gait and distinct 128x128 moss/plate atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `bark_marten` | Small grove predator; Ribroot Groves | 12 health, 3 damage; hunts native prey, avoids routine player aggression | Long low torso, short legs, pointed ears, two-part tail and distinct 128x128 bark-striped atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; food-web pacing pending |
+| `crag_ram` | Neutral cliff herbivore; Marrow Rifts | 28 health, 5 retaliation damage | Deep chest, stone-wool mantle, curled multi-part horns, hoof gait and distinct 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `rift_puma` | Large Rifts predator | 34 health, 7 damage; hunts native prey and players at low spawn weight | Long muscular cat frame, shoulder plates, rounded ears, segmented tail and distinct 128x128 rosette atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; combat/pacing pending |
+| `mire_toad` | Small prey; Suture Mire | 7 health; evasive ground wander | Flat wide body, splayed feet, bulging eyes, animated throat/jaw and distinct 128x128 wetland atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `reed_lynx` | Mire predator; Suture Mire | 25 health, 6 damage; hunts native prey and players at low spawn weight | Tall-legged cat frame, ear tufts, flank blades, short tail and distinct 128x128 reed-striped atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; combat/pacing pending |
 | `silt_ray` | Peaceful bottom swimmer; Gloam Sea | 12 health; submerged bottom-band wander | Dedicated paired-fin ray model and original 128x128 atlas | Original loot; egg, summon, EN/RU and aquatic GameTests PASS | Implemented alpha; natural school motion pending |
-| `ember_fox` | Small predator; Ember Thicket | 14 health, 4 damage; hunts native prey without routine player aggression | Layered bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; food-web pacing pending |
-| `cinder_fowl` | Small ground bird; Ember Thicket | 8 health; panic/avoidance, hopping flight and slow fall | Bilateral winged native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `pallid_hart` | Woodland prey; Pallid Weald | 26 health; fast player/monster avoidance | Antlered bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `mossboar` | Neutral browser; Mosswake Woods | 32 health, 6 retaliation damage | Layered bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `amber_jay` | Small bird; Amberquiet Grove | 6 health; panic/avoidance, hopping flight and slow fall | Bilateral winged native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
-| `sunhorn` | Grove prey; Amberquiet Grove | 30 health; player/monster avoidance | Horned bilateral native-fauna model and original 128x128 atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `ember_fox` | Small predator; Ember Thicket | 14 health, 4 damage; hunts native prey without routine player aggression | Narrow frame, oversized brush tail, pointed ears, bounding gait and distinct 128x128 ember/cream atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; food-web pacing pending |
+| `cinder_fowl` | Small ground bird; Ember Thicket | 8 health; panic/avoidance, hopping flight and slow fall | Upright fowl body, crest/wattle, short wings, fan tail and distinct 128x128 layered-feather atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `pallid_hart` | Woodland prey; Pallid Weald | 26 health; fast player/monster avoidance | Tall deer frame, long hoof legs, branching antlers, alert gait and distinct 128x128 dappled atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `mossboar` | Neutral browser; Mosswake Woods | 32 health, 6 retaliation damage | Barrel torso, broad snout, paired tusks, raised mane and distinct 128x128 moss-saddle atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `amber_jay` | Small bird; Amberquiet Grove | 6 health; panic/avoidance, hopping flight and slow fall | Compact bird frame, long beak, broad wings, long tail and distinct 128x128 amber/teal feather atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
+| `sunhorn` | Grove prey; Amberquiet Grove | 30 health; player/monster avoidance | Slender tall frame, swept paired horns, dewlap, long hoof gait and distinct 128x128 golden atlas | Original loot; egg, summon, EN/RU and NativeFauna GameTests PASS | Implemented alpha; natural pacing pending |
 | `bellbeak` | Carrion bird that steals food and calls others | Planned | Planned | Planned | Not implemented |
 | `hushstep` | Grove hunter that freezes under a direct gaze | Planned | Planned | Planned | Not implemented |
 | `choirmaw` | Rare ecosystem coordinator | Planned | Planned | Planned | Not implemented |
 
 All 23 implemented creatures have registration, server attributes/AI, a client
 renderer/model/original texture, loot, spawn egg, EN/RU names and an easy summon/test
-path. Twenty-two use reviewed natural spawn entries across the exact nine-biome
+path. Every egg appears in both the dedicated Gravesown Fauna tab and the vanilla
+Spawn Eggs tab. Twenty-two use reviewed natural spawn entries across the exact nine-biome
 allowlist; Buried Remnant is released only by the grave encounter. The 14 profile-based
 land newcomers cover prey, neutral, small-predator, large-predator and bird archetypes;
 Silt Ray adds a fourth peaceful aquatic niche. Their goals are bounded, server-owned
 and species-specific predators remain a minority. Static art audits enforce atlas and
-model bounds. The FHD client smoke tracks a five-entity dry-land lineup; underwater
+model bounds. The FHD client smoke tracks the complete fourteen-entity profile-based land lineup; underwater
 motion and population feel remain separate manual checks. `gloam_skiff` is a vehicle
 and `thrown_spear` is a projectile, not creatures.
 
@@ -167,8 +168,8 @@ The historical seven-biome strict Full evidence covers 867 FULL chunks and
 | Windows launcher | Java 21 Swing app-image with `.exe`, centered animated Play, Verify/Logs, compact console and process guard in the cold presentation palette | App-image diagnostic/offscreen preview paths exist | Final FHD composition and live open-and-play pass |
 | Art source | Immutable giant-tree background master plus deterministic V3 pixel assets for all UV-constrained art | Background may use ImageGen; exact textures remain script-owned | Human composition review and hash gate |
 
-The consolidated integrated-client smoke records the responsive Hub, symmetric
-five-entity dry-land lineup and revised open-face Quietskin front view. Automated
+The consolidated integrated-client smoke records the responsive Hub, the complete
+fourteen-entity profile-based land lineup and revised open-face Quietskin front view. Automated
 server/static checks and controlled captures do not replace normal-distance motion,
 underwater or multi-angle armor review.
 

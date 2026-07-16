@@ -5,6 +5,7 @@ import dev.gravesown.entity.NativeFauna;
 import dev.gravesown.entity.NativeFaunaSpecies;
 import dev.gravesown.entity.SiltRay;
 import dev.gravesown.registry.ModEntities;
+import dev.gravesown.registry.ModItems;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -76,6 +78,34 @@ public final class NativeFaunaGameTests {
         }
         SiltRay siltRay = helper.spawnWithNoFreeWill(ModEntities.SILT_RAY.get(), 1, 1, 1);
         assertOnlyGravesownLoot(helper, siltRay, "silt_ray");
+        helper.succeed();
+    }
+
+    @GameTest(template = "hollow_grazer_platform", timeoutTicks = 60)
+    public static void everyPublicCreatureHasAWorkingSpawnEgg(GameTestHelper helper) {
+        helper.assertTrue(
+                ModItems.spawnEggs().size() == 23,
+                "The public creature roster must expose exactly 23 spawn eggs"
+        );
+        for (var deferredEgg : ModItems.spawnEggs()) {
+            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(deferredEgg.get());
+            helper.assertTrue(
+                    itemId.getNamespace().equals(Gravesown.MOD_ID) && itemId.getPath().endsWith("_spawn_egg"),
+                    "Spawn egg must keep a Gravesown *_spawn_egg id: " + itemId
+            );
+            ItemStack stack = deferredEgg.get().getDefaultInstance();
+            helper.assertTrue(stack.getItem() instanceof SpawnEggItem, itemId + " must be a real SpawnEggItem");
+            SpawnEggItem egg = (SpawnEggItem) stack.getItem();
+            ResourceLocation entityId = BuiltInRegistries.ENTITY_TYPE.getKey(egg.getType(stack));
+            helper.assertTrue(
+                    entityId.getNamespace().equals(Gravesown.MOD_ID),
+                    itemId + " points at forbidden entity " + entityId
+            );
+            helper.assertTrue(
+                    itemId.getPath().equals(entityId.getPath() + "_spawn_egg"),
+                    itemId + " must target its matching entity " + entityId
+            );
+        }
         helper.succeed();
     }
 
